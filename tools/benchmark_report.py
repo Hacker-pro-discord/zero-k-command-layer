@@ -42,7 +42,7 @@ def analyze(directory, output):
         with (output/'matches.csv').open('w',newline='',encoding='utf-8') as f:
             w=csv.DictWriter(f,fieldnames=rows[0].keys());w.writeheader();w.writerows(rows)
     counts=collections.Counter(r['outcome'] for r in rows)
-    lines=['# Benchmark results', '',f'Completed cases: {len(rows)}. Outcomes: {dict(counts)}.', '', 'Diagnostic indicators below are hypotheses from telemetry, not proven causal explanations. Time limits are censored, not wins.', '', '| Map / factory / side | Result | Killed / lost | Final mexes (ours/enemy) |', '|---|---|---:|---:|']
+    lines=['# Benchmark results', '',f'Completed cases: {len(rows)}. Outcomes: {dict(counts)}.', '', 'Diagnostic indicators below are hypotheses from telemetry, not proven causal explanations. Time limits are censored, not wins.', '', '[Match table](matches.csv) · [Detailed analysis](analysis.json). Plot files, when generated: army, income, mexes and coverage.', '', '| Map / factory / side | Result | Killed / lost | Final mexes (ours/enemy) |', '|---|---|---:|---:|']
     for r in rows: lines.append(f"| {r['map']} / {r['factory']} / {r['side']} | {r['outcome']} | {r['killed']} / {r['lost']} | {r['ownMex']}/{r['enemyMex']} |")
     for d in details:
         lines.extend(['',f"## {d['case']}",'', ' '.join(d['diagnosticIndicators']) or 'No automatic diagnostic flag; review the full timeline.', '', f"Largest own losses by unit value: {sorted(d['lossesByUnit'].items(),key=lambda v:-v[1])[:5]}."])

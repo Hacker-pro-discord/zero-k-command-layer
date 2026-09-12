@@ -1,0 +1,33 @@
+case,map,side,factory,outcome,seconds,killed,lost,ownIncome,enemyIncome,ownMex,enemyMex,ownArmyValue,enemyArmyValue,firstFiveCreatedSeconds,firstFiveReadySeconds,explored,scoutVisited
+adamantine_mountain_2-factoryjump-s0,Adamantine Mountain 2,0,factoryjump,LOSS,643.7,2500,16605,2,41.4,0,21,0,3257,200.000015,,0.6484375,0
+adamantine_mountain_2-factoryjump-s1,Adamantine Mountain 2,1,factoryjump,LOSS,1028.2,340,12140,6,98.4,0,34,0,12015,,,0.66796875,0
+adamantine_mountain_2-factoryspider-s0,Adamantine Mountain 2,0,factoryspider,LOSS,631.6,250,11755,6,51.1,0,27,0,3645,,,0.546875,0
+adamantine_mountain_2-factoryspider-s1,Adamantine Mountain 2,1,factoryspider,LOSS,524.8,675,7665,2,44.0,0,21,0,2700,,,0.65625,0.02734375
+altair_crossing_v4-factorycloak-s0,Altair_Crossing_V4,0,factorycloak,LOSS,711.3,880,8140,2,53.6,0,17,0,9497,,,0.4921875,0
+altair_crossing_v4-factorycloak-s1,Altair_Crossing_V4,1,factorycloak,LOSS,581.2,1320,7770,2,64.2,0,26,0,6142,190.000015,,0.55078125,0.12890625
+altair_crossing_v4-factoryveh-s0,Altair_Crossing_V4,0,factoryveh,LOSS,567.1,640,7800,4,60.8,0,17,0,5320,,,0.4921875,0.05078125
+altair_crossing_v4-factoryveh-s1,Altair_Crossing_V4,1,factoryveh,LOSS,393.2,0,6365,2,31.9,0,11,0,4126,,,0.63671875,0
+aquatic_divide_revised_v02-factoryamph-s0,Aquatic Divide Revised v02,0,factoryamph,LOSS,609.3,2460,8425,4,33.5,1,14,0,3690,160.000015,,0.61328125,0.16796875
+aquatic_divide_revised_v02-factoryamph-s1,Aquatic Divide Revised v02,1,factoryamph,LOSS,435.7,240,8215,2,34.8,0,12,0,4300,,,0.7109375,0
+aquatic_divide_revised_v02-factoryhover-s0,Aquatic Divide Revised v02,0,factoryhover,CENSORED,1200.0,2525,14245,2,73.5,0,21,0,13656,180.000015,,0.93359375,0.25390625
+aquatic_divide_revised_v02-factoryhover-s1,Aquatic Divide Revised v02,1,factoryhover,LOSS,526.1,320,7245,2,32.3,0,11,0,5238,140,,0.9375,0.5625
+comet_catcher_redux_v3_1-factorytank-s0,Comet Catcher Redux v3.1,0,factorytank,LOSS,789.7,1980,14590,2,205.9,0,63,0,17395,230.000015,,0.59765625,0.15234375
+comet_catcher_redux_v3_1-factorytank-s1,Comet Catcher Redux v3.1,1,factorytank,LOSS,852.5,4075,11905,2,143.0,0,63,0,17233,230.000015,,0.66015625,0.30078125
+comet_catcher_redux_v3_1-factoryveh-s0,Comet Catcher Redux v3.1,0,factoryveh,LOSS,830.3,4500,14155,2,206.2,0,76,0,17194,140,,0.7109375,0.3359375
+comet_catcher_redux_v3_1-factoryveh-s1,Comet Catcher Redux v3.1,1,factoryveh,LOSS,748.1,1135,16770,2,165.1,0,60,0,15640,150.000015,,0.65625,0.390625
+folsomdamdeluxev4-factorycloak-s0,FolsomDamDeluxeV4,0,factorycloak,LOSS,1200.0,65,13780,3.8,131.8,1,46,0,29036,,,0.390625,0
+folsomdamdeluxev4-factorycloak-s1,FolsomDamDeluxeV4,1,factorycloak,CENSORED,1200.0,7805,11490,44.1,126.5,16,38,2062,21902,160.000015,,0.515625,0.14453125
+folsomdamdeluxev4-factoryshield-s0,FolsomDamDeluxeV4,0,factoryshield,CENSORED,1200.0,730,14175,6,147.4,0,48,0,23085,,,0.24609375,0
+folsomdamdeluxev4-factoryshield-s1,FolsomDamDeluxeV4,1,factoryshield,CENSORED,1200.0,390,16860,6,124.2,0,39,0,28047,160.000015,,0.34375,0.0390625
+porky_islands-factoryamph-s0,Porky_Islands,0,factoryamph,LOSS,424.8,720,4770,2,36.8,0,11,0,3140,,,0.11328125,0
+porky_islands-factoryamph-s1,Porky_Islands,1,factoryamph,CENSORED,1200.0,970,14985,40.8,114.2,12,41,0,34987,180.000015,,0.76953125,0.30078125
+porky_islands-factoryship-s0,Porky_Islands,0,factoryship,LOSS,777.1,80,6755,6,110.4,0,44,0,11463,,,0.19921875,0.015625
+porky_islands-factoryship-s1,Porky_Islands,1,factoryship,LOSS,993.1,970,16755,2,123.1,0,52,0,24516,160.000015,,0.55078125,0.01171875
+red_comet_remake_1_7-factorycloak-s0,Red Comet Remake 1.7,0,factorycloak,LOSS,947.3,2415,12475,2,156.2,0,40,0,24770,130,,0.796875,0.34375
+red_comet_remake_1_7-factorycloak-s1,Red Comet Remake 1.7,1,factorycloak,LOSS,809.3,3280,13175,2,82.6,0,30,0,10276,150.000015,,0.70703125,0.11328125
+red_comet_remake_1_7-factoryveh-s0,Red Comet Remake 1.7,0,factoryveh,LOSS,575.3,80,13925,4.0,72.6,1,30,0,7516,130,,0.53125,0.21484375
+red_comet_remake_1_7-factoryveh-s1,Red Comet Remake 1.7,1,factoryveh,LOSS,589.8,380,7815,2,96.1,0,35,0,8660,170.000015,,0.51171875,0.0546875
+sailaway2-factoryhover-s0,SailAway 2,0,factoryhover,CENSORED,1200.0,1400,19025,2,172.4,0,70,0,49770,180.000015,,0.66796875,0.1953125
+sailaway2-factoryhover-s1,SailAway 2,1,factoryhover,CENSORED,1200.0,930,22535,2,164.4,0,69,0,47798,150.000015,,0.61328125,0.19140625
+sailaway2-factoryship-s0,SailAway 2,0,factoryship,LOSS,1002.1,510,16470,6,130.8,0,55,0,22556,170.000015,,0.328125,0.0078125
+sailaway2-factoryship-s1,SailAway 2,1,factoryship,LOSS,1022.2,5045,13600,4.0,192.9,1,65,0,28480,150.000015,,0.2890625,0

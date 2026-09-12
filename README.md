@@ -44,7 +44,7 @@ In local single-player, automatic map control also starts economic expansion by 
 
 Open **OFFICER > CONTROL PANEL** for **ECONOMY: ON/OFF** and **ADD ECONOMY BUILDERS**. The latter explicitly returns selected constructors to expansion control. Recovery builders and expansion builders have separate duties. Disabling economy preserves native orders already issued. Disable **Automatic economic expansion in local single-player** in widget settings to keep the preference off in later matches. **STOP AI** ends the current automatic session.
 
-This is experimental. The ongoing [Circuit Brutal benchmark](docs/BENCHMARK_PROTOCOL.md) uses normal commander starts and lets the Officer run its economy without scripted help. Benchmark completion and consistent performance must be established by recorded match results; regression tests alone do not establish playing strength.
+This is experimental. The ongoing [Circuit Brutal benchmark](docs/BENCHMARK_PROTOCOL.md) uses normal commander starts and lets the Officer run its economy without scripted help. The completed [32-match baseline](docs/benchmarks/baseline/REPORT.md) recorded zero wins, 25 losses and seven time limits. Fixes are undergoing a full rerun; this is not yet a reliable Brutal-beating AI. Regression tests alone do not establish playing strength. The [unfinished counter-matrix draft](docs/MATRIX_DRAFT_REVIEW.md) remains outside live decisions, preserving the existing fallback logic.
 
 ## Adaptive production and expanded control (preview 10)
 
@@ -78,7 +78,7 @@ With the widget enabled, **map-control AI now starts automatically in local sing
 
 It recruits your eligible military units, queues idle factories and searches successive sectors across the whole map. Scouts and harassment groups choose separate sectors; the main force searches too and redirects to currently visible enemies. It does not stop at the first line. Completed searches pick another sector; native empty queues can retry after a cooldown rather than permanently abandoning those units. Unexpected nonempty queues and manual releases remain protected.
 
-The search planner uses a 5Ã—5 map grid, visit/attempt history, group reservations and legitimately observed contacts. It does not know where hidden enemies are. RAID prefers vulnerable observed contacts; MAIN uses native Fight toward observed positions. Arrival and no-contact timeouts allow new objectives; native combat and damaged-unit recovery still have priority. This is an experimental heuristic, not a strategic search guarantee.
+The search planner uses a 5x5 map grid, visit/attempt history, group reservations and legitimately observed contacts. It does not know where hidden enemies are. RAID prefers vulnerable observed contacts; MAIN uses native Fight toward observed positions. Arrival and no-contact timeouts allow new objectives; native combat and damaged-unit recovery still have priority. This is an experimental heuristic, not a strategic search guarantee.
 
 **STOP AI** stops the active force and production for this session. To prevent automatic startup in future sessions/reloads, disable **Automatically start map-control AI in local single-player** under Settings > Interface > Command Layer, or disable the widget. **START MAP CONTROL** explicitly restarts it. Automatic startup is a saved preference; active assignments, operations and approvals are still not serialized.
 
@@ -102,7 +102,7 @@ The Officer watches your factories, buildings, constructors/commander and vulner
 
 After 20 seconds without a current threat, defenders escort active recovery work. Once work finishes (or its 200-second escort timeout expires), temporary defenders return to the main force and the reserve is rebuilt. Defense and reserve orders use native Fight, a ten-second redispatch cooldown and the existing validated executor. Manual releases, native retreat and Stop AI still win. Reserve/defense units are excluded from the field army's automatic fallback so a stalled push does not pull home defenders away.
 
-Set **Reserve combat value (%)** under **Settings > Interface > Command Layer** (0â€“40%; default 20%). Zero disables the standing reserve, not emergency defense. **AI DETAILS** shows RESERVE and DEFENSE counts, availability and the response reason. In drawn-line mode, defensive destinations still respect that force's authorized corridor; map-control mode can defend anywhere on the map.
+Set **Reserve combat value (%)** under **Settings > Interface > Command Layer** (0-40%; default 20%). Zero disables the standing reserve, not emergency defense. **AI DETAILS** shows RESERVE and DEFENSE counts, availability and the response reason. In drawn-line mode, defensive destinations still respect that force's authorized corridor; map-control mode can defend anywhere on the map.
 
 This is an experimental ground-defense response, not a guarantee against every attack; it does not yet choose specialized anti-air reserves or coordinate separate forces' defenses. See [defense test evidence](docs/DEFENSE_TEST.md).
 

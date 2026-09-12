@@ -1,0 +1,73 @@
+# Benchmark results
+
+Completed cases: 9. Outcomes: {'ABORTED_FOR_FIX': 3, 'LOSS': 6}.
+
+Diagnostic indicators below are hypotheses from telemetry, not proven causal explanations. Time limits are censored, not wins.
+
+[Match table](matches.csv) · [Detailed analysis](analysis.json). Plot files, when generated: army, income, mexes and coverage.
+
+| Map / factory / side | Result | Killed / lost | Final mexes (ours/enemy) |
+|---|---|---:|---:|
+| Adamantine Mountain 2 / factoryspider / 0 | ABORTED_FOR_FIX | 1320 / 6220 | 0/15 |
+| Comet Catcher Redux v3.1 / factorytank / 0 | ABORTED_FOR_FIX | 1015 / 795 | 11/15 |
+| Comet Catcher Redux v3.1 / factorytank / 1 | ABORTED_FOR_FIX | 0 / 0 | 0/0 |
+| Comet Catcher Redux v3.1 / factoryveh / 0 | LOSS | 165 / 9575 | 1/61 |
+| Comet Catcher Redux v3.1 / factoryveh / 1 | LOSS | 4115 / 12135 | 0/78 |
+| Red Comet Remake 1.7 / factorycloak / 0 | LOSS | 2210 / 7925 | 0/32 |
+| Red Comet Remake 1.7 / factorycloak / 1 | LOSS | 3600 / 10230 | 0/37 |
+| Red Comet Remake 1.7 / factoryveh / 0 | LOSS | 3940 / 11000 | 0/35 |
+| Red Comet Remake 1.7 / factoryveh / 1 | LOSS | 1310 / 11655 | 0/27 |
+
+## adamantine_mountain_2-factoryspider-s0
+
+Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
+
+Largest own losses by unit value: [('staticmex', 1275), ('dyntrainer_strike_base', 1100), ('energysolar', 980), ('spideremp', 760), ('factoryspider', 700)].
+
+## comet_catcher_redux_v3_1-factorytank-s0
+
+No automatic diagnostic flag; review the full timeline.
+
+Largest own losses by unit value: [('staticmex', 425), ('tankheavyraid', 300), ('energysolar', 70)].
+
+## comet_catcher_redux_v3_1-factorytank-s1
+
+No automatic diagnostic flag; review the full timeline.
+
+Largest own losses by unit value: [].
+
+## comet_catcher_redux_v3_1-factoryveh-s0
+
+Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure.
+
+Largest own losses by unit value: [('staticmex', 2465), ('energysolar', 1960), ('dyntrainer_strike_base', 1100), ('vehraid', 780), ('factoryveh', 700)].
+
+## comet_catcher_redux_v3_1-factoryveh-s1
+
+Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
+
+Largest own losses by unit value: [('vehraid', 2990), ('staticmex', 2210), ('energysolar', 1820), ('factoryveh', 1400), ('vehcon', 840)].
+
+## red_comet_remake_1_7-factorycloak-s0
+
+Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
+
+Largest own losses by unit value: [('energysolar', 1540), ('cloakraid', 1365), ('staticmex', 1360), ('dyntrainer_strike_base', 1100), ('cloakcon', 720)].
+
+## red_comet_remake_1_7-factorycloak-s1
+
+Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
+
+Largest own losses by unit value: [('cloakraid', 2340), ('energysolar', 1820), ('staticmex', 1530), ('dyntrainer_strike_base', 1100), ('cloakskirm', 720)].
+
+## red_comet_remake_1_7-factoryveh-s0
+
+Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
+
+Largest own losses by unit value: [('vehraid', 2080), ('energysolar', 2030), ('staticmex', 1700), ('dyntrainer_strike_base', 1100), ('vehriot', 960)].
+
+## red_comet_remake_1_7-factoryveh-s1
+
+Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure.
+
+Largest own losses by unit value: [('vehraid', 3900), ('energysolar', 1610), ('staticmex', 1445), ('dyntrainer_strike_base', 1100), ('vehriot', 960)].

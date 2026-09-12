@@ -1,0 +1,1179 @@
+{
+  "created": 1789247472.1971118,
+  "cases": [
+    {
+      "id": "red_comet_remake_1_7-factorycloak-s0",
+      "map": "Red Comet Remake 1.7",
+      "archive": "red_comet_remake_1.7.sd7",
+      "category": "open/small",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          1048.0,
+          3536.0
+        ],
+        [
+          5064.0,
+          479.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        6144,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 18.886013399663522,
+      "heightRange": [
+        100.0,
+        400.0
+      ],
+      "side": 0,
+      "factory": "factorycloak",
+      "seed": 1729
+    },
+    {
+      "id": "red_comet_remake_1_7-factorycloak-s1",
+      "map": "Red Comet Remake 1.7",
+      "archive": "red_comet_remake_1.7.sd7",
+      "category": "open/small",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          1048.0,
+          3536.0
+        ],
+        [
+          5064.0,
+          479.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        6144,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 18.886013399663522,
+      "heightRange": [
+        100.0,
+        400.0
+      ],
+      "side": 1,
+      "factory": "factorycloak",
+      "seed": 1730
+    },
+    {
+      "id": "red_comet_remake_1_7-factoryveh-s0",
+      "map": "Red Comet Remake 1.7",
+      "archive": "red_comet_remake_1.7.sd7",
+      "category": "open/small",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          1048.0,
+          3536.0
+        ],
+        [
+          5064.0,
+          479.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        6144,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 18.886013399663522,
+      "heightRange": [
+        100.0,
+        400.0
+      ],
+      "side": 0,
+      "factory": "factoryveh",
+      "seed": 1826
+    },
+    {
+      "id": "red_comet_remake_1_7-factoryveh-s1",
+      "map": "Red Comet Remake 1.7",
+      "archive": "red_comet_remake_1.7.sd7",
+      "category": "open/small",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          1048.0,
+          3536.0
+        ],
+        [
+          5064.0,
+          479.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        6144,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 18.886013399663522,
+      "heightRange": [
+        100.0,
+        400.0
+      ],
+      "side": 1,
+      "factory": "factoryveh",
+      "seed": 1827
+    },
+    {
+      "id": "comet_catcher_redux_v3_1-factoryveh-s0",
+      "map": "Comet Catcher Redux v3.1",
+      "archive": "comet_catcher_redux_v3.1.sd7",
+      "category": "open/large",
+      "split": "train",
+      "factories": [
+        "factoryveh",
+        "factorytank"
+      ],
+      "starts": [
+        [
+          557.0,
+          737.0
+        ],
+        [
+          5603.0,
+          7487.0
+        ]
+      ],
+      "startSource": "map SMD teams",
+      "size": [
+        6144,
+        8192
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 12.705264101373709,
+      "heightRange": [
+        54.0,
+        526.0
+      ],
+      "side": 0,
+      "factory": "factoryveh",
+      "seed": 1729
+    },
+    {
+      "id": "comet_catcher_redux_v3_1-factoryveh-s1",
+      "map": "Comet Catcher Redux v3.1",
+      "archive": "comet_catcher_redux_v3.1.sd7",
+      "category": "open/large",
+      "split": "train",
+      "factories": [
+        "factoryveh",
+        "factorytank"
+      ],
+      "starts": [
+        [
+          557.0,
+          737.0
+        ],
+        [
+          5603.0,
+          7487.0
+        ]
+      ],
+      "startSource": "map SMD teams",
+      "size": [
+        6144,
+        8192
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 12.705264101373709,
+      "heightRange": [
+        54.0,
+        526.0
+      ],
+      "side": 1,
+      "factory": "factoryveh",
+      "seed": 1730
+    },
+    {
+      "id": "comet_catcher_redux_v3_1-factorytank-s0",
+      "map": "Comet Catcher Redux v3.1",
+      "archive": "comet_catcher_redux_v3.1.sd7",
+      "category": "open/large",
+      "split": "train",
+      "factories": [
+        "factoryveh",
+        "factorytank"
+      ],
+      "starts": [
+        [
+          557.0,
+          737.0
+        ],
+        [
+          5603.0,
+          7487.0
+        ]
+      ],
+      "startSource": "map SMD teams",
+      "size": [
+        6144,
+        8192
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 12.705264101373709,
+      "heightRange": [
+        54.0,
+        526.0
+      ],
+      "side": 0,
+      "factory": "factorytank",
+      "seed": 1826
+    },
+    {
+      "id": "comet_catcher_redux_v3_1-factorytank-s1",
+      "map": "Comet Catcher Redux v3.1",
+      "archive": "comet_catcher_redux_v3.1.sd7",
+      "category": "open/large",
+      "split": "train",
+      "factories": [
+        "factoryveh",
+        "factorytank"
+      ],
+      "starts": [
+        [
+          557.0,
+          737.0
+        ],
+        [
+          5603.0,
+          7487.0
+        ]
+      ],
+      "startSource": "map SMD teams",
+      "size": [
+        6144,
+        8192
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 12.705264101373709,
+      "heightRange": [
+        54.0,
+        526.0
+      ],
+      "side": 1,
+      "factory": "factorytank",
+      "seed": 1827
+    },
+    {
+      "id": "adamantine_mountain_2-factoryspider-s0",
+      "map": "Adamantine Mountain 2",
+      "archive": "adamantine_mountain_2.sd7",
+      "category": "rough/hilly",
+      "split": "train",
+      "factories": [
+        "factoryspider",
+        "factoryjump"
+      ],
+      "starts": [
+        [
+          799,
+          512
+        ],
+        [
+          2847,
+          3789
+        ]
+      ],
+      "startSource": "map startboxes",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 64.9403099295683,
+      "heightRange": [
+        0.0,
+        200.0
+      ],
+      "side": 0,
+      "factory": "factoryspider",
+      "seed": 1729
+    },
+    {
+      "id": "adamantine_mountain_2-factoryspider-s1",
+      "map": "Adamantine Mountain 2",
+      "archive": "adamantine_mountain_2.sd7",
+      "category": "rough/hilly",
+      "split": "train",
+      "factories": [
+        "factoryspider",
+        "factoryjump"
+      ],
+      "starts": [
+        [
+          799,
+          512
+        ],
+        [
+          2847,
+          3789
+        ]
+      ],
+      "startSource": "map startboxes",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 64.9403099295683,
+      "heightRange": [
+        0.0,
+        200.0
+      ],
+      "side": 1,
+      "factory": "factoryspider",
+      "seed": 1730
+    },
+    {
+      "id": "adamantine_mountain_2-factoryjump-s0",
+      "map": "Adamantine Mountain 2",
+      "archive": "adamantine_mountain_2.sd7",
+      "category": "rough/hilly",
+      "split": "train",
+      "factories": [
+        "factoryspider",
+        "factoryjump"
+      ],
+      "starts": [
+        [
+          799,
+          512
+        ],
+        [
+          2847,
+          3789
+        ]
+      ],
+      "startSource": "map startboxes",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 64.9403099295683,
+      "heightRange": [
+        0.0,
+        200.0
+      ],
+      "side": 0,
+      "factory": "factoryjump",
+      "seed": 1826
+    },
+    {
+      "id": "adamantine_mountain_2-factoryjump-s1",
+      "map": "Adamantine Mountain 2",
+      "archive": "adamantine_mountain_2.sd7",
+      "category": "rough/hilly",
+      "split": "train",
+      "factories": [
+        "factoryspider",
+        "factoryjump"
+      ],
+      "starts": [
+        [
+          799,
+          512
+        ],
+        [
+          2847,
+          3789
+        ]
+      ],
+      "startSource": "map startboxes",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 64.9403099295683,
+      "heightRange": [
+        0.0,
+        200.0
+      ],
+      "side": 1,
+      "factory": "factoryjump",
+      "seed": 1827
+    },
+    {
+      "id": "folsomdamdeluxev4-factoryshield-s0",
+      "map": "FolsomDamDeluxeV4",
+      "archive": "folsomdamdeluxev4.sd7",
+      "category": "chokepoint/large",
+      "split": "train",
+      "factories": [
+        "factoryshield",
+        "factorycloak"
+      ],
+      "starts": [
+        [
+          1024,
+          3584
+        ],
+        [
+          9216,
+          3584
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__folsomdamdeluxev4.lua",
+      "size": [
+        10240,
+        7168
+      ],
+      "waterFraction": 0.15909567584549766,
+      "heightStd": 215.7773627244543,
+      "heightRange": [
+        -140.0,
+        1200.0
+      ],
+      "side": 0,
+      "factory": "factoryshield",
+      "seed": 1729
+    },
+    {
+      "id": "folsomdamdeluxev4-factoryshield-s1",
+      "map": "FolsomDamDeluxeV4",
+      "archive": "folsomdamdeluxev4.sd7",
+      "category": "chokepoint/large",
+      "split": "train",
+      "factories": [
+        "factoryshield",
+        "factorycloak"
+      ],
+      "starts": [
+        [
+          1024,
+          3584
+        ],
+        [
+          9216,
+          3584
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__folsomdamdeluxev4.lua",
+      "size": [
+        10240,
+        7168
+      ],
+      "waterFraction": 0.15909567584549766,
+      "heightStd": 215.7773627244543,
+      "heightRange": [
+        -140.0,
+        1200.0
+      ],
+      "side": 1,
+      "factory": "factoryshield",
+      "seed": 1730
+    },
+    {
+      "id": "folsomdamdeluxev4-factorycloak-s0",
+      "map": "FolsomDamDeluxeV4",
+      "archive": "folsomdamdeluxev4.sd7",
+      "category": "chokepoint/large",
+      "split": "train",
+      "factories": [
+        "factoryshield",
+        "factorycloak"
+      ],
+      "starts": [
+        [
+          1024,
+          3584
+        ],
+        [
+          9216,
+          3584
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__folsomdamdeluxev4.lua",
+      "size": [
+        10240,
+        7168
+      ],
+      "waterFraction": 0.15909567584549766,
+      "heightStd": 215.7773627244543,
+      "heightRange": [
+        -140.0,
+        1200.0
+      ],
+      "side": 0,
+      "factory": "factorycloak",
+      "seed": 1826
+    },
+    {
+      "id": "folsomdamdeluxev4-factorycloak-s1",
+      "map": "FolsomDamDeluxeV4",
+      "archive": "folsomdamdeluxev4.sd7",
+      "category": "chokepoint/large",
+      "split": "train",
+      "factories": [
+        "factoryshield",
+        "factorycloak"
+      ],
+      "starts": [
+        [
+          1024,
+          3584
+        ],
+        [
+          9216,
+          3584
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__folsomdamdeluxev4.lua",
+      "size": [
+        10240,
+        7168
+      ],
+      "waterFraction": 0.15909567584549766,
+      "heightStd": 215.7773627244543,
+      "heightRange": [
+        -140.0,
+        1200.0
+      ],
+      "side": 1,
+      "factory": "factorycloak",
+      "seed": 1827
+    },
+    {
+      "id": "altair_crossing_v4-factorycloak-s0",
+      "map": "Altair_Crossing_V4",
+      "archive": "altair_crossing_v4.sd7",
+      "category": "small/chokepoint",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          456.0,
+          893.0
+        ],
+        [
+          3640.0,
+          3188.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 37.62413226692767,
+      "heightRange": [
+        -125.0,
+        875.0
+      ],
+      "side": 0,
+      "factory": "factorycloak",
+      "seed": 1729
+    },
+    {
+      "id": "altair_crossing_v4-factorycloak-s1",
+      "map": "Altair_Crossing_V4",
+      "archive": "altair_crossing_v4.sd7",
+      "category": "small/chokepoint",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          456.0,
+          893.0
+        ],
+        [
+          3640.0,
+          3188.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 37.62413226692767,
+      "heightRange": [
+        -125.0,
+        875.0
+      ],
+      "side": 1,
+      "factory": "factorycloak",
+      "seed": 1730
+    },
+    {
+      "id": "altair_crossing_v4-factoryveh-s0",
+      "map": "Altair_Crossing_V4",
+      "archive": "altair_crossing_v4.sd7",
+      "category": "small/chokepoint",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          456.0,
+          893.0
+        ],
+        [
+          3640.0,
+          3188.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 37.62413226692767,
+      "heightRange": [
+        -125.0,
+        875.0
+      ],
+      "side": 0,
+      "factory": "factoryveh",
+      "seed": 1826
+    },
+    {
+      "id": "altair_crossing_v4-factoryveh-s1",
+      "map": "Altair_Crossing_V4",
+      "archive": "altair_crossing_v4.sd7",
+      "category": "small/chokepoint",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          456.0,
+          893.0
+        ],
+        [
+          3640.0,
+          3188.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 37.62413226692767,
+      "heightRange": [
+        -125.0,
+        875.0
+      ],
+      "side": 1,
+      "factory": "factoryveh",
+      "seed": 1827
+    },
+    {
+      "id": "aquatic_divide_revised_v02-factoryamph-s0",
+      "map": "Aquatic Divide Revised v02",
+      "archive": "aquatic_divide_revised_v02.sd7",
+      "category": "amphibious/coastal",
+      "split": "train",
+      "factories": [
+        "factoryamph",
+        "factoryhover"
+      ],
+      "starts": [
+        [
+          307,
+          307
+        ],
+        [
+          3789,
+          3789
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__aquatic divide revised v02.lua",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.14922730260782996,
+      "heightStd": 77.62293063070156,
+      "heightRange": [
+        -100.0,
+        300.0
+      ],
+      "side": 0,
+      "factory": "factoryamph",
+      "seed": 1729
+    },
+    {
+      "id": "aquatic_divide_revised_v02-factoryamph-s1",
+      "map": "Aquatic Divide Revised v02",
+      "archive": "aquatic_divide_revised_v02.sd7",
+      "category": "amphibious/coastal",
+      "split": "train",
+      "factories": [
+        "factoryamph",
+        "factoryhover"
+      ],
+      "starts": [
+        [
+          307,
+          307
+        ],
+        [
+          3789,
+          3789
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__aquatic divide revised v02.lua",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.14922730260782996,
+      "heightStd": 77.62293063070156,
+      "heightRange": [
+        -100.0,
+        300.0
+      ],
+      "side": 1,
+      "factory": "factoryamph",
+      "seed": 1730
+    },
+    {
+      "id": "aquatic_divide_revised_v02-factoryhover-s0",
+      "map": "Aquatic Divide Revised v02",
+      "archive": "aquatic_divide_revised_v02.sd7",
+      "category": "amphibious/coastal",
+      "split": "train",
+      "factories": [
+        "factoryamph",
+        "factoryhover"
+      ],
+      "starts": [
+        [
+          307,
+          307
+        ],
+        [
+          3789,
+          3789
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__aquatic divide revised v02.lua",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.14922730260782996,
+      "heightStd": 77.62293063070156,
+      "heightRange": [
+        -100.0,
+        300.0
+      ],
+      "side": 0,
+      "factory": "factoryhover",
+      "seed": 1826
+    },
+    {
+      "id": "aquatic_divide_revised_v02-factoryhover-s1",
+      "map": "Aquatic Divide Revised v02",
+      "archive": "aquatic_divide_revised_v02.sd7",
+      "category": "amphibious/coastal",
+      "split": "train",
+      "factories": [
+        "factoryamph",
+        "factoryhover"
+      ],
+      "starts": [
+        [
+          307,
+          307
+        ],
+        [
+          3789,
+          3789
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__aquatic divide revised v02.lua",
+      "size": [
+        4096,
+        4096
+      ],
+      "waterFraction": 0.14922730260782996,
+      "heightStd": 77.62293063070156,
+      "heightRange": [
+        -100.0,
+        300.0
+      ],
+      "side": 1,
+      "factory": "factoryhover",
+      "seed": 1827
+    },
+    {
+      "id": "porky_islands-factoryship-s0",
+      "map": "Porky_Islands",
+      "archive": "Porky_Islands.sd7",
+      "category": "coastal/naval",
+      "split": "train",
+      "factories": [
+        "factoryship",
+        "factoryamph"
+      ],
+      "starts": [
+        [
+          819,
+          4096
+        ],
+        [
+          7373,
+          4096
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__porky_islands.lua",
+      "size": [
+        8192,
+        8192
+      ],
+      "waterFraction": 0.6014734086853064,
+      "heightStd": 66.1286243405696,
+      "heightRange": [
+        -100.0,
+        300.0
+      ],
+      "side": 0,
+      "factory": "factoryship",
+      "seed": 1729
+    },
+    {
+      "id": "porky_islands-factoryship-s1",
+      "map": "Porky_Islands",
+      "archive": "Porky_Islands.sd7",
+      "category": "coastal/naval",
+      "split": "train",
+      "factories": [
+        "factoryship",
+        "factoryamph"
+      ],
+      "starts": [
+        [
+          819,
+          4096
+        ],
+        [
+          7373,
+          4096
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__porky_islands.lua",
+      "size": [
+        8192,
+        8192
+      ],
+      "waterFraction": 0.6014734086853064,
+      "heightStd": 66.1286243405696,
+      "heightRange": [
+        -100.0,
+        300.0
+      ],
+      "side": 1,
+      "factory": "factoryship",
+      "seed": 1730
+    },
+    {
+      "id": "porky_islands-factoryamph-s0",
+      "map": "Porky_Islands",
+      "archive": "Porky_Islands.sd7",
+      "category": "coastal/naval",
+      "split": "train",
+      "factories": [
+        "factoryship",
+        "factoryamph"
+      ],
+      "starts": [
+        [
+          819,
+          4096
+        ],
+        [
+          7373,
+          4096
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__porky_islands.lua",
+      "size": [
+        8192,
+        8192
+      ],
+      "waterFraction": 0.6014734086853064,
+      "heightStd": 66.1286243405696,
+      "heightRange": [
+        -100.0,
+        300.0
+      ],
+      "side": 0,
+      "factory": "factoryamph",
+      "seed": 1826
+    },
+    {
+      "id": "porky_islands-factoryamph-s1",
+      "map": "Porky_Islands",
+      "archive": "Porky_Islands.sd7",
+      "category": "coastal/naval",
+      "split": "train",
+      "factories": [
+        "factoryship",
+        "factoryamph"
+      ],
+      "starts": [
+        [
+          819,
+          4096
+        ],
+        [
+          7373,
+          4096
+        ]
+      ],
+      "startSource": "luarules__configs__startboxes__porky_islands.lua",
+      "size": [
+        8192,
+        8192
+      ],
+      "waterFraction": 0.6014734086853064,
+      "heightStd": 66.1286243405696,
+      "heightRange": [
+        -100.0,
+        300.0
+      ],
+      "side": 1,
+      "factory": "factoryamph",
+      "seed": 1827
+    },
+    {
+      "id": "sailaway2-factoryship-s0",
+      "map": "SailAway 2",
+      "archive": "SailAway2.sd7",
+      "category": "naval/large",
+      "split": "train",
+      "factories": [
+        "factoryship",
+        "factoryhover"
+      ],
+      "starts": [
+        [
+          5120,
+          8782.69727
+        ],
+        [
+          5120,
+          1457.30322
+        ]
+      ],
+      "startSource": "map startboxes",
+      "size": [
+        10240,
+        10240
+      ],
+      "waterFraction": 0.6958190962490882,
+      "heightStd": 70.62338203466001,
+      "heightRange": [
+        -75.0,
+        202.0
+      ],
+      "side": 0,
+      "factory": "factoryship",
+      "seed": 1729
+    },
+    {
+      "id": "sailaway2-factoryship-s1",
+      "map": "SailAway 2",
+      "archive": "SailAway2.sd7",
+      "category": "naval/large",
+      "split": "train",
+      "factories": [
+        "factoryship",
+        "factoryhover"
+      ],
+      "starts": [
+        [
+          5120,
+          8782.69727
+        ],
+        [
+          5120,
+          1457.30322
+        ]
+      ],
+      "startSource": "map startboxes",
+      "size": [
+        10240,
+        10240
+      ],
+      "waterFraction": 0.6958190962490882,
+      "heightStd": 70.62338203466001,
+      "heightRange": [
+        -75.0,
+        202.0
+      ],
+      "side": 1,
+      "factory": "factoryship",
+      "seed": 1730
+    },
+    {
+      "id": "sailaway2-factoryhover-s0",
+      "map": "SailAway 2",
+      "archive": "SailAway2.sd7",
+      "category": "naval/large",
+      "split": "train",
+      "factories": [
+        "factoryship",
+        "factoryhover"
+      ],
+      "starts": [
+        [
+          5120,
+          8782.69727
+        ],
+        [
+          5120,
+          1457.30322
+        ]
+      ],
+      "startSource": "map startboxes",
+      "size": [
+        10240,
+        10240
+      ],
+      "waterFraction": 0.6958190962490882,
+      "heightStd": 70.62338203466001,
+      "heightRange": [
+        -75.0,
+        202.0
+      ],
+      "side": 0,
+      "factory": "factoryhover",
+      "seed": 1826
+    },
+    {
+      "id": "sailaway2-factoryhover-s1",
+      "map": "SailAway 2",
+      "archive": "SailAway2.sd7",
+      "category": "naval/large",
+      "split": "train",
+      "factories": [
+        "factoryship",
+        "factoryhover"
+      ],
+      "starts": [
+        [
+          5120,
+          8782.69727
+        ],
+        [
+          5120,
+          1457.30322
+        ]
+      ],
+      "startSource": "map startboxes",
+      "size": [
+        10240,
+        10240
+      ],
+      "waterFraction": 0.6958190962490882,
+      "heightStd": 70.62338203466001,
+      "heightRange": [
+        -75.0,
+        202.0
+      ],
+      "side": 1,
+      "factory": "factoryhover",
+      "seed": 1827
+    }
+  ],
+  "seconds": 1200,
+  "speed": 20,
+  "ai": "1052188CircuitAIBrutal64",
+  "files": {
+    "tests\\benchmark_driver.lua": "35a1ce960b31d2a3833a6fee6e04ea34d968ebc04c14a51daaac08a9d13b2d5b",
+    "tests\\benchmark_observer.lua": "f42be284854360ca9901f869a05664ade992f775e27d45d55bdb042f99140155",
+    "LuaUI\\Widgets\\gui_command_layer.lua": "dd420ecaca034685ad6216c96e5069b15dfc8fbcc5beafb2fa74f0ab8c6f8692",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Arsenal.lua": "4a8866bfbd921262d8b974a823466c39dfefc4104d070f3f45b89d3022e382bc",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Debug.lua": "1de42d6a11aad6ee33d3439d97fb9e0f590194566a146f556807b6957862b44d",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Defense.lua": "0d50de4d4efe38971b142d9847d5a7dede89ddc4423a30eb019129cbf68756a6",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Domains.lua": "5117d9df0b76319c31002d45f6c9a11c16e256713ab415401d89304762401dd1",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Economy.lua": "47667f23278cc692b13d53191007d497d098b921ec100dfc7d37d4f337eac4e1",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\EnemyModel.lua": "febf3467bdcccee79e4ac480fb65b8428a304c04a688748fbd28ad82eb75dff1",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\ForceRegistry.lua": "0d2fdfd672d1106b80270ed085d1bd67115f689d5de61dbc17071f820352de89",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Formations.lua": "dc65d4e00b555a36e0c3e8f93b5f7e474613c095e9740fab22d5ede2be6d1165",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Input.lua": "9743f4602576a0385f5e5a803a2af832ee95b088a0f4535919e842ef685482e7",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Logistics.lua": "f99b4203a04133157a30f978b71dfc49ef146ec2000770dd8c305eb4aa737d4a",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\MapControl.lua": "251858bf2f764e24bfd1ca8c873f8ee133ccb5ffa94539609ee301a006280f51",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Observations.lua": "227b50feb18b9a3b79b0d9572bba6363f895b5ddb75ec2b8c7ccc59df19316cc",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Officer.lua": "0dc641a3c66e5276eabf0006885db5ad94df0a27cad1055eef7bf5402a9acf64",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Orders.lua": "71e82cdb8b9ed1fb502c4a20ffaf152483993d1e6a1069708e160268165b2d05",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\ProductionAdvisor.lua": "50be0c1db65d7efd66003796566e89899b2996f090f4bad42277e91f587680d2",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\ProductionController.lua": "2e75b29b6dbb5594186640418438f1fc3dde81b6995dc7d75564820d52313324",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\ProposalService.lua": "ae544000f91836f4b40204c8b9c0e61143dbdc2affb223df192fa1ceccfcc55d",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Recovery.lua": "40ed4c8bb0d436801a5ce11e560c5c0c592e4cec306bbdf777ad4d45aa6e2ada",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\RetreatPriority.lua": "bc88d8132b0384645ed58d5e6151393b875af7ccca099385ee038c7ce2b98323",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Routing.lua": "6aaafff008c59ea321a9ef783e66539964f52a13cfffacc6991bb17da69de93f",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Settings.lua": "9d7b8548131ebdb1e72bb8dd242ab1322728ae7765ff617763750210156682ee",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Startup.lua": "5ad380317103f3562c2ea6c9d4a5b0e52a8fbc0e97d32a68cb5345317f7a888e",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\TacticalAdvisor.lua": "74029f8842886a1aed963627acb5bd206f062b25d798c46020ccd5d590b2c07a",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\TacticalController.lua": "c79a75a99c81cfed0663eb6519204576a384373e08343e686fcc6c996b830793",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\TacticalRules.lua": "5f4d75737240067c4f72541522c745208a5ae7e50dc10ada381dd30ac7e09a55",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\UI.lua": "b7f8074c6c3c0238b621ca19561d8ced32481664970ad6aeaf8ca08e68173f91",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\UnitClassification.lua": "41566e1a9cb525e1291521d0cff9c343baa2c86f321a1e40fd7d81019b620ef3",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Util.lua": "83be9eba1e5c8b2ca12e37be3eeaa6993291ce4312899c1ec7b16a83b12ba951"
+  },
+  "engineSha256": "8a1895bad0c7e5140ae8fcb75f8c314b26085d9ba326f214aaa23011110acd60",
+  "aiSha256": "147e2c5475e947a4d0e3f7d875e67707439ee52b63af5ab0b2839a8ea5158431",
+  "aiFiles": {
+    "stable\\AIInfo.lua": "6eb5c7a2e1a16d3a4a89cec770a490fc395ee350943f7cc68003329e5294e5d5",
+    "stable\\AIOptions.lua": "b25fd62e61a5cbd11be111c37f62c4716ce1a7d7b26481822f312fe127535da8",
+    "stable\\libSkirmishAI.so": "5969ff35fec601180515325692d6b2861925c241e9a47162bbbb01912f531223",
+    "stable\\SkirmishAI.dll": "147e2c5475e947a4d0e3f7d875e67707439ee52b63af5ab0b2839a8ea5158431",
+    "stable\\config\\behaviour.json": "0e34436c29c0c088b76778d95cad7a958dfc9bdaa5c74bd10c1db93d88a59896",
+    "stable\\config\\block_map.json": "e70141d15777ff255e2b62ea7e3c65c34155fd23b50b41421a2662f222a1dadc",
+    "stable\\config\\build_chain.json": "1121ff229db53a33274b493c244e1868ecb5a04bb327bc471cc2dde72e7a72bb",
+    "stable\\config\\commander.json": "78ebe2c9fe54f27303cdcef390c51d91681ab75d1126a277b1c27009659cffaf",
+    "stable\\config\\economy.json": "51c4b269d43e6a48ed2623199975bfdc9264864aa51d14fe6c149fd348a8f3e4",
+    "stable\\config\\factory.json": "927fb27254bcfd0ba76b500a15e54b74d51f4d8b0e2c4b7754cdc75ef46862ee",
+    "stable\\config\\response.json": "6c2873b40b40ba5f56bf3724fa0d64aa18eb688ca2846675b97f2e5eacfdd5b7",
+    "stable\\script\\init.as": "adcd11b8165e29089df8c2f52420bb40752d080e4451dedd3cc68a628dfa1353",
+    "stable\\script\\role.as": "50af41000dee7e242559dc451586a1547510a7c352c03a192315653d680b7e1a",
+    "stable\\script\\side.as": "9129aa4f722da5970bf3d75dc03ae6f5626af7ca2cabe8847d5102e51c1c164e"
+  }
+}

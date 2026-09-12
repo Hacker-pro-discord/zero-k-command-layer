@@ -1,0 +1,10 @@
+case,map,side,factory,outcome,seconds,killed,lost,ownIncome,enemyIncome,ownMex,enemyMex,ownArmyValue,enemyArmyValue,firstFiveCreatedSeconds,firstFiveReadySeconds,explored,scoutVisited
+adamantine_mountain_2-factoryspider-s0,Adamantine Mountain 2,0,factoryspider,ABORTED_FOR_FIX,497.7,1320,6220,2,31.7,0,15,0,2863,30.0000019,30.0000019,0.87109375,0.62109375
+comet_catcher_redux_v3_1-factorytank-s0,Comet Catcher Redux v3.1,0,factorytank,ABORTED_FOR_FIX,392.3,1015,795,38.7,47.8,11,15,2467,2410,170.000015,200.900009,0.6484375,0.23046875
+comet_catcher_redux_v3_1-factorytank-s1,Comet Catcher Redux v3.1,1,factorytank,ABORTED_FOR_FIX,0,0,0,0,0,0,0,0,0,,,0,0
+comet_catcher_redux_v3_1-factoryveh-s0,Comet Catcher Redux v3.1,0,factoryveh,LOSS,834.4,165,9575,4.3,155.5,1,61,0,19140,50.0000038,50.0000038,0.84375,0.4140625
+comet_catcher_redux_v3_1-factoryveh-s1,Comet Catcher Redux v3.1,1,factoryveh,LOSS,898.0,4115,12135,6,216.2,0,78,0,23772,80.0000076,90.2333374,0.796875,0.4140625
+red_comet_remake_1_7-factorycloak-s0,Red Comet Remake 1.7,0,factorycloak,LOSS,720.1,2210,7925,2,84.0,0,32,120,8256,50.0000038,60.0000038,0.7578125,0.4609375
+red_comet_remake_1_7-factorycloak-s1,Red Comet Remake 1.7,1,factorycloak,LOSS,863.9,3600,10230,2,115.1,0,37,0,14667,50.0000038,60.0000038,0.7734375,0.6015625
+red_comet_remake_1_7-factoryveh-s0,Red Comet Remake 1.7,0,factoryveh,LOSS,818.1,3940,11000,2,102.8,0,35,0,10779,70,70.0666733,0.90234375,0.55078125
+red_comet_remake_1_7-factoryveh-s1,Red Comet Remake 1.7,1,factoryveh,LOSS,659.8,1310,11655,2,81.9,0,27,0,6020,60.0000038,70.1666718,0.8671875,0.546875

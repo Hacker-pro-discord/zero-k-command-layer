@@ -17,3 +17,5 @@ Run `python tools/benchmark.py --game GAME_DIRECTORY --directory NEW_RESULTS_DIR
 Initial 8x runs are preliminary timing/diagnostic pilots and excluded from the paired campaign. All formal baseline/candidate/holdout cases request 20x with three workers; actual speed may be CPU limited.
 
 Population fields count spawned units, including unfinished frames; army value is weighted by build completion. The first-five-created metric is not the first-five-completed metric. Candidate telemetry additionally records completed military count and native factory queue quantities/repeat states. These extra fields do not alter the controller; earlier records lacking them stay unavailable. Baseline subgroup lists can retain dead entries; native population metrics are the authoritative counts.
+
+Killed/lost values are nominal UnitDef metal values (including unfinished casualties), not exact resources paid. Total losses include unattributed/environmental deaths; attributed kill values require an opposing attacker team. Do not interpret the resulting trade ratio as an exact resource ledger.
