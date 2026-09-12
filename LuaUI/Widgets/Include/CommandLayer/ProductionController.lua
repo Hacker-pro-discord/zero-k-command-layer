@@ -55,6 +55,8 @@ return function(C)
 		-- Fair round-robin, one addition per idle factory per pass. Reserve spending
 		-- locally because Spring resource values can lag several orders in a frame.
 		local factories={}; for id in pairs(P.factories) do factories[#factories+1]=id end; table.sort(factories)
+		local workerNeed=C.recovery and C.recovery.workerNeed() or 0
+		local recoveryReserve=C.recovery and C.recovery.reserveMetal() or 0
 		local sent=0
 		for offset=1,#factories do
 			local index=((P.cursor or 0)+offset-1)%#factories+1; local id=factories[index]
@@ -63,14 +65,15 @@ return function(C)
 				local factory=UnitDefs[Spring.GetUnitDefID(id)]
 				for _,bid in ipairs(factory and factory.buildOptions or {}) do
 					local d=C.classify.definition(bid)
-					if d.mobile and not d.builder and d.cost>0 and metal>=d.cost+100 and P.valid(id,bid) then
-						local score=weights and #members>=5 and -C.enemyModel.score(d,weights,friendly,total) or d.cost+(d.role==desired and 0 or 100000)
-						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost} end
+					local recovery=workerNeed>0 and UnitDefs[bid].name=='cloakcon'
+					if d.mobile and (not d.builder or recovery) and d.cost>0 and metal>=d.cost+100+(recovery and 0 or recoveryReserve) and P.valid(id,bid) then
+						local score=recovery and -1000000 or weights and #members>=5 and -C.enemyModel.score(d,weights,friendly,total) or d.cost+(d.role==desired and 0 or 100000)
+						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost,recovery=recovery} end
 					end
 				end
 			end
 			if best and C.orders.production(id,best.unit) then
-				metal=metal-best.cost; sent=sent+1
+				metal=metal-best.cost; sent=sent+1; if best.recovery then workerNeed=workerNeed-1 end
 				if friendly then friendly[best.role]=(friendly[best.role] or 0)+best.cost; total=total+best.cost end
 				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(weights and #members>=5 and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or 'Desired role: '..desired))
 			end

@@ -16,3 +16,9 @@ find('START MAP CONTROL').OnClick[1](); assert(C.testStarted)
 C.settings.autoAssign=true; C.settings.privateSession=false; C.ui.build()
 assert(find('AUTO ASSIGN: WAIT'))
 C.ui.update(1); assert(C.ui.detail.text:find('enable LOCAL / PRIVATE'))
+
+C.productionControl.enroll=function(ids) C.enrolled=ids; return true end
+C.recovery={status='Recovery test',enroll=function(ids) C.builders=ids end,cancelRequests=function() C.cancelled=true end,stop=function() C.recoveryStopped=true end}
+C.ui.showManagement(); find('RE-ENROLL SELECTED FACTORIES').OnClick[1](); assert(C.enrolled[1]==1)
+find('ADD SELECTED BUILDERS').OnClick[1](); assert(C.builders[1]==1)
+find('ADD BUILD REQUEST').OnClick[1](); assert(C.recovery.armed)

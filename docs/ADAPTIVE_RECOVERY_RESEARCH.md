@@ -25,3 +25,10 @@ Air and naval detachments will use native movement/combat orders and domain-comp
 ## Milestone validation
 
 Shared intel / factory re-enrollment: 27 suites passed. Isolated 60-second automatic production run completed, native Knight production logged, no EnemyModel/Command Layer errors. UI stubs cover existing controls; rendered UI inspection remains pending.
+
+
+Recovery diagnostics found native RAW_BUILD approach commands stalling on the initial forced-spawn scenario. The test fixture now validates terrain/spawn placement, and the separate construction pipeline scenario uses an explicitly flattened test pad (isolated mutator only). These runs are not routing victories. Recovery prioritizes the feature ID returned by TestBuildOrder, offsets reserve escort positions from work sites, and releases builders after 25 seconds without approach/work progress. Other builders can take the pending job. Native queues are preserved for manual review.
+
+TestBuildOrder's second result is a blocking reclaimable feature ID; its compatibility codes map open/reclaimable to 2. Confirmed in Recoil's public LuaSyncedRead.cpp, in addition to installed Mex/CommandInsert usage. Runtime calls remain LOS-filtered. Terrain fixture calls to SetHeightMapFunc/LevelHeightMap follow installed api_map_structures.lua and never enter production widgets.
+
+Recovery milestone: 28 Lua suites passed. The 180-game-second flat-pad run completed with two Conjurers, native factory repair, replacement solar `energysolar:20969` at full build, and native wreck reclamation. See recovery-engine.txt. Earlier uneven-terrain runs failed to finish reconstruction; this remains a routing limitation, with timeout/manual re-enrollment available. No claim of full terrain reliability.

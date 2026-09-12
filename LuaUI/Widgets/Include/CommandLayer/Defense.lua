@@ -55,8 +55,11 @@ return function(C)
 		if r.damage and now<r.damage.untilTime and C.formations.inCorridor(d.sector,r.damage.point) then
 			if not threat then threat={point=r.damage.point,risk=195,asset=r.damage.id,reason='Owned asset lost health; attacker identity and position are not inferred.'} end
 		end
+		if threat and C.recovery then C.recovery.threat(threat.point) end
+		local recoveryHold=not threat and r.threat and C.recovery and C.recovery.hold(r.threat.point,now)
+		if recoveryHold then r.reason="Reserve escort: waiting for repairs, reconstruction and wreck clearance." end
 		if threat then if not r.threat then r.next=now end; r.threat=threat; r.lastThreat=now end
-		if not threat and r.threat and now-r.lastThreat>=20 then
+		if not threat and r.threat and not recoveryHold and now-r.lastThreat>=20 then
 			if d.ops.DEFENSE then C.officer.cancel(d.ops.DEFENSE); d.ops.DEFENSE=nil end
 			local returning=C.U.copy(d.groups.DEFENSE)
 			for _,id in ipairs(returning) do transfer(d,id,'MAIN') end
@@ -85,10 +88,12 @@ return function(C)
 			for _,group in ipairs({'MAIN','RAID','SCOUT'}) do for _,id in ipairs(d.groups[group]) do if eligible(f,id) and suitable(id) then candidates[#candidates+1]=id end end end
 			table.sort(candidates,function(a,b) local x,y=C.U.distance(C.U.position(a),r.threat.point),C.U.distance(C.U.position(b),r.threat.point); return x==y and a<b or x<y end)
 			for _,id in ipairs(candidates) do if committed>=desired then break end; transfer(d,id,'DEFENSE'); committed=committed+cost(id) end
-			r.committedValue=committed; r.reserveValue=0; r.state='DEFENDING'; r.reason=r.threat.reason
+			r.committedValue=committed; r.reserveValue=0; r.state=recoveryHold and 'ESCORTING RECOVERY' or 'DEFENDING'; r.reason=recoveryHold and 'Reserve escort: repair/rebuild/reclaim in progress.' or r.threat.reason
 		end
 		local group=r.threat and 'DEFENSE' or 'RESERVE'; local selected=ids(f,group); table.sort(selected)
-		local target=r.threat and r.threat.point or home; local signature=table.concat(selected,',')
+		local target=r.threat and r.threat.point or home
+		if recoveryHold then local dx,dz=target[1]-home[1],target[3]-home[3]; local length=math.max(1,math.sqrt(dx*dx+dz*dz)); if length<=1 then dx=1; dz=0 end; local offset=400+math.min(600,#selected*8); local x=math.max(16,math.min(Game.mapSizeX-16,target[1]+dx/length*offset)); local z=math.max(16,math.min(Game.mapSizeZ-16,target[3]+dz/length*offset)); target={x,Spring.GetGroundHeight(x,z),z} end
+		local signature=table.concat(selected,',')
 		local op=d.ops[group] and C.registry.operations[d.ops[group]]
 		local changed=signature~=r.signature or r.target and C.U.distance(target,r.target)>200
 		local distant=false; for _,id in ipairs(selected) do if C.U.distance(C.U.position(id),op and op.slots[id] or target)>300 then distant=true; break end end

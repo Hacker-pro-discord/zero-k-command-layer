@@ -38,7 +38,7 @@ return function(C)
 			button(p,0,252,375,'ASSIGN ALL MILITARY','Assign all your completed mobile military units now, including air/naval. Excludes builders and structures. No orders until delegated; Auto Assign handles subsequent recruits.',function() C.officer.assignAll() end)
 			for i,front in ipairs({'ADVANCE','HOLD','FLANK_LEFT','FLANK_RIGHT'}) do local directive=front; button(p,(i-1)*95,294,91,front:gsub('_',' '),'Set this force front approach. Cancels maintenance; next action still needs approval. Set an objective line for this front.',function() C.officer.setFront(C.registry.activeForce,directive) end) end
 			button(p,0,338,185,'DELEGATE PRESSURE','Single-player only. Continuously scout, raid and push assigned units inside your objective corridor until stopped. This explicitly authorizes repeated orders.',function() C.officer.setDelegated(C.registry.activeForce,true) end)
-			button(p,190,338,90,'STOP AI','Stop delegation and production; existing native orders remain.',function() C.productionControl.set(false); C.officer.setDelegated(C.registry.activeForce,false) end)
+			button(p,190,338,90,'STOP AI','Stop delegation and production; existing native orders remain.',function() C.productionControl.set(false); if C.recovery then C.recovery.stop() end; if C.arsenal then C.arsenal.stop() end; C.officer.setDelegated(C.registry.activeForce,false) end)
 			button(p,285,338,90,'AI DETAILS','Read groups, observed evidence and current decision.',function() UI.showTactical() end)
 			button(p,0,380,185,'REVIEW ARMY PUSH','Propose one Fight action by the entire assigned force. Draw an objective first. Approval required; delegation ends on approval.',function() C.advisor.ask(C.registry.activeForce,true,true) end)
 			button(p,190,380,185,'AUTO ASSIGN: '..(C.settings.autoAssign and (C.U.assisted(C.settings) and 'ON' or 'WAIT') or 'OFF'),'Recruit existing unassigned and newly completed military units into a fixed receiving force. Manual releases stay released. Existing approvals never expand.',function() C.officer.setAutoAssign(not C.settings.autoAssign); UI.build() end)
@@ -50,15 +50,21 @@ return function(C)
 	end
 	function UI.showManagement()
 		if UI.management then UI.management:Dispose() end
-		local p=UI.ch.Window:New{name='CommandLayerManagement',caption='Officer control and logistics',parent=UI.ch.Screen0,x=440,y=80,width=560,height=570,draggable=true,resizable=false,padding={12,30,12,12}}; UI.management=p
+		local p=UI.ch.Window:New{name='CommandLayerManagement',caption='Officer control and logistics',parent=UI.ch.Screen0,x=440,y=80,width=560,height=690,draggable=true,resizable=false,padding={12,30,12,12}}; UI.management=p
 		button(p,0,0,510,'RE-ENROLL SELECTED FACTORIES','Explicitly return selected factories to AI production. Busy queues stay intact. Other manual exclusions stay excluded.',function() C.productionControl.enroll(Spring.GetSelectedUnits()); UI.showManagement() end)
 		button(p,0,45,250,'PREVIOUS FORCE','View previous force.',function() C.officer.cycle(-1) end)
 		button(p,260,45,250,'NEXT FORCE','View next force.',function() C.officer.cycle(1) end)
-		local text=C.productionControl.status
+		if C.recovery then
+			button(p,0,92,250,'ADD SELECTED BUILDERS','Enroll selected constructors for recovery and requested construction. Manual orders release them again.',function() C.recovery.enroll(Spring.GetSelectedUnits()); UI.showManagement() end)
+			button(p,260,92,250,'ADD BUILD REQUEST','Select constructors, click this, then choose and place one native build command. The AI receives that explicit build request; Escape cancels.',function() C.recovery.armed=true; C.debug.log('BUILD REQUEST','Choose a building in the native build menu and place it. Escape cancels.'); p:Dispose(); UI.management=nil end)
+			button(p,0,136,250,'CANCEL BUILD REQUESTS','Cancel pending reconstruction and manual requests. Native orders already issued remain.',function() C.recovery.cancelRequests(); UI.showManagement() end)
+			button(p,260,136,250,'STOP RECOVERY','Release builders from automation; existing native queues remain.',function() C.recovery.stop(); UI.showManagement() end)
+		end
+		local text=C.productionControl.status..(C.recovery and ('\n'..C.recovery.status) or '')
 		if C.enemyModel then local model=C.enemyModel.snapshot(); text=text..'\n\nRolling visual intel (half-life '..model.halfLife..'s):'; local keys={}; for role in pairs(model.roles) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..'\n'..role..': '..string.format('%.1f',model.roles[role])..' weighted sightings' end; text=text..'\nUnknown radar contacts: '..model.unknown..'\nOld sightings decay; this is not a current hidden-army count.' end
-		UI.ch.TextBox:New{parent=p,x=0,y=100,width=510,height=300,text=text}
-		button(p,0,465,250,'REFRESH','Refresh current control and intel information.',function() UI.showManagement() end)
-		button(p,260,465,250,'CLOSE','Keep current controls.',function() p:Dispose(); UI.management=nil end)
+		UI.ch.TextBox:New{parent=p,x=0,y=232,width=510,height=300,text=text}
+		button(p,0,590,250,'REFRESH','Refresh current control and intel information.',function() UI.showManagement() end)
+		button(p,260,590,250,'CLOSE','Keep current controls.',function() p:Dispose(); UI.management=nil end)
 	end
 	function UI.initialize()
 		if not WG.Chili then return false end; UI.ch=WG.Chili

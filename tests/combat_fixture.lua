@@ -4,6 +4,8 @@ if not gadgetHandler:IsSyncedCode() then return end
 local armies={[0]={},[1]={}}; local value={[0]=0,[1]=0}; local losses={[0]=0,[1]=0}; local damage={[0]=0,[1]=0}; local active=false
 local roster={{'cloakraid',18},{'cloakriot',4},{'cloakskirm',4},{'cloakarty',4},{'cloakaa',2}}
 local defense=Spring.GetModOptions().cl_test_defense=='1'
+local recovery=Spring.GetModOptions().cl_test_recovery=='1'
+local recoverySolar; local homeX,homeZ=1400,1400
 local homeFactory; local raiders={}
 local stress=Spring.GetModOptions().cl_test_stress=='1'
 if stress then roster={{'cloakraid',240},{'cloakriot',40},{'cloakskirm',40},{'cloakarty',40},{'cloakaa',40}} end
@@ -23,7 +25,10 @@ local function metric()
 	report('METRIC frame='..Spring.GetGameFrame()..' own_count='..totals[0][1]..' enemy_count='..totals[1][1]..' own_value='..totals[0][2]..' enemy_value='..totals[1][2]..' own_lost='..losses[0]..' enemy_lost='..losses[1]..' own_damage_taken='..math.floor(damage[0])..' enemy_damage_taken='..math.floor(damage[1]))
 end
 function gadget:GameFrame(frame)
-	if frame==30 then
+	if recovery and frame==1 then
+		Spring.SetHeightMapFunc(function() Spring.LevelHeightMap(64,64,math.min(Game.mapSizeX-64,3600),math.min(Game.mapSizeZ-64,3200),170) end)
+		report('RECOVERY_TEST_PAD flat construction pad in isolated test only; not a routing benchmark')
+	elseif frame==30 then
 		-- Identical combat rosters, separate from starting commanders.
 		for team=0,1 do
 			local index=0
@@ -44,16 +49,23 @@ function gadget:GameFrame(frame)
 	elseif frame==90 and (defense or Spring.GetModOptions().cl_test_production=='1') then
 		for i,name in ipairs((stress or startup) and {'factorycloak','factoryveh','factoryshield','factoryhover'} or {'factorycloak'}) do
 			local x=800+i*600; local z=stress and 500 or 1400
+			if recovery then local found=false; for sx=640,Game.mapSizeX-640,192 do if found then break end; for sz=640,Game.mapSizeZ*.45,192 do local sy=Spring.GetGroundHeight(sx,sz); local ok,feature=Spring.TestBuildOrder(UnitDefNames[name].id,sx,sy,sz,0); if ok==2 and not feature and math.abs(sy-Spring.GetGroundHeight(sx+250,sz))<10 and math.abs(sy-Spring.GetGroundHeight(sx,sz+250))<10 then x=sx; z=sz; found=true; break end end end; report('RECOVERY_FACTORY valid_site='..tostring(found)..' pos='..x..','..z) end
 			local id=Spring.CreateUnit(name,x,Spring.GetGroundHeight(x,z),z,0,0)
-			if defense then homeFactory=id end
+			if defense then homeFactory=id; homeX=x; homeZ=z end
+			if recovery then
+				for j=1,2 do for attempt=1,32 do local angle=(attempt+j*5)*math.pi/8; local cx,cz=x+math.cos(angle)*300,z+math.sin(angle)*300; local cy=Spring.GetGroundHeight(cx,cz); if Spring.TestMoveOrder(UnitDefNames.cloakcon.id,cx,cy,cz,0,0,0,true,true,false) then local builder=Spring.CreateUnit('cloakcon',cx,cy,cz,0,0); report('RECOVERY_BUILDER valid_terrain unit='..tostring(builder)); break end end end
+				for attempt=1,32 do local angle=attempt*math.pi/8; local sx,sz=x+math.cos(angle)*250,z+math.sin(angle)*250; local sy=Spring.GetGroundHeight(sx,sz); if math.abs(sy-Spring.GetGroundHeight(x,z))<20 and Spring.TestBuildOrder(UnitDefNames.energysolar.id,sx,sy,sz,0)>0 then recoverySolar=Spring.CreateUnit('energysolar',sx,sy,sz,0,0); break end end
+				report('RECOVERY_SETUP two Conjurers; solar='..tostring(recoverySolar))
+			end
 			report('PRODUCTION_FIXTURE factory='..tostring(id)..' type='..name..'; not an equal-army comparison')
 		end
 	elseif frame==180 then
 		for id,p in pairs(armies[1]) do if early or defense then Spring.GiveOrderToUnit(id,CMD.FIRE_STATE,{0},0) else Spring.GiveOrderToUnit(id,CMD.FIGHT,{p.x,Spring.GetGroundHeight(p.x,2400),2400},0) end end
 		report(early and 'PASSIVE_ENEMY hold fire for controlled recovery test' or 'ENEMY_ADVANCE native Fight issued')
 	elseif defense and frame==900 then
-		for i=1,8 do local x=1700+i*25; local z=1500; local id=Spring.CreateUnit('cloakraid',x,Spring.GetGroundHeight(x,z),z,0,1); if id then raiders[#raiders+1]=id; Spring.GiveOrderToUnit(id,CMD.FIGHT,{1400,Spring.GetGroundHeight(1400,1400),1400},0) end end
+		for i=1,8 do local x=homeX+300+i*25; local z=homeZ+100; local id=Spring.CreateUnit('cloakraid',x,Spring.GetGroundHeight(x,z),z,0,1); if id then raiders[#raiders+1]=id; Spring.GiveOrderToUnit(id,CMD.FIGHT,{homeX,Spring.GetGroundHeight(homeX,homeZ),homeZ},0) end end
 		if homeFactory and Spring.ValidUnitID(homeFactory) then local h=Spring.GetUnitHealth(homeFactory); Spring.SetUnitHealth(homeFactory,h*.8) end
+		if recovery and recoverySolar and Spring.ValidUnitID(recoverySolar) then Spring.DestroyUnit(recoverySolar,false,false); report('RECOVERY_DESTROY solar leaves wreck for reconstruction') end
 		report('DEFENSE_RAID eight raiders near home factory; controlled initial damage; not an equal-army benchmark')
 	elseif defense and frame==1800 then
 		for _,id in ipairs(raiders) do if Spring.ValidUnitID(id) and not Spring.GetUnitIsDead(id) then Spring.DestroyUnit(id,false,true) end end
@@ -69,6 +81,7 @@ function gadget:GameFrame(frame)
 		report(frame==900 and (cover and 'CONTROLLED_DAMAGE six=5% four=90%' or 'CONTROLLED_DAMAGE health=30%') or 'CONTROLLED_HEAL health=100%')
 	elseif active and frame%300==0 then
 		metric()
+		if recovery then local parts={}; for _,id in ipairs(Spring.GetTeamUnits(0)) do local def=UnitDefs[Spring.GetUnitDefID(id)]; if def.name=='energysolar' or def.name=='factorycloak' or def.name=='cloakcon' then local _,_,_,_,built=Spring.GetUnitHealth(id); parts[#parts+1]=def.name..':'..id..':'..string.format('%.2f',built or 0) end end; table.sort(parts); report('RECOVERY_ASSETS '..table.concat(parts,',')) end
 		if frame==30*(tonumber(Spring.GetModOptions().cl_test_duration) or 120) then report('END combat benchmark') end
 	end
 end

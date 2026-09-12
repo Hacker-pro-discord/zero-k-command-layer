@@ -47,6 +47,17 @@ return function(C)
 		for i=#list,1,-1 do local p=list[i]; if p.untilTime<C.U.now() then table.remove(list,i) elseif p.cmd==cmd and same(p.params,params) then table.remove(list,i); return true end end
 		return fromSynced==true -- Native gadget orders are not player override.
 	end
+	function O.service(name,id,cmd,params)
+		if name~='recovery' and name~='arsenal' then return false end
+		local service=C[name]; if not service or not service.valid(id,cmd,params) then return false end
+		local opts=C.U.options({}); O.sending=true
+		local handled=widgetHandler:UnitCommandNotify(id,cmd,params,opts); local ok=false
+		if not handled and service.valid(id,cmd,params) then
+			O.pending[id]=O.pending[id] or {}; table.insert(O.pending[id],{cmd=cmd,params=C.U.copy(params),untilTime=C.U.now()+5})
+			ok=Spring.GiveOrderToUnit(id,cmd,params,opts.coded)
+		end
+		O.sending=false; return ok
+	end
 	function O.production(id,unit)
 		if not C.productionControl or not C.productionControl.valid(id,unit) then return false end
 		local cmd=-unit; local opts=C.U.options({shift=true})

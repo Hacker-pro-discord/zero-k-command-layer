@@ -23,4 +23,7 @@ C.productionControl.release(20); C.productionControl.release(21)
 assert(C.productionControl.enroll({20}) and C.productionControl.factories[20] and C.productionControl.excluded[21])
 local before=#calls; clock=606; C.productionControl.update(); assert(#calls==before) -- existing queues retained
 queues[20]={}; clock=612; C.productionControl.update(); assert(#calls==before+1 and calls[#calls].id==20)
+contacts={}; clock=702; local aged=C.enemyModel.weights(); assert(aged.SKIRMISHER<w.SKIRMISHER)
+Spring.GetUnitLosState=function() return {radar=true} end; C.enemyModel.destroyed(90); assert(C.enemyModel.seen[90])
+Spring.GetUnitLosState=function() return {los=true} end; C.enemyModel.destroyed(90); assert(not C.enemyModel.seen[90])
 C.settings.privateSession=false; assert(not C.productionControl.enroll({21})); assert(C.enemyModel.snapshot().total==0 and next(C.enemyModel.seen)==nil)

@@ -11,24 +11,27 @@ return function(C)
 				E.seen[v.id]={role=role,cost=def and def.metalCost or 0,time=v.time or live.time or now}
 			elseif v.visibility=='RADAR' then unknown=unknown+1 end
 		end
-		local out={roles={},value={},total=0,unknown=unknown,time=now,halfLife=C.settings.intelHalfLife or 90}
+		local out={roles={},value={},rawValue={},total=0,unknown=unknown,time=now,halfLife=C.settings.intelHalfLife or 90}
 		for id,v in pairs(E.seen) do
 			local age=math.max(0,now-v.time)
 			if age>out.halfLife*6 then E.seen[id]=nil else
 				local weight=2^(-age/out.halfLife)
 				out.roles[v.role]=(out.roles[v.role] or 0)+weight
+				out.rawValue[v.role]=(out.rawValue[v.role] or 0)+math.max(50,v.cost)
 				out.value[v.role]=(out.value[v.role] or 0)+math.max(50,v.cost)*weight
 				out.total=out.total+math.max(50,v.cost)*weight
 			end
 		end
 		E.latest=out; return out
 	end
+	function E.destroyed(id) if C.U.delegationAllowed(C.settings) and Spring.GetUnitLosState then local state=Spring.GetUnitLosState(id,Spring.GetMyAllyTeamID(),false); if state and state.los then E.seen[id]=nil end end end
 	function E.update() if C.U.now()-E.last>=1 then E.last=C.U.now(); E.snapshot() end end
 	function E.weights()
 		local model=E.snapshot()
 		local weights={RAIDER=3,RIOT=2,SKIRMISHER=2,ASSAULT=3,ARTILLERY=1,ANTI_AIR=1,SUPPORT=.5,OTHER=.5,SCOUT=.3}
 		local counters={RAIDER={RIOT=9},SCOUT={RIOT=5},RIOT={SKIRMISHER=9},ASSAULT={SKIRMISHER=7,RAIDER=2},SKIRMISHER={RAIDER=8},ARTILLERY={RAIDER=7},AIR={ANTI_AIR=14},DEFENSE={ARTILLERY=10,ASSAULT=3}}
-		for role,value in pairs(model.value) do for counter,bias in pairs(counters[role] or {}) do weights[counter]=weights[counter]+bias*value/math.max(300,model.total) end end
+		local confidenceBase=0; for role,value in pairs(model.rawValue or {}) do if counters[role] then confidenceBase=confidenceBase+value end end
+		for role,value in pairs(model.value) do for counter,bias in pairs(counters[role] or {}) do weights[counter]=weights[counter]+bias*value/math.max(300,confidenceBase) end end
 		return weights,model
 	end
 	function E.friendly()

@@ -5,6 +5,7 @@ local initial={}; local bootConfigured=false
 function widget:Initialize()
 	if Spring.GetPlayerInfo(Spring.GetMyPlayerID())~='CommandLayerCombatTest' then widgetHandler:RemoveWidget(self); return end
 	Spring.SendCommands('forcestart')
+	local speed=tonumber(Spring.GetModOptions().cl_test_speed) or 1; if speed>1 then Spring.SendCommands('setmaxspeed '..speed); Spring.SendCommands('setminspeed '..speed) end
 end
 function widget:Update()
 	local A=WG.CommandLayer; local now=Spring.GetGameSeconds(); if not A then return end
@@ -33,6 +34,8 @@ function widget:Update()
 		if d and f.mapControl then local minX,maxX,minZ,maxZ=Game.mapSizeX,0,Game.mapSizeZ,0; for id in pairs(f.members) do local x,_,z=Spring.GetUnitPosition(id); if x then minX=math.min(minX,x); maxX=math.max(maxX,x); minZ=math.min(minZ,z); maxZ=math.max(maxZ,z) end end; Spring.Echo('[CL-MAP] t='..math.floor(now)..' bounds='..math.floor(minX)..','..math.floor(maxX)..','..math.floor(minZ)..','..math.floor(maxZ)) end
 		if d then
 			for _,group in ipairs({'SCOUT','RAID','MAIN','RESERVE','DEFENSE'}) do local n=0; for _,id in ipairs(d.groups[group] or {}) do if f.members[id] and Spring.ValidUnitID(id) then n=n+1 end end; Spring.Echo('[CL-COMBAT-CLIENT] group='..group..' alive='..n..' op='..tostring(d.ops[group])) end
+			if A.GetRecoveryStatus then Spring.Echo('[CL-RECOVERY] '..A.GetRecoveryStatus()) end
+			if Spring.GetModOptions().cl_test_recovery=='1' then for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID())) do if UnitDefs[Spring.GetUnitDefID(id)].name=='cloakcon' then local q=(Spring.GetCommandQueue(id,1) or {})[1]; local x,_,z=Spring.GetUnitPosition(id); Spring.Echo('[CL-BUILDER] '..id..' pos='..math.floor(x)..','..math.floor(z)..' cmd='..tostring(q and q.id)..' params='..(q and table.concat(q.params,',') or '')) end end end
 			if d.defense then local r=d.defense; local n,near=0,0; for _,group in ipairs({'RESERVE','DEFENSE'}) do for _,id in ipairs(d.groups[group] or {}) do local x,_,z=Spring.GetUnitPosition(id); if x and f.members[id] then n=n+1; local target=r.threat and r.threat.point or r.home; if (x-target[1])^2+(z-target[3])^2<500^2 then near=near+1 end end end end; Spring.Echo('[CL-DEFENSE] t='..math.floor(now)..' state='..r.state..' allocated='..n..' within500='..near..' value='..(r.reserveValue or 0)..' reason='..(r.reason or 'reserve')) end
 			local blocked=0; for _ in pairs(d.blocked) do blocked=blocked+1 end
 			Spring.Echo('[CL-COMBAT-CLIENT] t='..math.floor(now)..' state='..d.state..' blocked='..blocked..' main_op='..tostring(d.ops.MAIN)..' reason='..d.reason)
