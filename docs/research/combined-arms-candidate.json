@@ -1,0 +1,27 @@
+{
+  "status": "CANDIDATE_REQUIRES_HUMAN_REVIEW_AND_GAME_TESTS",
+  "topic": "combined-arms",
+  "checked_utc": "2026-09-12T14:00:25.733699+00:00",
+  "sources": [
+    {
+      "url": "https://www.nam.ac.uk/explore/1918-victory",
+      "title": "1918: Year of victory | National Army Museum",
+      "status": "FETCHED_METADATA_ONLY"
+    },
+    {
+      "url": "https://zero-k.info/mediawiki/Strategy_Treatise",
+      "title": "Strategy Treatise - Zero-K",
+      "status": "FETCHED_METADATA_ONLY"
+    }
+  ],
+  "abstract_concept": "Coordinate complementary roles rather than relying on one unit type.",
+  "zero_k_interpretation": "Keep main-force role zones together; retain AA/support and artillery depth during native Fight advances.",
+  "interpretation_origin": "Curated template; not generated or validated by fetched web text.",
+  "required_validation": [
+    "Review sources",
+    "Validate roles and LOS restrictions",
+    "Run regression and isolated game tests",
+    "Explicit code review and version promotion"
+  ],
+  "execution_enabled": false
+}

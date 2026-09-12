@@ -1,0 +1,13 @@
+Isolated spring-headless 2025.06.21 / Zero-K v1.14.8.0 / Absolution 2 / NullAI
+[t=00:00:15.146267][f=0000091] [CL-DELEGATION-QA] PASS twelve mobile fixtures available
+[t=00:00:15.153305][f=0000091] [CL-DELEGATION-QA] PASS private session enabled
+[t=00:00:15.161360][f=0000091] [CL-DELEGATION-QA] PASS army assignment accepted
+[t=00:00:15.180044][f=0000091] [CL-DELEGATION-QA] PASS explicit sustained authority accepted
+[t=00:00:19.145685][f=0000211] [CL-DELEGATION-QA] PASS three independent detachment operations
+[t=00:00:19.150484][f=0000211] [CL-DELEGATION-QA] PASS native orders queued on 12/12 units
+[t=00:00:44.145837][f=0000961] [CL-DELEGATION-QA] PASS actual engine movement on 12/12 units
+[t=00:00:44.150467][f=0000961] [CL-DELEGATION-QA] PASS recurring scouting, harassment patrol and main advances reached engine
+[t=00:00:44.157543][f=0000961] [CL-DELEGATION-QA] PASS manual override releases unit
+[t=00:00:44.166492][f=0000961] [CL-DELEGATION-QA] PASS stop revokes sustained authority
+[t=00:00:46.145544][f=0001021] [CL-DELEGATION-QA] PASS delegation stays stopped after next tick
+[t=00:00:46.149569][f=0001021] [CL-DELEGATION-QA] DONE

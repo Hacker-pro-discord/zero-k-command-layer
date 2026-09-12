@@ -11,6 +11,7 @@
 - `AssignAdvisedForce(unitIDs)`: explicit eligible membership, no orders; returns force ID.
 - `AssignAllMilitary()`: snapshot completed owned mobile non-builders into a new adviser force, no orders. Does not auto-recruit future units.
 - `SetFront(forceID, front)`: `ADVANCE`, `HOLD`, `FLANK_LEFT`, `FLANK_RIGHT`. Invalidates pending proposals and cancels maintenance; no new orders.
+- `SetDelegatedControl(forceID, enabled)`: explicit sustained Scout + Raid + Push authority for the assigned force and current objective corridor. Single-player roster plus private-session gate required. False stops every parallel detachment. Grants reset on reload. `GetForce` includes delegation groups, operation IDs, rule version, observed composition, state and reason.
 - `SetObjective(forceID, points)`: new line invalidates old approval and cancels prior active maintenance. No orders.
 - `AskOfficer(forceID)`: advice request; returns proposal ID when available. No orders.
 - `GetForce(forceID)`, `GetOfficerStatus(forceID)`, `GetProposals(forceID)`: copied inspection data. Proposals include retained terminal history and current offers.

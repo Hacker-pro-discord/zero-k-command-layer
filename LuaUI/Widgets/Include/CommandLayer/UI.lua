@@ -30,14 +30,17 @@ return function(C)
 			end)
 			button(p,0,126,185,'PREVIOUS FORCE','Select previous assigned-force record.',function() if C.officer.cycle then C.officer.cycle(-1) end end)
 			button(p,190,126,185,'NEXT FORCE','Select next assigned-force record.',function() if C.officer.cycle then C.officer.cycle(1) end end)
-			button(p,0,168,185,'CANCEL ACTION','Stop further Officer maintenance for active force.',function() local f=C.registry.forces[C.registry.activeForce]; if f and f.operation then C.officer.cancel(f.operation) end end)
+			button(p,0,168,185,'CANCEL ACTION','Stop further Officer maintenance for active force.',function() local f=C.registry.forces[C.registry.activeForce]; if f and f.delegation and f.delegation.active then C.officer.setDelegated(f.id,false) elseif f and f.operation then C.officer.cancel(f.operation) end end)
 			button(p,190,168,185,'RESUME','Explicitly resume suspended advice membership, never old approval.',function() if C.officer.resume then C.officer.resume(C.registry.activeForce) end end)
 			button(p,0,210,185,'SHOW DETAILS','Read production advice and its limitations; no build commands.',function() UI.showAdvice() end)
 			button(p,190,210,185,'DISMISS ADVICE','Dismiss the current production recommendation.',function() local f=C.registry.forces[C.registry.activeForce]; if f then f.advice=nil end end)
 			button(p,0,252,375,'ASSIGN ALL MILITARY','Assign all your completed mobile military units now, including air/naval. Excludes builders and structures. No automatic recruitment; no orders.',function() C.officer.assignAll() end)
 			for i,front in ipairs({'ADVANCE','HOLD','FLANK_LEFT','FLANK_RIGHT'}) do local directive=front; button(p,(i-1)*95,294,91,front:gsub('_',' '),'Set this force front approach. Cancels maintenance; next action still needs approval. Set an objective line for this front.',function() C.officer.setFront(C.registry.activeForce,directive) end) end
+			button(p,0,338,185,'DELEGATE PRESSURE','Single-player only. Continuously scout, raid and push assigned units inside your objective corridor until stopped. This explicitly authorizes repeated orders.',function() C.officer.setDelegated(C.registry.activeForce,true) end)
+			button(p,190,338,90,'STOP AI','Revoke every delegated detachment; native destination orders remain.',function() C.officer.setDelegated(C.registry.activeForce,false) end)
+			button(p,285,338,90,'AI DETAILS','Read groups, observed evidence and current decision.',function() UI.showTactical() end)
 			UI.lastDetail=nil
-			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=338,width=367,height=90,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
+			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=382,width=367,height=80,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
 	end
 	function UI.initialize()
@@ -58,6 +61,7 @@ return function(C)
 			if f then local n=0; for _ in pairs(f.members) do n=n+1 end; text='Force '..f.id..' | '..n..' units | '..f.status..' | '..(f.front or 'ADVANCE')..'\n'..(f.advice and 'Production recommendation available. SHOW DETAILS to read evidence, cost and alternatives.' or 'Set an objective or ask for a reform proposal.') end
 			if text~=UI.lastDetail then UI.detail:SetText(text); UI.lastDetail=text end
 		end
+		if UI.tacticalText then UI.updateTactical() end
 		if C.proposals then UI.showProposal(C.proposals.firstOffered()) end
 	end
 	function UI.showProposal(p)
@@ -71,6 +75,26 @@ return function(C)
 		button(UI.dialog,138,450,120,'DISMISS','No orders. Decline and suppress this suggestion temporarily.',function() C.proposals.decline(p.id); C.proposals.dismiss(p.id) end)
 		button(UI.dialog,266,450,140,'SHOW PLAN','Preview destinations; no orders.',function() C.input.preview=p.plan end)
 	end
+	function UI.updateTactical()
+		local f=C.registry.forces[UI.tacticalForce]; local d=f and f.delegation
+		local text='No delegated operation for this force.'
+		if d then
+			text='Force '..f.id..' | '..(d.active and 'DELEGATED' or 'STOPPED')..' | '..d.state..'\nRules: '..d.version..' (experimental)\n\n'
+			for _,group in ipairs({'SCOUT','RAID','MAIN'}) do local n=0; for _,id in ipairs(d.groups[group]) do if f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) then n=n+1 end end; local decision=d.decisions and d.decisions[group]; text=text..group..': '..n..' available units'..(decision and ' | '..decision.state..'\n'..decision.reason:sub(1,100) or '')..'\n' end
+			text=text..'\nObserved contacts (radar stays UNKNOWN):\n'; local keys={}; for role in pairs(d.known or {}) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..role..': '..d.known[role]..'  ' end
+			text=text..'\n\nCurrent decision: '..(d.reason or '')..'\n\nFinal line: hold under control. Manual orders release units. No auto-recruitment.\nResearch rules: docs/TACTICAL_RESEARCH.md. No runtime web execution.'
+		end
+		if text~=UI.tacticalLast then UI.tacticalText:SetText(text); UI.tacticalLast=text end
+	end
+	function UI.showTactical()
+		if UI.tacticalDialog then UI.tacticalDialog:Dispose() end
+		UI.tacticalForce=C.registry.activeForce; UI.tacticalLast=nil
+		UI.tacticalDialog=UI.ch.Window:New{name='CommandLayerTactical',caption='Tactical Officer - live decisions',parent=UI.ch.Screen0,x=450,y=100,width=520,height=570,draggable=true,resizable=false,padding={12,30,12,12}}
+		UI.tacticalText=UI.ch.TextBox:New{parent=UI.tacticalDialog,x=0,y=0,width='100%',height=440,text=''}
+		button(UI.tacticalDialog,0,470,185,'STOP THIS FORCE','Revoke sustained authority.',function() C.officer.setDelegated(UI.tacticalForce,false) end)
+		button(UI.tacticalDialog,195,470,185,'CLOSE','Close details; keep current authority.',function() UI.tacticalDialog:Dispose(); UI.tacticalDialog=nil; UI.tacticalText=nil end)
+		UI.updateTactical()
+	end
 	function UI.showAdvice()
 		local f=C.registry.forces[C.registry.activeForce]; if not f or not f.advice then return end
 		if UI.adviceDialog then UI.adviceDialog:Dispose() end
@@ -79,6 +103,7 @@ return function(C)
 		button(UI.adviceDialog,0,365,200,'DISMISS','No production changes.',function() f.advice=nil; UI.adviceDialog:Dispose(); UI.adviceDialog=nil end)
 	end
 	function UI.shutdown()
+		if UI.tacticalDialog then UI.tacticalDialog:Dispose() end
 		if UI.adviceDialog then UI.adviceDialog:Dispose() end
 		if UI.dialog then UI.dialog:Dispose() end
 		if UI.window then C.settings.x=UI.window.x; C.settings.y=UI.window.y; UI.window:Dispose(); UI.window=nil end

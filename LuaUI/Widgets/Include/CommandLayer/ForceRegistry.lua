@@ -10,7 +10,12 @@ return function(C)
 	function R.claim(ids,op)
 		for _,id in ipairs(ids) do R.generation[id]=(R.generation[id] or 0)+1; R.owner[id]=op.id; op.generations[id]=R.generation[id] end
 	end
-	function R.valid(op,id) return op and op.active and R.owner[id]==op.id and op.generations[id]==R.generation[id] and C.U.owned(id) end
+	function R.valid(op,id)
+		if op and op.grant then
+			local f=R.forces[op.forceID]; local d=f and f.delegation
+			if not d or not d.active or d.token~=op.grant or not f.members[id] or f.suspended[id] or d.blocked[id] or not C.U.delegationAllowed(C.settings) then return false end
+		end
+		return op and op.active and R.owner[id]==op.id and op.generations[id]==R.generation[id] and C.U.owned(id) end
 	function R.newOperation(ids)
 		R.nextOperation=R.nextOperation+1
 		local op={id=R.nextOperation,units=C.U.copy(ids),generations={},active=true,state='PLANNING',created=C.U.now(),slots={},tracking={}}

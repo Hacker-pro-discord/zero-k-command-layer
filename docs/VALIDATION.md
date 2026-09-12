@@ -1,4 +1,4 @@
-# Validation — 2026-09-12
+# Validation â€” 2026-09-12
 
 ## Passed automated Lua checks
 
@@ -48,8 +48,19 @@ These have **not** been established by the automated tests:
 Use a local skirmish to judge formation quality before relying on it in a serious match. Strict mode intentionally can interfere with native kiting; Loose avoids corrections near observed combat, but preserving native AI callouts is not proof of identical combat performance.
 
 
-## Officer feedback revision � 2026-09-12
+## Officer feedback revision — 2026-09-12
 
 Added all-military assignment, per-force front directives, bounded left/right approach proposals, persistent stale briefs and configurable 60-second approval / 10-second suggestion defaults. Eight Lua 5.1 test suites pass, including new mixed ground/air ownership, builder/structure/allied exclusion, persistent expiry, explicit refresh, flank direction, single approval, intermediate-versus-final completion and manual override cases.
 
 These changes have not yet been verified in a live match. Earlier Beginner skirmish verified Mex + 2 Energy construction, but computer control was stopped before formation/Officer playtesting. No live-match success is claimed for this revision. Original game files remain untouched; restart the match or reload LuaUI to load the installed update (runtime assignments reset).
+
+
+## Sustained pressure revision — 2026-09-12
+
+Twelve Lua 5.1 suites pass. New coverage includes zero authority before delegation, three disjoint detachments, bounded slots, repeated main advances, command retention between ticks, manual ownership revocation, stopping and multiplayer/spectator denial, compatible role allocation, anonymous radar exclusion from raid targeting, observed riot protection and automatic fresh advice without approval reuse.
+
+A separate **spring-headless 2025.06.21** process ran the actual Zero-K archive and LuaUI on Absolution 2 with NullAI and twelve controlled test Glaives. All eleven checks passed: fixtures, session gating, assignment, delegation, three detachment operations, native orders on 12/12 units, physical movement on 12/12, recurring scouting/harassment patrol/main advances, manual override, stop and no restart on the next tick. The process exited normally. See DELEGATION_ENGINE_RESULTS.txt. The user's existing spring.exe process was not controlled or restarted.
+
+This was an isolated command/movement test with explicit test-only spawning, not a completed Beginner match or a combat win. Target-choice heuristics pass mocked observation tests but effectiveness against active enemy forces, navigation over difficult terrain and final UI layout remain unverified. Stock translation warnings and the engine's existing GetCommandQueue deprecation notice are not claimed as fixed. New modules contain no direct combat order APIs; Officer and Orders retain dispatch control.
+
+Research helper fetched official museum/wiki metadata and produced a non-executable combined-arms candidate. No model or webpage receives direct game authority. Autonomous tests require single-player; public/ranked use stays disabled.
