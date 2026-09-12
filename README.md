@@ -38,19 +38,45 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
-## Automatic map-control AI (preview 9)
+## Adaptive production and expanded control (preview 10)
+
+Open **OFFICER > CONTROL PANEL**. These features remain local single-player automation. Manual orders release affected units; explicit re-enrollment returns them to AI control.
+
+| Control | Behavior |
+|---|---|
+| RE-ENROLL SELECTED FACTORIES | Return selected factories to shared AI production. Preserve busy queues and other factories' manual exclusions. |
+| ADD SELECTED BUILDERS | Enroll mobile constructors for recovery and requested construction; let existing queues finish. |
+| ADD BUILD REQUEST | Select a capable constructor, click this, then choose/place one building in the native build menu. Escape cancels placement. |
+| CANCEL BUILD REQUESTS | Clear pending requests/reconstruction; retain native orders already issued. |
+| STOP RECOVERY | Release workers; retain native queues. |
+| ARM SELECTED LAUNCHERS | Authorize native ammunition production and automatic visual-target fire for selected launchers/silos. Mobile launchers leave army movement control while armed. |
+| STOP STRATEGIC FIRE | Remove only tracked AI attack orders; retain native ammunition queues. |
+
+**Shared counter production.** The army-wide model remembers visual sightings with a default 90-game-second half-life and six-half-life expiry. Radar never refreshes identity. All controlled factories share counter-role weights and completed/queued friendly combat value; each purchase updates the deficit before another factory chooses. Counter weights themselves decay with old intel. Newly completed factories join while production is on. Set **Enemy intel half-life** under Settings > Interface > Command Layer. The panel shows weighted sightings and unknown radar contacts. This is a transparent role heuristic, not a guaranteed best unit matchup or hidden enemy count.
+
+**Rear-area recovery.** The service records own mex/energy/factory sites and retains a reserve escort after attacks. Workers repair, clear blocking wrecks, reconstruct recorded structures and reclaim visible unit wrecks. It requests one Conjurer at five mobile units and two at twenty, only from a factory whose actual build options include Conjurer. It does not automatically build a missing Cloakbot Factory. Other builders can be enrolled manually. Destroyed factories return at their recorded location/facing; new expansion requires your explicit build request. Resources, unlocks, LOS and native placement still apply. Manual single-target reclaim suppresses reconstruction of that asset.
+
+Workers withdraw from observed nearby threats. After 25 seconds without movement/work progress, a stalled worker is released for manual review and another can take the job. Escort duty ends when recovery finishes or its 200-second post-threat bound expires; pending requests remain afterward. Uneven terrain, congestion and inaccessible islands can still prevent recovery. The successful construction test used an explicitly flattened test pad, not arbitrary-terrain routing.
+
+**Air and sea.** Aircraft and ships/submarines use separate detachments and native Fight destinations. Aircraft yield to native rearm/repair states. Ships receive water-compatible destinations using public terrain checks. Both can respond to rear threats where their domain permits, and new recruits join their own detachment. Air/sea positioning is arrival-only; standing reserves remain ground-focused. This does not implement transport loading, carrier aircraft management or every special ability. A compatible water destination is not proof of a connected route.
+
+**Missiles and nukes.** Armed silos build native Eos missiles and fire completed children. Stockpile launchers use actual native ammunition. Targets must be currently visually identified, in weapon range and valuable enough for the role heuristic, without friendlies in the blast exclusion area. Known visible anti-nuke coverage is checked; hidden interception remains unknown. Radar/stale identities never become firing targets. One tracked shot per launcher and temporary target reservations limit duplicate fire. Old AI attacks are removed after firing, loss of visual contact or a short timeout. Native Zero-K stockpile widgets may maintain their own ammunition queue targets; those queues remain intact. Launcher grants are not saved across matches/reloads.
+
+The existing Logistics, ground formations, manual override and approval controls remain available. Public/ranked autonomous use remains disabled. See [preview 10 test evidence and limitations](docs/PREVIEW10_TEST.md) and [source notes](docs/ADAPTIVE_RECOVERY_RESEARCH.md). Earlier preview sections below describe the development history; this section describes the current expanded behavior.
+
+## Automatic map-control AI
 
 With the widget enabled, **map-control AI now starts automatically in local single-player games**, including after `/luaui reload`. No unit selection, drawn line, private-session button or separate production click is required. The local single-player/autohost/spectator checks run before automatic startup.
 
 It recruits your eligible military units, queues idle factories and searches successive sectors across the whole map. Scouts and harassment groups choose separate sectors; the main force searches too and redirects to currently visible enemies. It does not stop at the first line. Completed searches pick another sector; native empty queues can retry after a cooldown rather than permanently abandoning those units. Unexpected nonempty queues and manual releases remain protected.
 
-The search planner uses a 5×5 map grid, visit/attempt history, group reservations and legitimately observed contacts. It does not know where hidden enemies are. RAID prefers vulnerable observed contacts; MAIN uses native Fight toward observed positions. Arrival and no-contact timeouts allow new objectives; native combat and damaged-unit recovery still have priority. This is an experimental heuristic, not a strategic search guarantee.
+The search planner uses a 5Ã—5 map grid, visit/attempt history, group reservations and legitimately observed contacts. It does not know where hidden enemies are. RAID prefers vulnerable observed contacts; MAIN uses native Fight toward observed positions. Arrival and no-contact timeouts allow new objectives; native combat and damaged-unit recovery still have priority. This is an experimental heuristic, not a strategic search guarantee.
 
 **STOP AI** stops the active force and production for this session. To prevent automatic startup in future sessions/reloads, disable **Automatically start map-control AI in local single-player** under Settings > Interface > Command Layer, or disable the widget. **START MAP CONTROL** explicitly restarts it. Automatic startup is a saved preference; active assignments, operations and approvals are still not serialized.
 
 Player-drawn objectives and explicit front controls revoke that force's map-wide mode and retain bounded corridor behavior. This gives you an explicit way to direct one force while using autonomous search elsewhere.
 
-**PRODUCTION: ON/OFF** is directly visible on the Officer panel and can be enabled even before any military unit exists. It controls eligible idle factories, including newly completed factories. Manual factory commands release that factory. It preserves existing queues and does not place factories, constructors, mexes or economy buildings.
+**PRODUCTION: ON/OFF** is directly visible on the Officer panel and can be enabled even before any military unit exists. It controls eligible idle factories, including newly completed factories. Manual factory commands release that factory. It preserves existing queues. The separate Recovery service can produce Conjurers, reconstruct recorded infrastructure and execute your explicit building requests, as described below.
 
 **AUTO ASSIGN: WAIT** means local testing is disabled; **ON** means recruitment is enabled. It creates a receiving force and checks existing unassigned and newly completed military units once per game second. Previously manually released units remain released. Toggling recruitment on pins the receiving force; merely cycling the viewed force does not redirect recruits. Production recruits retain their production-force association.
 
@@ -60,15 +86,15 @@ This is autonomous military control plus factory queues, not a full economic AI 
 
 See [map-control evidence](docs/MAP_CONTROL_TEST.md) and [earlier startup/UI stress tests](docs/STARTUP_TEST.md).
 
-## Reserves and defensive response (preview 9)
+## Reserves and defensive response
 
 Autonomous forces now keep **approximately 20% of assigned military metal value** in suitable healthy ground combat units near a home factory (or the force's starting position). This starts at five units: one reserves, one scouts and three advance. Unit costs are indivisible, and a force lacking suitable defenders can miss the target. Artillery, builders and support are not used as disposable reserve troops.
 
 The Officer watches your factories, buildings, constructors/commander and vulnerable artillery/support. Observed armed enemies near these assets, unidentified radar contacts nearby, or a measured loss of asset health trigger defense. It commits the reserve first and redirects nearby compatible troops when more help is needed, targeting up to 70% of assigned value for the response. Damage without a visible attacker sends defenders to the damaged asset; it never reveals the attacker.
 
-After 20 seconds without a current threat, temporary defenders return to the main force and the reserve is rebuilt. Defense and reserve orders use native Fight, a ten-second redispatch cooldown and the existing validated executor. Manual releases, native retreat and Stop AI still win. Reserve/defense units are excluded from the field army's automatic fallback so a stalled push does not pull home defenders away.
+After 20 seconds without a current threat, defenders escort active recovery work. Once work finishes (or its 200-second escort timeout expires), temporary defenders return to the main force and the reserve is rebuilt. Defense and reserve orders use native Fight, a ten-second redispatch cooldown and the existing validated executor. Manual releases, native retreat and Stop AI still win. Reserve/defense units are excluded from the field army's automatic fallback so a stalled push does not pull home defenders away.
 
-Set **Reserve combat value (%)** under **Settings > Interface > Command Layer** (0–40%; default 20%). Zero disables the standing reserve, not emergency defense. **AI DETAILS** shows RESERVE and DEFENSE counts, availability and the response reason. In drawn-line mode, defensive destinations still respect that force's authorized corridor; map-control mode can defend anywhere on the map.
+Set **Reserve combat value (%)** under **Settings > Interface > Command Layer** (0â€“40%; default 20%). Zero disables the standing reserve, not emergency defense. **AI DETAILS** shows RESERVE and DEFENSE counts, availability and the response reason. In drawn-line mode, defensive destinations still respect that force's authorized corridor; map-control mode can defend anywhere on the map.
 
 This is an experimental ground-defense response, not a guarantee against every attack; it does not yet choose specialized anti-air reserves or coordinate separate forces' defenses. See [defense test evidence](docs/DEFENSE_TEST.md).
 

@@ -1,0 +1,76 @@
+[t=00:00:36.609779][f=0000180] [CL-DEFENSE] t=6 state=RESERVE READY allocated=3 within500=0 value=630 reason=reserve
+[t=00:00:37.795609][f=0000300] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:4741:1.00,factorycloak:18892:1.00
+[t=00:00:39.836063][f=0000480] [CL-DEFENSE] t=16 state=RESERVE ASSEMBLING allocated=3 within500=0 value=630 reason=reserve
+[t=00:00:41.116863][f=0000600] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:4741:1.00,factorycloak:18892:1.00
+[t=00:00:43.163515][f=0000780] [CL-DEFENSE] t=26 state=RESERVE ASSEMBLING allocated=3 within500=0 value=630 reason=reserve
+[t=00:00:44.453072][f=0000901] [CommandLayer] RECOVERY WORK: Builder 2399: builder withdrawal
+[t=00:00:44.467184][f=0000901] [CommandLayer] RECOVERY WORK: Builder 31776: builder withdrawal
+[t=00:00:45.111918][f=0000961] [CommandLayer] RECOVERY WORK: Builder 2399: builder withdrawal
+[t=00:00:45.120955][f=0000961] [CommandLayer] RECOVERY WORK: Builder 31776: builder withdrawal
+[t=00:00:46.502972][f=0001081] [CL-DEFENSE] t=36 state=DEFENDING allocated=4 within500=0 value=0 reason=Observed armed enemies near an owned asset.
+[t=00:00:47.791121][f=0001200] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00
+[t=00:00:49.841937][f=0001381] [CL-DEFENSE] t=46 state=DEFENDING allocated=4 within500=4 value=0 reason=Observed armed enemies near an owned asset.
+[t=00:00:51.120634][f=0001500] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00
+[t=00:00:53.164834][f=0001681] [CL-DEFENSE] t=56 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:00:56.511429][f=0001981] [CL-DEFENSE] t=66 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:00:57.107572][f=0002041] [CommandLayer] RECOVERY WORK: Builder 2399: wreck:3899
+[t=00:00:57.110615][f=0002041] [CommandLayer] RECOVERY WORK: Builder 31776: build:406:870:927
+[t=00:00:57.785612][f=0002100] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00
+[t=00:00:59.879603][f=0002281] [CL-DEFENSE] t=76 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:01.132187][f=0002400] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00
+[t=00:01:03.176257][f=0002581] [CL-DEFENSE] t=86 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:04.441856][f=0002700] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:0.31
+[t=00:01:06.530862][f=0002881] [CL-DEFENSE] t=96 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:07.781259][f=0003000] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00
+[t=00:01:07.809577][f=0003001] [CommandLayer] RECOVERY WORK: Builder 31776: wreck:21700
+[t=00:01:09.107343][f=0003121] [CommandLayer] RECOVERY WORK: Builder 31776: wreck:17980
+[t=00:01:09.834073][f=0003181] [CL-DEFENSE] t=106 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:10.439954][f=0003241] [CommandLayer] RECOVERY WORK: Builder 31776: wreck:3342
+[t=00:01:11.122830][f=0003300] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00
+[t=00:01:11.776636][f=0003361] [CommandLayer] RECOVERY WORK: Builder 31776: wreck:18661
+[t=00:01:13.112784][f=0003481] [CommandLayer] RECOVERY WORK: Builder 31776: wreck:28653
+[t=00:01:13.199614][f=0003481] [CL-DEFENSE] t=116 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:14.446218][f=0003600] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00
+[t=00:01:15.110810][f=0003661] [CommandLayer] RECOVERY WORK: Builder 31776: wreck:12137
+[t=00:01:16.771680][f=0003781] [CL-DEFENSE] t=126 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:17.195631][f=0003841] [CommandLayer] RECOVERY WORK: Builder 31776: wreck:21179
+[t=00:01:17.783852][f=0003900] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00
+[t=00:01:19.118823][f=0004021] [CommandLayer] RECOVERY WORK: Builder 31776: wreck:14003
+[t=00:01:19.787970][f=0004081] [CommandLayer] RECOVERY WORK: Builder 2399: build:409:640:832
+[t=00:01:19.910225][f=0004081] [CL-DEFENSE] t=136 state=ESCORTING RECOVERY allocated=4 within500=3 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:21.114181][f=0004200] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:0.02
+[t=00:01:21.128674][f=0004201] [CommandLayer] RECOVERY WORK: Builder 31776: repair:28722
+[t=00:01:23.158069][f=0004381] [CL-DEFENSE] t=146 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:24.450270][f=0004500] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:0.16
+[t=00:01:26.500226][f=0004681] [CL-DEFENSE] t=156 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:27.785513][f=0004800] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:0.30
+[t=00:01:29.832640][f=0004981] [CL-DEFENSE] t=166 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:31.115172][f=0005100] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:0.44
+[t=00:01:33.171115][f=0005281] [CL-DEFENSE] t=176 state=ESCORTING RECOVERY allocated=4 within500=3 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:34.445867][f=0005400] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:0.59
+[t=00:01:36.498217][f=0005581] [CL-DEFENSE] t=186 state=ESCORTING RECOVERY allocated=4 within500=4 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:37.777098][f=0005700] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:0.73
+[t=00:01:39.827348][f=0005881] [CL-DEFENSE] t=196 state=ESCORTING RECOVERY allocated=4 within500=3 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:41.128765][f=0006000] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:0.87
+[t=00:01:43.170606][f=0006181] [CL-DEFENSE] t=206 state=ESCORTING RECOVERY allocated=4 within500=3 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:44.452605][f=0006300] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:01:44.469530][f=0006301] [CommandLayer] RECOVERY WORK: Builder 2399: wreck:24444
+[t=00:01:46.508665][f=0006481] [CL-DEFENSE] t=216 state=ESCORTING RECOVERY allocated=4 within500=3 value=0 reason=Reserve escort: repair/rebuild/reclaim in progress.
+[t=00:01:47.790572][f=0006600] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:01:50.804502][f=0006781] [CL-DEFENSE] t=226 state=RESERVE READY allocated=3 within500=3 value=630 reason=reserve
+[t=00:01:51.992135][f=0006900] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:01:53.936788][f=0007081] [CL-DEFENSE] t=236 state=RESERVE ASSEMBLING allocated=6 within500=2 value=680 reason=reserve
+[t=00:01:55.630671][f=0007200] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:01:57.775148][f=0007381] [CL-DEFENSE] t=246 state=RESERVE ASSEMBLING allocated=6 within500=1 value=680 reason=reserve
+[t=00:01:58.909944][f=0007500] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:02:01.202691][f=0007681] [CL-DEFENSE] t=256 state=RESERVE ASSEMBLING allocated=9 within500=1 value=730 reason=reserve
+[t=00:02:04.285495][f=0007800] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:02:06.220351][f=0007981] [CL-DEFENSE] t=266 state=RESERVE ASSEMBLING allocated=9 within500=1 value=730 reason=reserve
+[t=00:02:07.504980][f=0008100] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:02:09.567220][f=0008281] [CL-DEFENSE] t=276 state=RESERVE ASSEMBLING allocated=9 within500=1 value=730 reason=reserve
+[t=00:02:10.852631][f=0008400] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:02:12.886031][f=0008581] [CL-DEFENSE] t=286 state=RESERVE ASSEMBLING allocated=9 within500=2 value=730 reason=reserve
+[t=00:02:14.173151][f=0008700] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:02:16.215603][f=0008881] [CL-DEFENSE] t=296 state=RESERVE ASSEMBLING allocated=8 within500=4 value=810 reason=reserve
+[t=00:02:17.506141][f=0009000] [CL-COMBAT] RECOVERY_ASSETS cloakcon:2399:1.00,cloakcon:31776:1.00,energysolar:3765:1.00,factorycloak:28722:1.00
+[t=00:02:17.531784][f=0009000] [CL-COMBAT-CLIENT] COMPLETE

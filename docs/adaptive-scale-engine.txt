@@ -1,0 +1,25 @@
+[t=00:00:57.028908][f=0000030] [CL-COMBAT] SCALE_FIXTURE commanders protected from damage to prevent early game-over; not a victory benchmark
+[t=00:01:00.356774][f=0000153] [CommandLayer] PRODUCTION: Factory 22408: queued Rogue (SKIRMISHER), 125 metal. Shared counter deficits; intel half-life 90s; 147 unknown radar contacts.
+[t=00:01:00.370032][f=0000153] [CommandLayer] PRODUCTION: Factory 26083: queued Scalpel (SKIRMISHER), 220 metal. Shared counter deficits; intel half-life 90s; 147 unknown radar contacts.
+[t=00:01:00.387819][f=0000153] [CommandLayer] PRODUCTION: Factory 27211: queued Ravager (ASSAULT), 250 metal. Shared counter deficits; intel half-life 90s; 147 unknown radar contacts.
+[t=00:01:00.397971][f=0000153] [CommandLayer] PRODUCTION: Factory 29511: queued Conjurer (CONSTRUCTOR), 120 metal. Shared counter deficits; intel half-life 90s; 147 unknown radar contacts.
+[t=00:01:01.143342][f=0000180] [CL-MAP] automatic startup force=true
+[t=00:01:01.152405][f=0000180] [CL-STRESS] t=6 alive=1000 moved32=0 queued=996 mean_forward=0
+[t=00:01:01.159097][f=0000180] [CL-MAP] t=6 bounds=576,7594,921,2800
+[t=00:01:05.037832][f=0000300] [CL-COMBAT] METRIC frame=300 own_count=1000 enemy_count=996 own_value=91000 enemy_value=90525 own_lost=0 enemy_lost=475 own_damage_taken=0 enemy_damage_taken=2345
+[t=00:01:09.948896][f=0000480] [CL-STRESS] t=16 alive=1000 moved32=954 queued=947 mean_forward=755
+[t=00:01:09.957751][f=0000480] [CL-MAP] t=16 bounds=593,7592,921,3955
+[t=00:01:13.336417][f=0000600] [CL-COMBAT] METRIC frame=600 own_count=998 enemy_count=993 own_value=90870 enemy_value=90150 own_lost=130 enemy_lost=850 own_damage_taken=698 enemy_damage_taken=3763
+[t=00:01:21.514137][f=0000780] [CL-STRESS] t=26 alive=962 moved32=916 queued=907 mean_forward=1444
+[t=00:01:21.519345][f=0000780] [CL-MAP] t=26 bounds=575,7592,511,4657
+[t=00:01:27.051010][f=0000900] [CL-COMBAT] METRIC frame=900 own_count=881 enemy_count=903 own_value=83265 enemy_value=84155 own_lost=7735 enemy_lost=6845 own_damage_taken=41574 enemy_damage_taken=44651
+[t=00:01:33.819349][f=0001081] [CL-STRESS] t=36 alive=775 moved32=729 queued=716 mean_forward=1795
+[t=00:01:33.825402][f=0001081] [CL-MAP] t=36 bounds=449,7592,277,4841
+[t=00:01:37.300711][f=0001200] [CL-COMBAT] METRIC frame=1200 own_count=721 enemy_count=662 own_value=72765 enemy_value=68200 own_lost=18235 enemy_lost=22800 own_damage_taken=89635 enemy_damage_taken=100704
+[t=00:01:41.386481][f=0001381] [CL-STRESS] t=46 alive=635 moved32=598 queued=521 mean_forward=1882
+[t=00:01:41.393644][f=0001381] [CL-MAP] t=46 bounds=600,7592,312,5217
+[t=00:01:45.004363][f=0001500] [CL-COMBAT] METRIC frame=1500 own_count=567 enemy_count=532 own_value=61430 enemy_value=59315 own_lost=29570 enemy_lost=31685 own_damage_taken=130363 enemy_damage_taken=129591
+[t=00:01:49.945247][f=0001681] [CL-STRESS] t=56 alive=507 moved32=471 queued=398 mean_forward=1666
+[t=00:01:49.953441][f=0001681] [CL-MAP] t=56 bounds=600,7592,511,5418
+[t=00:01:52.910697][f=0001800] [CL-COMBAT] METRIC frame=1800 own_count=484 enemy_count=469 own_value=55555 enemy_value=54495 own_lost=35445 enemy_lost=36505 own_damage_taken=155492 enemy_damage_taken=151972
+[t=00:01:52.942230][f=0001800] [CL-COMBAT-CLIENT] COMPLETE

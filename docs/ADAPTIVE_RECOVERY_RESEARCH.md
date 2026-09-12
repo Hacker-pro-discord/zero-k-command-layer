@@ -18,9 +18,9 @@ Official documentation consulted: [unit classes](https://zero-k.info/mediawiki/U
 
 EnemyModel remembers visual sightings only, with a 90-second half-life and six-half-life cutoff. Radar never refreshes remembered identity. Production uses shared friendly completed and queued combat value and counter-role deficits across factories. Counters are transparent heuristics, not matchup guarantees.
 
-Recovery will maintain records of owned infrastructure and attack sites, assign/produce a small Conjurer team, and issue native repair/reclaim/build orders through Orders with independent builder ownership. Explicit construction requests and factory/builder re-enrollment are exposed in the Control Panel. Busy queues and manual exclusions remain protected.
+Recovery maintains records of owned infrastructure and attack sites, assigns/produces a small Conjurer team, and issues native repair/reclaim/build orders through Orders with independent builder ownership. Explicit construction requests and factory/builder re-enrollment are exposed in the Control Panel. Busy queues and manual exclusions remain protected.
 
-Air and naval detachments will use native movement/combat orders and domain-compatible destinations through Officer. Strategic weapons will use separate enrollment, actual readiness and currently observed target checks; no stale intel targeting or hidden anti-nuke discovery. No stock archives or LuaRules are modified.
+Air and naval detachments use native movement/combat orders and domain-compatible destinations through Officer. Strategic weapons use separate enrollment, actual readiness and currently observed target checks; no stale intel targeting or hidden anti-nuke discovery. No stock archives or LuaRules are modified.
 
 ## Milestone validation
 
@@ -32,3 +32,10 @@ Recovery diagnostics found native RAW_BUILD approach commands stalling on the in
 TestBuildOrder's second result is a blocking reclaimable feature ID; its compatibility codes map open/reclaimable to 2. Confirmed in Recoil's public LuaSyncedRead.cpp, in addition to installed Mex/CommandInsert usage. Runtime calls remain LOS-filtered. Terrain fixture calls to SetHeightMapFunc/LevelHeightMap follow installed api_map_structures.lua and never enter production widgets.
 
 Recovery milestone: 28 Lua suites passed. The 180-game-second flat-pad run completed with two Conjurers, native factory repair, replacement solar `energysolar:20969` at full build, and native wreck reclamation. See recovery-engine.txt. Earlier uneven-terrain runs failed to finish reconstruction; this remains a routing limitation, with timeout/manual re-enrollment available. No claim of full terrain reliability.
+
+
+Preview 10 additionally validates native air/naval detachment movement on Porky_Islands, native nuke firing and Eos construction/firing with explicit launcher authority. Eos range is 3,500 in installed `units/tacnuke.lua`; its raw areaOfEffect is 192, converted by the engine to runtime radius. Missile Silo production must use GetFactoryCommands, not its movement queue. A regression test and a second engine run cover the corrected queue lookup.
+
+The native stockpile widget independently queued ten Trinity missiles on creation and one replacement after the shot in the fixture. Command Layer preserves these existing native queues; it only requests ammunition itself when ready plus queued is zero. Test-only SetUnitStockpile preloads one nuke to avoid waiting three minutes. Production code never changes stockpile readiness.
+
+Public engine reference: [LuaSyncedRead.cpp](https://github.com/beyond-all-reason/spring/blob/master/rts/Lua/LuaSyncedRead.cpp). Installed `gamedata/featuredefs_post.lua` marks unit wrecks/heaps with customParams.fromunit; recovery filters generic cleanup to these rather than indefinitely harvesting terrain rocks.

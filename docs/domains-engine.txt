@@ -1,0 +1,31 @@
+[t=00:00:31.152096][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=0 x=512 z=512
+[t=00:00:31.160494][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=0 x=512 z=512
+[t=00:00:31.167934][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=0 x=512 z=512
+[t=00:00:31.179772][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=0 x=512 z=512
+[t=00:00:31.189217][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=0 x=512 z=512
+[t=00:00:31.198045][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=0 x=512 z=512
+[t=00:00:31.208536][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=1 x=7680 z=2272
+[t=00:00:31.212166][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=1 x=7680 z=2272
+[t=00:00:31.216266][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=1 x=7680 z=2272
+[t=00:00:31.220872][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=1 x=7680 z=2272
+[t=00:00:31.225953][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=1 x=7680 z=2272
+[t=00:00:31.229291][f=0000030] [CL-COMBAT] DOMAIN_SEA_SPAWN valid=true team=1 x=7680 z=2272
+[t=00:00:32.800997][f=0000180] [CL-DOMAIN] AIR moved=0 invalid_land_destinations=0
+[t=00:00:32.805149][f=0000180] [CL-DOMAIN] SEA moved=0 invalid_land_destinations=0
+[t=00:00:36.131162][f=0000480] [CL-DOMAIN] AIR moved=7 invalid_land_destinations=0
+[t=00:00:36.137288][f=0000480] [CL-DOMAIN] SEA moved=4 invalid_land_destinations=0
+[t=00:00:39.454834][f=0000780] [CL-DOMAIN] AIR moved=7 invalid_land_destinations=0
+[t=00:00:39.458304][f=0000780] [CL-DOMAIN] SEA moved=4 invalid_land_destinations=0
+[t=00:00:42.822079][f=0001081] [CL-DOMAIN] AIR moved=7 invalid_land_destinations=0
+[t=00:00:42.826754][f=0001081] [CL-DOMAIN] SEA moved=4 invalid_land_destinations=0
+[t=00:00:46.130017][f=0001381] [CL-DOMAIN] AIR moved=7 invalid_land_destinations=0
+[t=00:00:46.132487][f=0001381] [CL-DOMAIN] SEA moved=6 invalid_land_destinations=0
+[t=00:00:49.472535][f=0001681] [CL-DOMAIN] AIR moved=7 invalid_land_destinations=0
+[t=00:00:49.476549][f=0001681] [CL-DOMAIN] SEA moved=6 invalid_land_destinations=0
+[t=00:00:52.798728][f=0001981] [CL-DOMAIN] AIR moved=7 invalid_land_destinations=0
+[t=00:00:52.801437][f=0001981] [CL-DOMAIN] SEA moved=6 invalid_land_destinations=0
+[t=00:00:56.132326][f=0002281] [CL-DOMAIN] AIR moved=7 invalid_land_destinations=0
+[t=00:00:56.134779][f=0002281] [CL-DOMAIN] SEA moved=6 invalid_land_destinations=0
+[t=00:00:59.487160][f=0002581] [CL-DOMAIN] AIR moved=7 invalid_land_destinations=0
+[t=00:00:59.491267][f=0002581] [CL-DOMAIN] SEA moved=6 invalid_land_destinations=0
+[t=00:01:00.774719][f=0002700] [CL-COMBAT-CLIENT] COMPLETE
