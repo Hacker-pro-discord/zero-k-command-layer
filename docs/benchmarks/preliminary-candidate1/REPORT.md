@@ -20,6 +20,8 @@ Diagnostic indicators below are hypotheses from telemetry, not proven causal exp
 
 ## adamantine_mountain_2-factoryspider-s0
 
+Opponent opening recorded by offline scorekeeper: factoryamph.
+
 Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
 
 Largest own losses by unit value: [('staticmex', 1275), ('dyntrainer_strike_base', 1100), ('energysolar', 980), ('spideremp', 760), ('factoryspider', 700)].
@@ -29,6 +31,8 @@ At five minutes: income 18.4/19.5, mexes 11/9, combat value 723/1520 (ours/oppon
 Own peak mexes: 11; peak combat value: 824. Full timestamped Officer messages are retained as OFFICER_EVENT records in the case JSONL.
 
 ## comet_catcher_redux_v3_1-factorytank-s0
+
+Opponent opening recorded by offline scorekeeper: factoryveh.
 
 No automatic diagnostic flag; review the full timeline.
 
@@ -40,6 +44,8 @@ Own peak mexes: 13; peak combat value: 2467. Full timestamped Officer messages a
 
 ## comet_catcher_redux_v3_1-factorytank-s1
 
+Opponent opening recorded by offline scorekeeper: unavailable.
+
 No automatic diagnostic flag; review the full timeline.
 
 Largest own losses by unit value: [].
@@ -47,6 +53,8 @@ Largest own losses by unit value: [].
 Own peak mexes: 0; peak combat value: 0. Full timestamped Officer messages are retained as OFFICER_EVENT records in the case JSONL.
 
 ## comet_catcher_redux_v3_1-factoryveh-s0
+
+Opponent opening recorded by offline scorekeeper: factorytank.
 
 Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure.
 
@@ -58,6 +66,8 @@ Own peak mexes: 24; peak combat value: 1870. Full timestamped Officer messages a
 
 ## comet_catcher_redux_v3_1-factoryveh-s1
 
+Opponent opening recorded by offline scorekeeper: factoryveh.
+
 Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
 
 Largest own losses by unit value: [('vehraid', 2990), ('staticmex', 2210), ('energysolar', 1820), ('factoryveh', 1400), ('vehcon', 840)].
@@ -67,6 +77,8 @@ At five minutes: income 36.5/29.0, mexes 13/9, combat value 2072/1440 (ours/oppo
 Own peak mexes: 16; peak combat value: 2599. Full timestamped Officer messages are retained as OFFICER_EVENT records in the case JSONL.
 
 ## red_comet_remake_1_7-factorycloak-s0
+
+Opponent opening recorded by offline scorekeeper: factoryshield.
 
 Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
 
@@ -78,6 +90,8 @@ Own peak mexes: 10; peak combat value: 1310. Full timestamped Officer messages a
 
 ## red_comet_remake_1_7-factorycloak-s1
 
+Opponent opening recorded by offline scorekeeper: factoryshield.
+
 Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
 
 Largest own losses by unit value: [('cloakraid', 2340), ('energysolar', 1820), ('staticmex', 1530), ('dyntrainer_strike_base', 1100), ('cloakskirm', 720)].
@@ -88,6 +102,8 @@ Own peak mexes: 9; peak combat value: 1779. Full timestamped Officer messages ar
 
 ## red_comet_remake_1_7-factoryveh-s0
 
+Opponent opening recorded by offline scorekeeper: factoryshield.
+
 Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
 
 Largest own losses by unit value: [('vehraid', 2080), ('energysolar', 2030), ('staticmex', 1700), ('dyntrainer_strike_base', 1100), ('vehriot', 960)].
@@ -97,6 +113,8 @@ At five minutes: income 26.7/26.9, mexes 11/8, combat value 1632/1047 (ours/oppo
 Own peak mexes: 16; peak combat value: 1860. Full timestamped Officer messages are retained as OFFICER_EVENT records in the case JSONL.
 
 ## red_comet_remake_1_7-factoryveh-s1
+
+Opponent opening recorded by offline scorekeeper: factoryhover.
 
 Final income below 60% of opponent; expansion survival/capture deficit. Final combat value below half of opponent. Lost more than twice attributed killed value; inspect engagements and builder exposure. Defense/recovery occupied over 60% of samples; possible response saturation.
 

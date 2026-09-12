@@ -33,7 +33,12 @@ def analyze(directory, output):
         first_army=next((e['time'] for e in metrics if e['team']==0 and e['army']>=5),None)
         row=dict(case=s['id'],map=s['map'],side=s['side'],factory=s['factory'],outcome=s['outcome'],seconds=round(s['gameSeconds'],1),killed=round(own.get('killed',0)),lost=round(own.get('lost',0)),ownIncome=round(own.get('metalIncome',0),1),enemyIncome=round(enemy.get('metalIncome',0),1),ownMex=own.get('mexes',0),enemyMex=enemy.get('mexes',0),ownArmyValue=round(own.get('armyValue',0)),enemyArmyValue=round(enemy.get('armyValue',0)),firstFiveCreatedSeconds=first_army,firstFiveReadySeconds=next((e['time'] for e in clients if e.get('readyArmy',0)>=5),None),explored=max((e.get('explored',0) for e in clients),default=0),scoutVisited=max((e.get('scoutVisited',0) for e in clients),default=0))
         rows.append(row)
+        row['enemyOpening']=next((','.join(sorted(name for name in e.get('composition',{}) if name.startswith('factory'))) for e in metrics if e['team']==1 and any(name.startswith('factory') for name in e.get('composition',{}))), 'unavailable')
         decisions=[e for e in events if e['kind']=='OFFICER_EVENT']
+        worker_stalls=sum(e['category'] in ('ECONOMY STALLED','RECOVERY STALLED') for e in decisions)
+        waiting_health=sum('wait for average health' in e.get('reason','') for e in clients)
+        if worker_stalls: notes.append(f'{worker_stalls} worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment.')
+        if waiting_health: notes.append(f'{waiting_health} samples waited for army health recovery; inspect whether repair/reinforcement was available.')
         checkpoints={}
         for second in (120,300,600,900,1200):
             if s['gameSeconds'] < second: continue
@@ -41,6 +46,8 @@ def analyze(directory, output):
         own_curve=[e for e in metrics if e['team']==0]
         peaks={key:max((e.get(key,0) for e in own_curve),default=0) for key in ('armyValue','army','mexes','metalIncome','factories','builders')}
         detail=dict(row,diagnosticIndicators=notes,states=dict(states),defenseStates=dict(defense),lossesByUnit=dict(lost),decisionCounts=dict(collections.Counter(e['category'] for e in decisions)),checkpoints=checkpoints,ownPeaks=peaks,finalOwn=own,finalEnemy=enemy)
+        queues=[q for e in clients for q in e.get('factoryQueues',[])]
+        detail['queueValidation']={'samples':len(queues),'maximumQueue':max((q.get('queued',0) for q in queues),default=None),'repeatEnabledSamples':sum(bool(q.get('repeatState')) for q in queues)}
         details.append(detail)
         # Preserve all curves/decisions, including legitimate player telemetry and offline score data.
         (output/(s['id']+'.jsonl')).write_text('\n'.join(json.dumps(e) for e in events)+'\n',encoding='utf-8')
@@ -52,7 +59,7 @@ def analyze(directory, output):
     lines=['# Benchmark results', '',f'Completed cases: {len(rows)}. Outcomes: {dict(counts)}.', '', 'Diagnostic indicators below are hypotheses from telemetry, not proven causal explanations. Time limits are censored, not wins.', '', '[Match table](matches.csv) · [Detailed analysis](analysis.json). Plot files, when generated: army, income, mexes and coverage.', '', '| Map / factory / side | Result | Killed / lost | Final mexes (ours/enemy) |', '|---|---|---:|---:|']
     for r in rows: lines.append(f"| {r['map']} / {r['factory']} / {r['side']} | {r['outcome']} | {r['killed']} / {r['lost']} | {r['ownMex']}/{r['enemyMex']} |")
     for d in details:
-        lines.extend(['',f"## {d['case']}",'', ' '.join(d['diagnosticIndicators']) or 'No automatic diagnostic flag; review the full timeline.', '', f"Largest own losses by unit value: {sorted(d['lossesByUnit'].items(),key=lambda v:-v[1])[:5]}."])
+        lines.extend(['',f"## {d['case']}",'',f"Opponent opening recorded by offline scorekeeper: {d['enemyOpening']}.",'', ' '.join(d['diagnosticIndicators']) or 'No automatic diagnostic flag; review the full timeline.', '', f"Largest own losses by unit value: {sorted(d['lossesByUnit'].items(),key=lambda v:-v[1])[:5]}."])
         five=d['checkpoints'].get('300')
         if five:
             a,z=five['0'],five['1']

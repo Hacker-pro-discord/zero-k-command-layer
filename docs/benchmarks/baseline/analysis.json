@@ -18,6 +18,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.6484375,
     "scoutVisited": 0,
+    "enemyOpening": "factoryshield",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -328,6 +329,11 @@
       "economyValue": 12290.4141,
       "energy": 406.645111,
       "metal": 0.07844195
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -349,6 +355,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.66796875,
     "scoutVisited": 0,
+    "enemyOpening": "factoryshield",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -726,6 +733,11 @@
       "economyValue": 33007.332,
       "energy": 1656.1582,
       "metal": 98.5725555
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -747,6 +759,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.546875,
     "scoutVisited": 0,
+    "enemyOpening": "factorycloak",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -1039,6 +1052,11 @@
       "economyValue": 17947.834,
       "energy": 934.914734,
       "metal": 22.9403057
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -1060,6 +1078,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.65625,
     "scoutVisited": 0.02734375,
+    "enemyOpening": "factoryshield",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -1290,6 +1309,11 @@
       "economyValue": 11734.166,
       "energy": 380.376343,
       "metal": 3.17894936
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -1311,6 +1335,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.4921875,
     "scoutVisited": 0,
+    "enemyOpening": "factoryamph",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -1335,6 +1360,7 @@
       "SESSION": 4,
       "ECONOMY": 87,
       "PRODUCTION": 3,
+      "RECOVERY WORK": 85,
       "REINFORCEMENT": 1
     },
     "checkpoints": {
@@ -1599,6 +1625,11 @@
       "economyValue": 10942.75,
       "energy": 1102.85486,
       "metal": 33.9600067
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -1620,11 +1651,13 @@
     "firstFiveReadySeconds": null,
     "explored": 0.55078125,
     "scoutVisited": 0.12890625,
+    "enemyOpening": "factoryshield",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
       "Lost more than twice attributed killed value; inspect engagements and builder exposure.",
-      "Defense/recovery occupied over 60% of samples; possible response saturation."
+      "Defense/recovery occupied over 60% of samples; possible response saturation.",
+      "1 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 9,
@@ -1653,6 +1686,7 @@
       "SESSION": 4,
       "ECONOMY": 124,
       "PRODUCTION": 7,
+      "RECOVERY WORK": 87,
       "REINFORCEMENT": 26,
       "DELEGATED": 4,
       "EXECUTING": 45,
@@ -1662,7 +1696,8 @@
       "ADAPT": 1,
       "MAP_CONTROL": 11,
       "ROUTING": 16,
-      "TACTICAL": 11
+      "TACTICAL": 11,
+      "RECOVERY STALLED": 1
     },
     "checkpoints": {
       "120": {
@@ -1862,6 +1897,11 @@
       "economyValue": 12339.166,
       "energy": 591.577087,
       "metal": 490.832092
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -1883,10 +1923,12 @@
     "firstFiveReadySeconds": null,
     "explored": 0.4921875,
     "scoutVisited": 0.05078125,
+    "enemyOpening": "factoryamph",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
-      "Lost more than twice attributed killed value; inspect engagements and builder exposure."
+      "Lost more than twice attributed killed value; inspect engagements and builder exposure.",
+      "1 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 57
@@ -1905,7 +1947,8 @@
       "LOAD": 1,
       "SESSION": 4,
       "ECONOMY": 84,
-      "PRODUCTION": 3
+      "PRODUCTION": 3,
+      "ECONOMY STALLED": 1
     },
     "checkpoints": {
       "120": {
@@ -2101,6 +2144,11 @@
       "economyValue": 11770.5,
       "energy": 1372.5199,
       "metal": 61.4144592
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -2122,6 +2170,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.63671875,
     "scoutVisited": 0,
+    "enemyOpening": "factoryamph",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -2338,6 +2387,11 @@
       "economyValue": 5942.80029,
       "energy": 249.959198,
       "metal": 62.2318573
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -2359,6 +2413,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.61328125,
     "scoutVisited": 0.16796875,
+    "enemyOpening": "factoryveh",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -2668,6 +2723,11 @@
       "economyValue": 8896,
       "energy": 470.36734,
       "metal": 22.3565559
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -2689,6 +2749,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.7109375,
     "scoutVisited": 0,
+    "enemyOpening": "factoryamph",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -2910,6 +2971,11 @@
       "economyValue": 7196.0166,
       "energy": 479.100311,
       "metal": 0.33007047
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -2931,6 +2997,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.93359375,
     "scoutVisited": 0.25390625,
+    "enemyOpening": "factoryshield",
     "diagnosticIndicators": [
       "No native winner before the game-time cap.",
       "Final income below 60% of opponent; expansion survival/capture deficit.",
@@ -3417,6 +3484,11 @@
       "economyValue": 32290.3223,
       "energy": 1634.93237,
       "metal": 2.54163241
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -3438,6 +3510,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.9375,
     "scoutVisited": 0.5625,
+    "enemyOpening": "factoryhover",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -3681,6 +3754,11 @@
       "economyValue": 7262.5,
       "energy": 514.657898,
       "metal": 41.9820099
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -3702,6 +3780,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.59765625,
     "scoutVisited": 0.15234375,
+    "enemyOpening": "factoryhover",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -4028,6 +4107,11 @@
       "economyValue": 35322.5,
       "energy": 2899.08716,
       "metal": 774.299561
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -4049,11 +4133,13 @@
     "firstFiveReadySeconds": null,
     "explored": 0.66015625,
     "scoutVisited": 0.30078125,
+    "enemyOpening": "factorycloak",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
       "Lost more than twice attributed killed value; inspect engagements and builder exposure.",
-      "Defense/recovery occupied over 60% of samples; possible response saturation."
+      "Defense/recovery occupied over 60% of samples; possible response saturation.",
+      "1 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 18,
@@ -4086,6 +4172,7 @@
       "MAP_CONTROL": 25,
       "EXECUTING": 35,
       "TACTICAL": 26,
+      "ECONOMY STALLED": 1,
       "ROUTING": 15,
       "COMPLETED": 14,
       "STALLED": 2,
@@ -4371,6 +4458,11 @@
       "economyValue": 29042.3906,
       "energy": 81.7284164,
       "metal": 98.3348312
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -4392,6 +4484,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.7109375,
     "scoutVisited": 0.3359375,
+    "enemyOpening": "factoryhover",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -4725,6 +4818,11 @@
       "economyValue": 35557.1484,
       "energy": 483.414063,
       "metal": 1333.24512
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -4746,6 +4844,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.65625,
     "scoutVisited": 0.390625,
+    "enemyOpening": "factoryhover",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -5071,6 +5170,11 @@
       "economyValue": 28475.1641,
       "energy": 2040.69751,
       "metal": 257.467957
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -5092,11 +5196,13 @@
     "firstFiveReadySeconds": null,
     "explored": 0.390625,
     "scoutVisited": 0,
+    "enemyOpening": "factorycloak",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
       "Lost more than twice attributed killed value; inspect engagements and builder exposure.",
-      "Defense/recovery occupied over 60% of samples; possible response saturation."
+      "Defense/recovery occupied over 60% of samples; possible response saturation.",
+      "2 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 16,
@@ -5126,7 +5232,9 @@
       "ROUTING": 1,
       "EXECUTING": 2,
       "DEFENSE": 2,
-      "UNIT_LOST": 2
+      "RECOVERY WORK": 94,
+      "UNIT_LOST": 2,
+      "RECOVERY STALLED": 2
     },
     "checkpoints": {
       "120": {
@@ -5568,6 +5676,11 @@
       "economyValue": 47902.8242,
       "energy": 2268.09668,
       "metal": 27.6200695
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -5589,11 +5702,13 @@
     "firstFiveReadySeconds": null,
     "explored": 0.515625,
     "scoutVisited": 0.14453125,
+    "enemyOpening": "factorycloak",
     "diagnosticIndicators": [
       "No native winner before the game-time cap.",
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
-      "Defense/recovery occupied over 60% of samples; possible response saturation."
+      "Defense/recovery occupied over 60% of samples; possible response saturation.",
+      "2 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 14,
@@ -5626,11 +5741,13 @@
       "DEFENSE": 95,
       "MAP_CONTROL": 48,
       "TACTICAL": 50,
+      "RECOVERY WORK": 98,
       "COMPLETED": 63,
       "UNIT_LOST": 6,
       "MAP_QUEUE": 20,
       "STALLED": 8,
-      "ABORTED": 3
+      "ABORTED": 3,
+      "ECONOMY STALLED": 2
     },
     "checkpoints": {
       "120": {
@@ -6112,6 +6229,11 @@
       "economyValue": 44038.668,
       "energy": 2809.20044,
       "metal": 30.2957611
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -6133,6 +6255,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.24609375,
     "scoutVisited": 0,
+    "enemyOpening": "factorycloak",
     "diagnosticIndicators": [
       "No native winner before the game-time cap.",
       "Final income below 60% of opponent; expansion survival/capture deficit.",
@@ -6587,6 +6710,11 @@
       "economyValue": 49324.832,
       "energy": 2736.81079,
       "metal": 171.737915
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -6608,6 +6736,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.34375,
     "scoutVisited": 0.0390625,
+    "enemyOpening": "factorycloak",
     "diagnosticIndicators": [
       "No native winner before the game-time cap.",
       "Final income below 60% of opponent; expansion survival/capture deficit.",
@@ -7096,6 +7225,11 @@
       "economyValue": 42648.1172,
       "energy": 2885.20288,
       "metal": 0.1426245
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -7117,6 +7251,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.11328125,
     "scoutVisited": 0,
+    "enemyOpening": "factoryhover",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -7338,6 +7473,11 @@
       "economyValue": 6510.66699,
       "energy": 468.291687,
       "metal": 54.8718147
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -7359,12 +7499,14 @@
     "firstFiveReadySeconds": null,
     "explored": 0.76953125,
     "scoutVisited": 0.30078125,
+    "enemyOpening": "factoryship",
     "diagnosticIndicators": [
       "No native winner before the game-time cap.",
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
       "Lost more than twice attributed killed value; inspect engagements and builder exposure.",
-      "Defense/recovery occupied over 60% of samples; possible response saturation."
+      "Defense/recovery occupied over 60% of samples; possible response saturation.",
+      "1 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 15,
@@ -7408,6 +7550,7 @@
       "UNIT_LOST": 10,
       "MAP_QUEUE": 1,
       "ABORTED": 1,
+      "ECONOMY STALLED": 1,
       "ADAPT": 1,
       "RECOVERY": 1
     },
@@ -7865,6 +8008,11 @@
       "economyValue": 33073.25,
       "energy": 2188.2915,
       "metal": 30.7815914
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -7886,6 +8034,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.19921875,
     "scoutVisited": 0.015625,
+    "enemyOpening": "factoryhover",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -8189,6 +8338,11 @@
       "economyValue": 20581.8672,
       "energy": 2278.66821,
       "metal": 258.274139
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -8210,6 +8364,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.55078125,
     "scoutVisited": 0.01171875,
+    "enemyOpening": "factoryship",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -8621,6 +8776,11 @@
       "economyValue": 28524.584,
       "energy": 2661.46069,
       "metal": 325.800079
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -8642,11 +8802,13 @@
     "firstFiveReadySeconds": null,
     "explored": 0.796875,
     "scoutVisited": 0.34375,
+    "enemyOpening": "factoryveh",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
       "Lost more than twice attributed killed value; inspect engagements and builder exposure.",
-      "Defense/recovery occupied over 60% of samples; possible response saturation."
+      "Defense/recovery occupied over 60% of samples; possible response saturation.",
+      "1 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 11,
@@ -8687,10 +8849,12 @@
       "RESERVE": 1,
       "ROUTING": 32,
       "DEFENSE": 32,
+      "RECOVERY WORK": 54,
       "MAP_QUEUE": 3,
       "UNIT_LOST": 7,
       "ADAPT": 1,
-      "RECOVERY": 1
+      "RECOVERY": 1,
+      "RECOVERY STALLED": 1
     },
     "checkpoints": {
       "120": {
@@ -9048,6 +9212,11 @@
       "economyValue": 32450.666,
       "energy": 1652.63171,
       "metal": 675.093872
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -9069,11 +9238,13 @@
     "firstFiveReadySeconds": null,
     "explored": 0.70703125,
     "scoutVisited": 0.11328125,
+    "enemyOpening": "factoryveh",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
       "Lost more than twice attributed killed value; inspect engagements and builder exposure.",
-      "Defense/recovery occupied over 60% of samples; possible response saturation."
+      "Defense/recovery occupied over 60% of samples; possible response saturation.",
+      "1 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 13,
@@ -9114,8 +9285,10 @@
       "UNIT_LOST": 5,
       "MAP_QUEUE": 5,
       "ABORTED": 2,
+      "RECOVERY WORK": 64,
       "ADAPT": 1,
-      "RECOVERY": 1
+      "RECOVERY": 1,
+      "RECOVERY STALLED": 1
     },
     "checkpoints": {
       "120": {
@@ -9393,6 +9566,11 @@
       "economyValue": 20509.6621,
       "energy": 827.050598,
       "metal": 62.2617111
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -9414,6 +9592,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.53125,
     "scoutVisited": 0.21484375,
+    "enemyOpening": "factoryhover",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -9657,6 +9836,11 @@
       "economyValue": 11554.2871,
       "energy": 23.091774,
       "metal": 1041.86035
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -9678,6 +9862,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.51171875,
     "scoutVisited": 0.0546875,
+    "enemyOpening": "factoryveh",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -9914,6 +10099,11 @@
       "economyValue": 15079.166,
       "energy": 1283.7002,
       "metal": 1565.16687
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -9935,6 +10125,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.66796875,
     "scoutVisited": 0.1953125,
+    "enemyOpening": "factoryship",
     "diagnosticIndicators": [
       "No native winner before the game-time cap.",
       "Final income below 60% of opponent; expansion survival/capture deficit.",
@@ -10448,6 +10639,11 @@
       "economyValue": 40476.4141,
       "energy": 3661.42065,
       "metal": 752.314453
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -10469,6 +10665,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.61328125,
     "scoutVisited": 0.19140625,
+    "enemyOpening": "factoryship",
     "diagnosticIndicators": [
       "No native winner before the game-time cap.",
       "Final income below 60% of opponent; expansion survival/capture deficit.",
@@ -10976,6 +11173,11 @@
       "economyValue": 39226.332,
       "energy": 2959.70508,
       "metal": 1778.41968
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -10997,6 +11199,7 @@
     "firstFiveReadySeconds": null,
     "explored": 0.328125,
     "scoutVisited": 0.0078125,
+    "enemyOpening": "factoryship",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
@@ -11402,6 +11605,11 @@
       "economyValue": 27361.082,
       "energy": 1920.24658,
       "metal": 513.764709
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   },
   {
@@ -11423,11 +11631,13 @@
     "firstFiveReadySeconds": null,
     "explored": 0.2890625,
     "scoutVisited": 0,
+    "enemyOpening": "factoryship",
     "diagnosticIndicators": [
       "Final income below 60% of opponent; expansion survival/capture deficit.",
       "Final combat value below half of opponent.",
       "Lost more than twice attributed killed value; inspect engagements and builder exposure.",
-      "Defense/recovery occupied over 60% of samples; possible response saturation."
+      "Defense/recovery occupied over 60% of samples; possible response saturation.",
+      "1 worker stall releases recorded; autonomous capacity was lost pending manual re-enrollment."
     ],
     "states": {
       "UNASSIGNED": 13,
@@ -11465,7 +11675,8 @@
       "COMPLETED": 59,
       "MAP_QUEUE": 16,
       "ABORTED": 2,
-      "UNIT_LOST": 4
+      "UNIT_LOST": 4,
+      "ECONOMY STALLED": 1
     },
     "checkpoints": {
       "120": {
@@ -11843,6 +12054,11 @@
       "economyValue": 35765,
       "energy": 2519.71753,
       "metal": 553.648193
+    },
+    "queueValidation": {
+      "samples": 0,
+      "maximumQueue": null,
+      "repeatEnabledSamples": 0
     }
   }
 ]

@@ -16,7 +16,7 @@ def records(path):
         if match:
             try: result.append({'kind': match[1], **json.loads(match[2])})
             except json.JSONDecodeError: pass
-        officer = re.search(r'\[f=(-?\d+)\].*?\[CommandLayer\] ([A-Z_]+): (.*)', line)
+        officer = re.search(r'\[f=(-?\d+)\].*?\[CommandLayer\] ([A-Z_ ]+): (.*)', line)
         if officer:
             result.append({'kind': 'OFFICER_EVENT', 'time': max(0, int(officer[1])) / 30,
                            'category': officer[2], 'message': officer[3]})

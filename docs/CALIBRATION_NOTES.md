@@ -1,6 +1,6 @@
 # Calibration candidate 1
 
-Status: 32 Lua regression suites and the native five-minute pilot passed; full candidate training evaluation is running. The pilot maintained one-unit native factory queues, reached five completed military units by 60 seconds, and recorded no controller errors. The baseline remains an immutable source snapshot in the isolated campaign directory. No holdout results have been used to select these changes.
+Status: 32 Lua regression suites and the native five-minute pilot passed. The complete corrected candidate 2 training pass finished with zero wins, 20 losses and 12 time caps; see [results and unresolved failures](BENCHMARK_RESULTS.md). The pilot maintained one-unit native factory queues, reached five completed military units by 60 seconds, and recorded no controller errors. The baseline remains an immutable source snapshot in the isolated campaign directory. No holdout results have been used to select these changes.
 
 ## Findings and changes
 
