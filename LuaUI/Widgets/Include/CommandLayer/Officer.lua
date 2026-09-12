@@ -26,6 +26,8 @@ return function(C)
 		local all=C.U.copy(eligible); for _,id in ipairs(ordinary) do all[#all+1]=id end
 		if not intent.approved and not intent.delegated then C.registry.release(all,'PLAYER_OVERRIDE') end
 		local op=C.registry.newOperation(all); op.ordinary={}; for _,id in ipairs(ordinary) do op.ordinary[id]=true end; op.plan=plan; op.command=intent.command or Spring.Utilities.CMD.RAW_MOVE; op.options=C.U.options(intent.options); op.mode=C.U.assisted(C.settings) and (intent.mode or C.settings.mode) or 'ARRIVAL'; op.state='EXECUTING'; op.forceID=intent.forceID; op.proposalID=intent.proposalID; op.grant=intent.delegated and intent.grant or nil
+		-- Packed transit ranks use native movement without conflicting anchor corrections.
+		if plan.packed then op.mode='ARRIVAL' end
 		for _,id in ipairs(all) do
 			local p=plan.slots[id] or plan.center; p={p[1],Spring.GetGroundHeight(p[1],p[3]),p[3]}; op.slots[id]=p
 			C.orders.issue(op,id,op.command,p,op.options)
@@ -45,11 +47,13 @@ return function(C)
 	function A.executeProposal(p)
 		if p.state~='APPROVED' or not C.U.assisted(C.settings) then return false end
 		local f=C.registry.forces[p.forceID]; if not f then p.state='INVALIDATED'; return false end
+		-- Consume approval before revoking competing detachment authority.
+		if p.wholeArmy and f.delegation and f.delegation.active then A.setDelegated(f.id,false) end
 		p.state='EXECUTING'; p.dispatching=true
 		local id=A.submit({approved=true,forceID=f.id,proposalID=p.id,plan=p.plan,command=CMD.FIGHT,options={},mode=p.mode},p.units)
 		p.dispatching=nil
 		if not id then p.state='ABORTED'; return false end
-		f.operation=id; f.status='EXECUTING'; C.registry.operations[id].kind=p.kind; C.input.preview=p.plan
+		f.operation=id; f.status='EXECUTING'; f.reviewReason=nil; C.registry.operations[id].kind=p.kind; C.input.preview=p.plan
 		return id
 	end
 	function A.executeDelegated(f,ids,plan,kind,command)
@@ -78,6 +82,17 @@ return function(C)
 		local f={id=C.registry.nextForce,members={},suspended={},revision=1,status='ADVISER',front='ADVANCE',formation=C.settings.formation=='OFF' and 'DOUBLE LINE' or C.settings.formation,lastSuggestion=-100,declined={}}
 		for _,id in ipairs(eligible) do f.members[id]=true end
 		C.registry.forces[f.id]=f; C.registry.activeForce=f.id; C.debug.log('ASSIGNED','Force '..f.id..' observes only; no orders issued.'); return f.id
+	end
+	function A.autoAssign(id)
+		local f=C.registry.forces[C.registry.activeForce]
+		if not C.settings.autoAssign or not f or not C.U.assisted(C.settings) or not C.U.live() or not C.U.owned(id) then return false end
+		local d=C.classify.definition(Spring.GetUnitDefID(id)); local _,_,_,_,built=Spring.GetUnitHealth(id)
+		if not d.mobile or d.builder or built and built<1 or (C.registry.generation[id] or 0)>0 or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 then return false end
+		for _,other in pairs(C.registry.forces) do if other.members[id] then return false end end
+		f.members[id]=true; f.revision=f.revision+1
+		if f.delegation and f.delegation.active then f.delegation.groups.MAIN[#f.delegation.groups.MAIN+1]=id end
+		C.debug.log('REINFORCEMENT','Completed military unit '..id..' assigned to Force '..f.id..'; joins its next authorized movement.')
+		return true
 	end
 	function A.assignAll()
 		if not C.U.live() then return nil end
@@ -131,13 +146,14 @@ return function(C)
 					local inObservedCombat=op.grant and C.observations.nearCombat(pos,C.classify.definition(Spring.GetUnitDefID(id)).range+180)
 					if inObservedCombat then op.state='ENGAGING' end
 					local release=not C.U.assisted(C.settings) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1
-					if arrived then release=true end
+					if arrived then release=true; op.arrivals=(op.arrivals or 0)+1 end
 					if base then t.seen=true elseif t.seen or now-op.created>5 then release=true end
 					if C.U.distance(pos,t.lastPos)>12 then t.progress=now; t.lastPos=pos end
-					if baseIndex==1 and now-t.progress>10 and not inObservedCombat then release=true; C.debug.log('STALLED','Released positioning for unit '..id) end
+					local stalled=baseIndex==1 and now-t.progress>10 and not inObservedCombat
+					if stalled then release=true; C.debug.log('STALLED','Released positioning for unit '..id) end
 					if release then
 						C.orders.clearCorrection(op,id)
-						if not arrived then op.endReason=op.endReason or 'ABORTED'; if op.grant then local f=C.registry.forces[op.forceID]; if f and f.delegation then f.delegation.blocked[id]=true end end end
+						if not arrived then op.endReason=op.endReason or 'ABORTED'; if op.grant then local f=C.registry.forces[op.forceID]; if f and f.delegation then f.delegation.blocked[id]=stalled and now+30 or true end end end
 						if C.registry.owner[id]==op.id then C.registry.owner[id]=nil end
 					else
 						remaining=remaining+1

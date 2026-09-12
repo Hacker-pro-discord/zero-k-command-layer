@@ -84,6 +84,16 @@ Assignment, silence and declined proposals issue no orders. Approval covers one 
 
 Production advice uses actual factory build options, friendly capability gaps and legitimately observed enemies. **SHOW DETAILS** explains evidence, cost and alternatives. Advice never places buildings, queues units or selects constructors.
 
+### Whole-army pushes and reinforcements (preview 2)
+
+- **REVIEW ARMY PUSH** reviews one Fight action by the entire assigned force, including its scout/raid detachments, toward your drawn objective. Inspect the destination and slots, then approve. Approval ends separate delegation; completion returns to advice. It never invents an enemy-base destination or authorizes a second attack.
+- The push heuristic requires average health above 50% and healthy friendly metal value at least 1.25 times visually identified enemy value near the objective. Otherwise it proposes reforming. This is a coarse comparison, not a prediction of victory; radar and unobserved territory remain uncertain.
+- **AUTO ASSIGN: ON/OFF** is an opt-in, persistent setting in the Officer panel, OFF by default. Newly completed, owned mobile military units join the currently active assigned force. Builders, structures, unfinished units and manually released units are excluded. Toggle it OFF to stop recruitment. There is no retroactive sweep; use Assign All for existing units.
+- New membership invalidates an offered approval and never expands an executing approved action. Under explicit delegation, reinforcements join a subsequent group movement. Adviser membership alone issues no orders. Selection changes do not change which force is active; use Previous/Next Force.
+- Large delegated/whole-army layouts use additional distinct ranks when the requested shape overflows the corridor. Role-zone order is retained; the precise geometric shape may change. Packed ranks use native movement without anchor corrections. If the army cannot fit, the Officer asks for a wider line rather than merging destinations. Terrain navigation still belongs to the engine.
+- Congestion-stalled units retry after 30 game seconds. Unknown queues and manual overrides are not treated as congestion. Partial arrival no longer counts as total group failure.
+- Delegation stops for strategic review after 60 seconds without 128 units of forward progress, or loss/release of more than 25% of its initial review membership. It offers one Assault role-zone reformation instead of repeating the failing advance. Approval is required; another push requires a new review. This is a transparent fallback rule, not a learned strategy planner. Native queued orders remain until completion or a manual Stop.
+
 ## Delegated pressure: single-player only
 
 For sustained control:
@@ -99,7 +109,7 @@ This explicitly authorizes repeated actions for that force inside the drawn corr
 - Damaged/exposed light detachments can withdraw with native movement. New main advances pause at very low average health.
 - At the final line MAIN holds under control; light detachments may continue within the corridor.
 
-**AI DETAILS** shows group availability, observed composition, rule version, state and reasons. **STOP AI** revokes sustained authority. Manual orders release affected units. Changing the objective/front requires explicit delegation again. Future production is **not** automatically recruited.
+**AI DETAILS** shows group availability, observed composition, rule version, state and reasons. **STOP AI** revokes sustained authority. Manual orders release affected units. Changing the objective/front requires explicit delegation again. Future production joins only when **AUTO ASSIGN** is enabled.
 
 Delegation requires a private-session assertion **and a single-player roster**. Multiplayer delegation is disabled. There is no autonomous economy, production, map-wide strategic targeting, reserve commitment, neural model or learned weights.
 
@@ -132,7 +142,8 @@ There are no orders or observation collection while spectating/replaying. Enemy 
 
 ## Test evidence and limitations
 
-- Thirteen Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal and status.
+- Fifteen Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
+- Preview 2 includes a separate 30-game-second headless engine smoke test. The 400-unit and new approval/recruitment cases are mocked Lua regressions, not a demonstrated 400-unit live battle. The two new buttons have not yet had visual in-game interaction testing.
 - Isolated engine tests verified native orders, actual movement, repeated scout/raid/main operations and cancellation.
 - A visible equal-army test started with 32 identical units and 3,010 metal of combat value each. The corrected two-minute run ended with **nine units and 910 value each**: a stalemate, not a victory or completed objective. The opponent was scripted native Fight, not a full Circuit AI match.
 - UI panels and live details were inspected. Broad terrain coverage, long-match strength, other versions/platforms and public multiplayer permission are not established.

@@ -72,5 +72,43 @@ return function(C)
 		end
 		return plan
 	end
+	-- Overflow ranks keep distinct destinations instead of clamping an entire wing
+	-- onto one boundary point. Role-zone order survives the compact layout.
+	function F.fitCorridor(plan,sector,settings)
+		local gap=(settings or C.settings).spacing
+		for _,id in ipairs(plan.units) do gap=math.max(gap,C.classify.definition(Spring.GetUnitDefID(id)).radius*2+8) end
+		local fits=true
+		for i,id in ipairs(plan.units) do
+			local p=plan.slots[id]
+			if not C.U.point(p) or not F.inCorridor(sector,p) then fits=false; break end
+			for j=1,i-1 do if C.U.distance(p,plan.slots[plan.units[j]])<gap*.9 then fits=false; break end end
+			if not fits then break end
+		end
+		plan.corridor=sector.corridor
+		if fits then return plan end
+		local columns=math.max(1,math.floor((sector.half*2-32)/gap)+1)
+		local rankGap=math.max(gap,(settings or C.settings).rankGap)
+		local rows=math.ceil(#plan.units/columns)
+		local front=math.min(sector.length,math.max(C.rules.progress(sector,plan.center),(rows-1)*rankGap-380))
+		local candidates={}
+		for row=0,math.floor((front+380)/rankGap) do
+			for column=0,columns-1 do
+				local p=C.rules.point(sector,front-row*rankGap,(column-(columns-1)/2)*gap)
+				if p then candidates[#candidates+1]=p end
+			end
+		end
+		if #candidates<#plan.units then return nil end -- Never merge slots to pretend the army fits.
+		local ids=C.U.copy(plan.units)
+		table.sort(ids,function(a,b)
+			local za,zb=plan.zones[a] or 0,plan.zones[b] or 0
+			if za~=zb then return za<zb end
+			local pa,pb=C.U.position(a),C.U.position(b)
+			local aa=pa[1]*sector.px+pa[3]*sector.pz; local ab=pb[1]*sector.px+pb[3]*sector.pz
+			return aa==ab and a<b or aa<ab
+		end)
+		for i,id in ipairs(ids) do plan.slots[id]=candidates[i] end
+		plan.packed=true; plan.width=(columns-1)*gap
+		return plan
+	end
 	return F
 end

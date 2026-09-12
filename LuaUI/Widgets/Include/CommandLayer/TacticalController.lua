@@ -42,20 +42,26 @@ return function(C)
 		local ground=C.classify.filter(ids); if #ground==0 then ground=ids end
 		local p=C.formations.plan(ground,{a,b},settings); if not p then return nil end
 		p.corridor=s.corridor
-		-- Narrow corridors may compress ranks; never enlarge delegated territory.
-		for id,slot in pairs(p.slots) do
-			local along=math.max(-380,math.min(s.length+40,C.rules.progress(s,slot)))
-			local across=(slot[1]-s.origin[1])*s.px+(slot[3]-s.origin[3])*s.pz
-			local bounded=C.rules.point(s,along,math.max(-s.half+16,math.min(s.half-16,across)))
-			if not bounded then return nil end; p.slots[id]=bounded
-		end
-		return p
+		return C.formations.fitCorridor(p,s,settings)
 	end
 	function T.tick(f,now)
 		local d=f.delegation; if not d or not d.active then return end
 		if not C.U.delegationAllowed(C.settings) then C.officer.setDelegated(f.id,false); return end
 		if #C.officer.members(f)==0 then C.officer.setDelegated(f.id,false); f.status='PLAYER_OVERRIDE'; return end
+		-- Congestion gets a bounded retry; manual/unknown queue overrides never do.
+		for id,untilTime in pairs(d.blocked) do if type(untilTime)=='number' and now>=untilTime then d.blocked[id]=nil end end
 		rebalance(f)
+		local forceIDs=C.officer.members(f); local centerNow=C.U.center(forceIDs)
+		local progressNow=C.rules.progress(d.sector,centerNow)
+		d.review=d.review or {time=now,progress=progressNow,count=#forceIDs}
+		if progressNow>d.review.progress+128 then d.review.time=now; d.review.progress=progressNow end
+		if not f.objectiveReached and f.front~='HOLD' and (now-d.review.time>=60 or #forceIDs<d.review.count*.75) then
+			local why=#forceIDs<d.review.count*.75 and 'At least 25% of assigned units were lost or released.' or 'No substantial forward progress for 60 game seconds.'
+			C.officer.setDelegated(f.id,false); f.reviewReason=why; f.status='REVIEW_REQUIRED'
+			C.debug.log('REVIEW',why..' Delegation stopped; review a revised plan.')
+			if C.advisor then C.advisor.ask(f.id,true,true) end
+			return
+		end
 		local s=d.sector; local snapshot=C.observations.snapshot(); local contacts={}
 		for _,v in ipairs(snapshot.contacts) do if C.formations.inCorridor(s,v.position) then contacts[#contacts+1]=v end end
 		d.observed=snapshot.time; d.known={}; for _,v in ipairs(contacts) do d.known[v.role]=(d.known[v.role] or 0)+1 end
@@ -64,7 +70,7 @@ return function(C)
 			if #ids==0 then d.decisions[group]={state='UNAVAILABLE',reason='No eligible surviving units in this detachment.',time=now} elseif op and op.active and d.decisions[group] then d.decisions[group].state=op.state end
 			if op and not op.active and not op.accounted then
 				op.accounted=true
-				if op.state~='COMPLETED' then d.failures[group]=(d.failures[group] or 0)+1 else d.failures[group]=0 end
+				if op.state~='COMPLETED' and not op.arrivals then d.failures[group]=(d.failures[group] or 0)+1 else d.failures[group]=0 end
 				d.next[group]=now+(op.state=='COMPLETED' and (group=='MAIN' and 3 or 12) or 15)
 			end
 			if #ids>0 and (d.failures[group] or 0)<3 then
@@ -91,14 +97,14 @@ return function(C)
 							for _,flank in ipairs({-1,1}) do local alternative=C.rules.point(s,nextLine,flank*s.half*.45); if alternative then local flankRisk=C.rules.risk(alternative,contacts,600); if flankRisk+150<risk then target=alternative; risk=flankRisk; reason='Shift main advance toward less observed resistance inside the corridor. Unobserved opposition may remain.' end end end
 						end
 						if health<.3 then target=nil; d.state='HOLDING'; d.reason='Main force below 30% average health; player reinforcement or a new objective needed.'
-						elseif (progress>=s.length-96 or f.front=='HOLD') and target and C.U.distance(center,target)<200 then target=nil; d.state='HOLDING'; d.reason='Holding current front; scouts and raid detachment continue within the corridor.' end
+						elseif f.objectiveReached or (progress>=s.length-96 or f.front=='HOLD') and target and C.U.distance(center,target)<200 then target=nil; d.state='HOLDING'; d.reason='Holding current front; scouts and raid detachment continue within the corridor.' end
 					end
 					if target then
 						local p=plan(f,ids,target,group,contacts)
 						if p then
 							local id=C.officer.executeDelegated(f,ids,p,kind,(group=='SCOUT' or kind=='WITHDRAW') and Spring.Utilities.CMD.RAW_MOVE or CMD.FIGHT)
 							if id then d.decisions[group]={state=kind,reason=reason,time=now}; d.ops[group]=id; d.state=kind; d.reason=reason; d.next[group]=now+10; if visit then d.visits[visit]=now end; d.returning[group]=returning; C.debug.log('TACTICAL',group..': '..reason) end
-						else d.next[group]=now+15; d.reason='No formation fits this map boundary. Draw a different objective corridor.' end
+						else d.next[group]=now+15; d.reason='The army needs a wider objective corridor to retain distinct slots. Draw a wider line or review an army push.' end
 					end
 				end
 			elseif (d.failures[group] or 0)>=3 then d.reason=group..' paused after three failed movements. Re-delegate after checking terrain.'; d.decisions[group]={state='PAUSED',reason=d.reason,time=now} end

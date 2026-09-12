@@ -39,8 +39,10 @@ return function(C)
 			button(p,0,338,185,'DELEGATE PRESSURE','Single-player only. Continuously scout, raid and push assigned units inside your objective corridor until stopped. This explicitly authorizes repeated orders.',function() C.officer.setDelegated(C.registry.activeForce,true) end)
 			button(p,190,338,90,'STOP AI','Revoke every delegated detachment; native destination orders remain.',function() C.officer.setDelegated(C.registry.activeForce,false) end)
 			button(p,285,338,90,'AI DETAILS','Read groups, observed evidence and current decision.',function() UI.showTactical() end)
+			button(p,0,380,185,'REVIEW ARMY PUSH','Propose one Fight action by the entire assigned force. Draw an objective first. Approval required; delegation ends on approval.',function() C.advisor.ask(C.registry.activeForce,true,true) end)
+			button(p,190,380,185,'AUTO ASSIGN: '..(C.settings.autoAssign and 'ON' or 'OFF'),'Opt in to assigning newly completed military units to the active force. Existing approvals never expand.',function() C.settings.autoAssign=not C.settings.autoAssign; UI.build() end)
 			UI.lastDetail=nil
-			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=382,width=367,height=80,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
+			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=420,width=367,height=40,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
 	end
 	function UI.initialize()
@@ -71,7 +73,7 @@ return function(C)
 		if not p then return end
 		UI.dialog=UI.ch.Window:New{name='CommandLayerProposal',caption='Officer - Force '..p.forceID,parent=UI.ch.Screen0,x=450,y=160,width=500,height=540,draggable=true,resizable=false,padding={12,30,12,12}}
 		UI.ch.TextBox:New{parent=UI.dialog,x=0,y=0,width='100%',height=415,text=(p.state=='OFFERED' and '' or p.state..' - this brief is no longer executable. Refresh to review a new plan.\n\n')..p.summary}
-		button(UI.dialog,0,450,130,p.state=='OFFERED' and 'APPROVE' or 'REFRESH','Approve one displayed action; outdated briefs require a fresh review.',function() if p.state=='OFFERED' then C.proposals.approve(p.id,p.revision) else C.advisor.ask(p.forceID,true) end end)
+		button(UI.dialog,0,450,130,p.state=='OFFERED' and 'APPROVE' or 'REFRESH','Approve one displayed action; outdated briefs require a fresh review.',function() if p.state=='OFFERED' then C.proposals.approve(p.id,p.revision) else C.advisor.ask(p.forceID,true,p.wholeArmy) end end)
 		button(UI.dialog,138,450,120,'DISMISS','No orders. Decline and suppress this suggestion temporarily.',function() C.proposals.decline(p.id); C.proposals.dismiss(p.id) end)
 		button(UI.dialog,266,450,140,'SHOW PLAN','Preview destinations; no orders.',function() C.input.preview=p.plan end)
 	end

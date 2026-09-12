@@ -1,0 +1,30 @@
+[t=00:00:24.181038][f=-000001] [CommandLayer] LOAD: Officer / Chili controls loaded
+[t=00:00:25.867511][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:26.181178][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:35.112344][f=0000180] [CommandLayer] SESSION: Local/private testing enabled for this session.
+[t=00:00:35.116458][f=0000180] [CommandLayer] ASSIGNED: Force 1 observes only; no orders issued.
+[t=00:00:35.120247][f=0000180] [CommandLayer] OBJECTIVE: Force 1 objective set. Await approval; no orders issued.
+[t=00:00:35.124740][f=0000180] [CommandLayer] DELEGATED: Scout + Raid + Push enabled. Assigned units only; manual orders release units.
+[t=00:00:35.129236][f=0000180] [CL-COMBAT-CLIENT] delegated=true
+[t=00:00:35.131923][f=0000180] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=nil
+[t=00:00:35.134329][f=0000180] [CL-COMBAT-CLIENT] group=RAID alive=4 op=nil
+[t=00:00:35.137036][f=0000180] [CL-COMBAT-CLIENT] group=MAIN alive=26 op=nil
+[t=00:00:35.140223][f=0000180] [CL-COMBAT-CLIENT] t=6 state=ASSEMBLING blocked=0 main_op=nil reason=Explicit Scout + Raid + Push delegation.
+[t=00:00:37.151246][f=0000241] [CommandLayer] EXECUTING: Operation 1: LINE / 2 units
+[t=00:00:37.154323][f=0000241] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:00:37.160894][f=0000241] [CommandLayer] EXECUTING: Operation 2: LINE / 4 units
+[t=00:00:37.164386][f=0000241] [CommandLayer] TACTICAL: RAID: No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:00:37.170667][f=0000241] [CommandLayer] EXECUTING: Operation 3: ASSAULT / 26 units
+[t=00:00:37.173924][f=0000241] [CommandLayer] TACTICAL: MAIN: Advance main role formation by up to 600 game units; native Fight engages observed opposition.
+[t=00:00:45.116473][f=0000480] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=1
+[t=00:00:45.119829][f=0000480] [CL-COMBAT-CLIENT] group=RAID alive=4 op=2
+[t=00:00:45.122971][f=0000480] [CL-COMBAT-CLIENT] group=MAIN alive=26 op=3
+[t=00:00:45.126188][f=0000480] [CL-COMBAT-CLIENT] t=16 state=ENGAGING blocked=0 main_op=3 reason=Main force is exchanging fire under native unit AI; combat movement is not being overwritten.
+[t=00:00:50.111640][f=0000630] [CommandLayer] COMPLETED: Operation 1 released positioning.
+[t=00:00:52.978619][f=0000716] [CommandLayer] UNIT_LOST: Operation 2 released positioning.
+[t=00:00:55.112066][f=0000780] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=1
+[t=00:00:55.115915][f=0000780] [CL-COMBAT-CLIENT] group=RAID alive=3 op=2
+[t=00:00:55.119628][f=0000780] [CL-COMBAT-CLIENT] group=MAIN alive=20 op=3
+[t=00:00:55.123354][f=0000780] [CL-COMBAT-CLIENT] t=26 state=ENGAGING blocked=0 main_op=3 reason=Main force is exchanging fire under native unit AI; combat movement is not being overwritten.
+[t=00:00:59.124239][f=0000900] [CommandLayer] DELEGATED: Autonomous control stopped. Native destination orders remain.
+[t=00:00:59.129463][f=0000900] [CL-COMBAT-CLIENT] COMPLETE
