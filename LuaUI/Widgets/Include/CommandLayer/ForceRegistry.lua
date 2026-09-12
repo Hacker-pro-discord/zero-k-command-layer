@@ -3,7 +3,7 @@ return function(C)
 	function R.release(ids,reason)
 		for _,id in ipairs(ids) do
 			R.generation[id]=(R.generation[id] or 0)+1; R.owner[id]=nil
-			for _,f in pairs(R.forces) do if f.members[id] then f.members[id]=nil; f.revision=f.revision+1; f.status=reason or 'PLAYER_OVERRIDE' end end
+			for _,f in pairs(R.forces) do if f.members[id] then if C.settings.override=='suspend' and reason=='PLAYER_OVERRIDE' then f.suspended=f.suspended or {}; f.suspended[id]=true else f.members[id]=nil end; f.revision=f.revision+1; f.status=reason or 'PLAYER_OVERRIDE' end end
 		end
 	end
 	function R.claim(ids,op)
@@ -17,6 +17,8 @@ return function(C)
 	end
 	function R.finish(op,state)
 		op.active=false; op.state=state or 'COMPLETED'
+		if op.forceID and R.forces[op.forceID] then R.forces[op.forceID].status='ADVISER' end
+		if op.proposalID and C.proposals and C.proposals.items[op.proposalID] then C.proposals.items[op.proposalID].state=op.state end
 		for _,id in ipairs(op.units) do if R.owner[id]==op.id then R.owner[id]=nil end end
 	end
 	return R

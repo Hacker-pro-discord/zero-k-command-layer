@@ -1,10 +1,18 @@
 return function(C)
 	local I={}
+	function I.armObjective()
+		if C.settings.privateSession and C.registry.activeForce then I.objective=C.registry.activeForce; Spring.SetActiveCommand(nil); C.debug.log('OBJECTIVE','Left-drag an objective line. Escape cancels.') else C.debug.log('LOCKED','Assign an adviser force in a local/private session first.') end
+	end
 	function I.press(x,y,button)
-		if not C.U.live() or C.settings.formation=='OFF' or Spring.IsGUIHidden() or Spring.IsAboveMiniMap(x,y) then return false end
+		if not C.U.live() or (C.settings.formation=='OFF' and not I.objective) or Spring.IsGUIHidden() or Spring.IsAboveMiniMap(x,y) then return false end
 		local scale=WG.uiScale or 1
 		if WG.Chili and WG.Chili.Screen0:IsAbove(x/scale,y/scale) then return false end
 		local _,cmd=Spring.GetActiveCommand(); local explicit=cmd~=nil
+		if I.objective then
+			if button~=1 then I.objective=nil; return false end
+			local _,p=Spring.TraceScreenRay(x,y,true); if not p then return false end
+			I.drag={points={p},units=C.officer.members(C.registry.forces[I.objective]),command=CMD.FIGHT,button=1,objective=I.objective}; return true
+		end
 		if explicit and button~=1 or not explicit and button~=3 then return false end
 		if not explicit then _,cmd=Spring.GetDefaultCommand() end
 		if cmd~=CMD.MOVE and cmd~=CMD.FIGHT and cmd~=Spring.Utilities.CMD.RAW_MOVE then return false end
@@ -23,6 +31,7 @@ return function(C)
 		if button~=d.button then I.drag=nil; return true end
 		I.move(x,y); I.drag=nil
 		local opts=C.U.currentOptions()
+		if d.objective then C.officer.objective(d.objective,d.points); I.objective=nil; return true end
 		if #d.points<2 or C.U.distance(d.points[1],d.points[#d.points])<20 then C.orders.native(d.command,d.points[1],opts)
 		else C.officer.submit({gesture=d.points,command=d.command,options=opts},d.units) end
 		if d.explicit and not opts.shift then Spring.SetActiveCommand(nil) end

@@ -13,3 +13,4 @@ Each entry records checks actually run; automated checks are not a claim of visu
 8. Role-icon classification, description fallback and constructor inclusion tests pass; no unit-name list. Installed and triggered live reload.
 9. SCREEN and ASSAULT role bands implemented; test verifies artillery remains over 300 units behind raiders. Engine reload requested. No autonomous target selection.
 10. In-engine screenshot confirms all formation controls render in the test match. Runtime logs show clean module reloads. Settings/actions use Epic Menu conventions. Observation service filters radar identity and disables reads while spectating. Full terrain/combat acceptance remains in final QA.
+11. Explicit adviser assignment, objective drawing and nonmodal proposal lifecycle implemented; approval has no executor yet (fails closed). No assignment/objective action issues orders. Syntax/regression tests pass; live reload requested.
