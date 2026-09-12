@@ -1,5 +1,5 @@
 local U=dofile(ROOT..'/LuaUI/Widgets/Include/CommandLayer/Util.lua')
-CMD={OPT_ALT=128,OPT_CTRL=64,OPT_META=4,OPT_SHIFT=32,OPT_RIGHT=16}
+CMD={REPAIR=40,RECLAIM=90,OPT_ALT=128,OPT_CTRL=64,OPT_META=4,OPT_SHIFT=32,OPT_RIGHT=16}
 local active=30100
 Spring={Utilities={CMD={AREA_MEX=30100}},GetSpectatingState=function()return false end,IsReplay=function()return false end,GetGameFrame=function()return 100 end,GetGameSeconds=function()return 1 end,GetCmdDescIndex=function(id)return id end,GetSelectedUnits=function()return {1,2} end,SetActiveCommand=function(id)active=id end,GetActiveCommand=function()return 1,active end}
 WG={metalSpots={},CommandInsert=function()end}
@@ -9,3 +9,7 @@ for _,count in ipairs({0,1,2,4}) do
 	assert(o.ctrl==(count==1 or count==4)); assert(o.alt==(count==2 or count==4)); assert(o.coded==36+(o.ctrl and 64 or 0)+(o.alt and 128 or 0))
 end
 L.notify(10,{},{}); assert(not L.pending)
+for _,kind in ipairs({'AREA_REPAIR','PERSISTENT_REPAIR','AREA_RECLAIM','PERSISTENT_RECLAIM'}) do
+	L.arm(kind); local o={ctrl=true,shift=true}; L.notify(active,{0,0,0,100},o)
+	assert(o.ctrl and o.shift); assert(o.alt==(kind:find('PERSISTENT')~=nil))
+end

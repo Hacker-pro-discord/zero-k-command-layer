@@ -6,3 +6,4 @@ Each entry records checks actually run; automated checks are not a claim of visu
 
 2. Engine log confirms Officer / Chili shell loaded and widget registered; Lua 5.1 syntax passed. UI screenshot inspection initially obscured by a second lobby window.
 3. All four Mex modifier presets pass option/queue tests. Native handlers retained; installed for live reload.
+4. Repair/reclaim modifier tests pass including Ctrl and Shift preservation. Live reload queued for separate test game; no gameplay completion claim.
