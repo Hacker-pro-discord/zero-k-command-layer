@@ -8,6 +8,14 @@ return function(C)
 		local mobile=(d.speed or 0)>0 and not d.isFactory and not d.isBuilding
 		local naval=icon:find('^ship') or icon:find('^sub')
 		local v={role=builder and 'CONSTRUCTOR' or 'OTHER',reason='Capability classification',builder=builder,mobile=mobile,ground=mobile and not d.canFly and not naval,cost=d.metalCost or 0,radius=math.max(16,(d.xsize or 2)*4,(d.zsize or 2)*4),range=d.maxWeaponRange or 0,defID=id,name=d.name,display=d.humanName or d.name}
+		if not builder then
+			local rules={{'aa$','ANTI_AIR'},{'scout','SCOUT'},{'raider','RAIDER'},{'lrarty','ARTILLERY'},{'arty','ARTILLERY'},{'sniper','ARTILLERY'},{'tachyon','ARTILLERY'},{'skirm','SKIRMISHER'},{'riot','RIOT'},{'assault','ASSAULT'},{'support','SUPPORT'},{'jammer','SUPPORT'},{'shield','SUPPORT'}}
+			for _,r in ipairs(rules) do if icon:find(r[1]) then v.role=r[2]; v.reason='Role icon: '..icon; break end end
+			if v.role=='OTHER' then
+				local text=(d.tooltip or d.description or ''):lower()
+				for _,r in ipairs({{'anti%-air','ANTI_AIR'},{'artillery','ARTILLERY'},{'skirmisher','SKIRMISHER'},{'riot','RIOT'},{'assault','ASSAULT'},{'raider','RAIDER'},{'scout','SCOUT'},{'support','SUPPORT'}}) do if text:find(r[1]) then v.role=r[2]; v.reason='Definition description'; break end end
+			end
+		end
 		K.cache[id]=v; return v
 	end
 	function K.filter(ids)
