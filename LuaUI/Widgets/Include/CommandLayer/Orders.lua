@@ -47,6 +47,18 @@ return function(C)
 		for i=#list,1,-1 do local p=list[i]; if p.untilTime<C.U.now() then table.remove(list,i) elseif p.cmd==cmd and same(p.params,params) then table.remove(list,i); return true end end
 		return fromSynced==true -- Native gadget orders are not player override.
 	end
+	function O.production(id,unit)
+		if not C.productionControl or not C.productionControl.valid(id,unit) then return false end
+		local cmd=-unit; local opts=C.U.options({shift=true})
+		O.sending=true
+		local handled=widgetHandler:UnitCommandNotify(id,cmd,{},opts)
+		local ok=false
+		if not handled and C.productionControl.valid(id,unit) then
+			O.pending[id]=O.pending[id] or {}; table.insert(O.pending[id],{cmd=cmd,params={},untilTime=C.U.now()+5})
+			ok=Spring.GiveOrderToUnit(id,cmd,{},opts.coded)
+		end
+		O.sending=false; return ok
+	end
 	function O.budget()
 		local now=C.U.now(); O.corrections=O.corrections or {}
 		while O.corrections[1] and O.corrections[1]<=now-1 do table.remove(O.corrections,1) end

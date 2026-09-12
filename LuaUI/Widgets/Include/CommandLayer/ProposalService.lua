@@ -16,8 +16,8 @@ return function(C)
 		if not p or p.state~='OFFERED' or not C.U.assisted(C.settings) or not C.U.live() then return false,'INVALIDATED' end
 		if C.U.now()>=p.expires then return false,'EXPIRED' end
 		local f=C.registry.forces[p.forceID]; if not f or f.revision~=p.forceRevision then return false,'INVALIDATED' end
-		local ids=C.officer.members(f); if #ids~=#p.units then return false,'INVALIDATED' end
-		for i,id in ipairs(ids) do if id~=p.units[i] or (C.registry.generation[id] or 0)~=p.generations[id] then return false,'INVALIDATED' end end
+		local ids=p.units -- Approval covers its snapshot; added recruits never enlarge it.
+		for _,id in ipairs(ids) do if not f.members[id] or f.suspended[id] or not C.U.owned(id) or (C.registry.generation[id] or 0)~=p.generations[id] then return false,'INVALIDATED' end end
 		for _,id in ipairs(ids) do local pos=C.U.position(id); local h,m=Spring.GetUnitHealth(id); local health=h and m and h/math.max(1,m) or 0; if not pos or C.U.distance(pos,p.positions[id])>128 or health<p.health[id]-.15 then return false,'INVALIDATED' end end
 		C.observations.update(fresh)
 		if C.observations.snapshot(p.observeCenter,p.observeRadius).signature~=p.observation.signature then return false,'INVALIDATED' end

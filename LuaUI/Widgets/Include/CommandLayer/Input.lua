@@ -1,7 +1,7 @@
 return function(C)
 	local I={}
-	function I.armObjective()
-		if C.U.assisted(C.settings) and C.registry.activeForce then I.objective=C.registry.activeForce; Spring.SetActiveCommand(nil); C.debug.log('OBJECTIVE','Left-drag an objective line. Escape cancels.') else C.debug.log('LOCKED','Assign an adviser force in a local/private session first.') end
+	function I.armObjective(forceID,mode)
+		if C.U.assisted(C.settings) and (forceID or C.registry.activeForce) then I.objective=forceID or C.registry.activeForce; I.objectiveMode=mode; Spring.SetActiveCommand(nil); C.debug.log('OBJECTIVE','Left-drag an objective line. Escape cancels.') else C.debug.log('LOCKED','Assign an adviser force in a local/private session first.') end
 	end
 	function I.press(x,y,button)
 		if I.drag then if button~=I.drag.button then I.drag=nil end; return true end
@@ -12,7 +12,7 @@ return function(C)
 		if I.objective then
 			if button~=1 then I.objective=nil; return false end
 			local _,p=Spring.TraceScreenRay(x,y,true); if not p then return false end
-			I.drag={points={p},units=C.officer.members(C.registry.forces[I.objective]),command=CMD.FIGHT,button=1,objective=I.objective}; return true
+			I.drag={points={p},units=C.officer.members(C.registry.forces[I.objective]),command=CMD.FIGHT,button=1,objective=I.objective,mode=I.objectiveMode}; return true
 		end
 		if explicit and button~=1 or not explicit and button~=3 then return false end
 		if not explicit then _,cmd=Spring.GetDefaultCommand() end
@@ -33,7 +33,17 @@ return function(C)
 		I.move(x,y); I.drag=nil
 		local opts=C.U.currentOptions()
 		if not d.objective then local current=Spring.GetSelectedUnits(); if #current~=#d.units then return true end; local set={}; for _,id in ipairs(current) do set[id]=true end; for _,id in ipairs(d.units) do if not set[id] then return true end end end
-		if d.objective then C.officer.objective(d.objective,d.points); I.objective=nil; return true end
+		if d.objective then
+			local ok=C.officer.objective(d.objective,d.points); local f=C.registry.forces[d.objective]
+			if ok and f then
+				f.objectiveMode=d.mode
+				if d.mode then
+					if d.mode=='SHOCK AND AWE' then f.formation='ASSAULT' end
+					C.settings.autoAssign=true; C.officer.setDelegated(f.id,true)
+				end
+			end
+			I.objective=nil; I.objectiveMode=nil; return true
+		end
 		if #d.points<2 or C.U.distance(d.points[1],d.points[#d.points])<20 then C.officer.nativeCommand(d.command,d.points[1],opts)
 		else C.officer.submit({gesture=d.points,command=d.command,options=opts},d.units) end
 		if d.explicit and not opts.shift then Spring.SetActiveCommand(nil) end

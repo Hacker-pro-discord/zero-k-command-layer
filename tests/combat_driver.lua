@@ -10,6 +10,7 @@ function widget:Update()
 	if not started and now>=6 then
 		started=true; A.SetPrivateTestingSession(true); A.SetFormationPreset('ASSAULT'); fid=A.AssignAllMilitary()
 		if fid then A.SetObjective(fid,{{1500,0,4000},{3300,0,4000}}); Spring.Echo('[CL-COMBAT-CLIENT] delegated='..tostring(A.SetDelegatedControl(fid,true))) end
+		if fid and Spring.GetModOptions().cl_test_production=='1' then Spring.Echo('[CL-COMBAT-CLIENT] production='..tostring(A.SetAutoProduction(true))) end
 		Spring.SetCameraTarget(2400,Spring.GetGroundHeight(2400,3100),3100,1)
 	end
 	if fid and now-last>=10 then

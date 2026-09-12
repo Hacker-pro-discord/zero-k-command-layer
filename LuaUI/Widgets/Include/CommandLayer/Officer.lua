@@ -83,13 +83,13 @@ return function(C)
 		for _,id in ipairs(eligible) do f.members[id]=true end
 		C.registry.forces[f.id]=f; C.registry.activeForce=f.id; C.debug.log('ASSIGNED','Force '..f.id..' observes only; no orders issued.'); return f.id
 	end
-	function A.autoAssign(id)
-		local f=C.registry.forces[C.registry.activeForce]
+	function A.autoAssign(id,forceID)
+		local f=C.registry.forces[forceID or C.registry.activeForce]
 		if not C.settings.autoAssign or not f or not C.U.assisted(C.settings) or not C.U.live() or not C.U.owned(id) then return false end
 		local d=C.classify.definition(Spring.GetUnitDefID(id)); local _,_,_,_,built=Spring.GetUnitHealth(id)
 		if not d.mobile or d.builder or built and built<1 or (C.registry.generation[id] or 0)>0 or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 then return false end
 		for _,other in pairs(C.registry.forces) do if other.members[id] then return false end end
-		f.members[id]=true; f.revision=f.revision+1
+		f.members[id]=true -- Additional recruits do not change the frozen units of an existing approval.
 		if f.delegation and f.delegation.active then f.delegation.groups.MAIN[#f.delegation.groups.MAIN+1]=id end
 		C.debug.log('REINFORCEMENT','Completed military unit '..id..' assigned to Force '..f.id..'; joins its next authorized movement.')
 		return true
@@ -123,6 +123,7 @@ return function(C)
 		local f=C.registry.forces[id]; if f then if f.delegation and f.delegation.active then A.setDelegated(id,false) end; f.suspended={}; f.revision=f.revision+1; f.status='ADVISER'; C.debug.log('RESUME','Advice resumed; previous approvals stay invalid.') end
 	end
 	function A.setSession(enabled)
+		if not enabled and C.productionControl then C.productionControl.set(false) end
 		C.settings.privateSession=enabled==true
 		if enabled and not C.U.assisted(C.settings) then C.settings.privateSession=false; C.debug.log('LOCKED','Requires active local/private testing; autohost matches stay locked.'); return false end
 		if not enabled then A.cancelAll(); for _,p in pairs(C.proposals.items) do if p.state=='OFFERED' then p.state='INVALIDATED' end end end

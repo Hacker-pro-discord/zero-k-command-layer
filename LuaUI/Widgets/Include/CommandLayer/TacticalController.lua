@@ -5,7 +5,7 @@ return function(C)
 		local ids={}; for _,id in ipairs(C.officer.members(f)) do if not C.classify.definition(Spring.GetUnitDefID(id)).builder then ids[#ids+1]=id end end; local sector=C.rules.sector(ids,f.objective)
 		if not sector then return false,'Draw an objective line at least 128 units from the force.' end
 		f.grant=(f.grant or 0)+1
-		f.delegation={token=f.grant,active=true,sector=sector,groups=C.rules.groups(ids),ops={},next={},visits={},blocked={},failures={},returning={},decisions={},state='ASSEMBLING',reason='Explicit Scout + Raid + Push delegation.',version=C.rules.version}
+		f.delegation={token=f.grant,active=true,sector=sector,groups=f.objectiveMode=='UTTER DESTRUCTION' and {SCOUT={},RAID={},MAIN=ids} or C.rules.groups(ids),ops={},next={},visits={},blocked={},failures={},returning={},decisions={},state='ASSEMBLING',reason='Explicit Scout + Raid + Push delegation.',version=C.rules.version}
 		C.input.preview={slots={},zones={},gesture=f.objective,center=sector.goal,front={sector.ux,sector.uz},corridor=sector.corridor}
 		return true
 	end
@@ -17,7 +17,7 @@ return function(C)
 		return ids
 	end
 	local function rebalance(f)
-		local d=f.delegation; local live=#C.officer.members(f)
+		local d=f.delegation; if f.objectiveMode=='UTTER DESTRUCTION' then return end; local live=#C.officer.members(f)
 		local wanted={SCOUT=live>=5 and math.min(2,math.max(1,math.floor(live*.1))) or 0,RAID=live>=8 and math.min(4,math.floor(live*.2)) or 0}
 		for _,group in ipairs({'SCOUT','RAID'}) do
 			local count=#members(f,group)
@@ -87,11 +87,11 @@ return function(C)
 						target=C.rules.raid(s,ids,contacts); kind='HARASS'
 						if target then reason='Visible local vulnerable unit; no observed heavy protection at destination.' else target,visit=C.rules.scout(s,ids,contacts,d.visits,now); reason='No suitable visual raid target. Patrol the assigned flank for contacts.' end
 					else
-						local progress=C.rules.progress(s,center); local nextLine=math.min(s.length,math.max(0,progress)+C.rules.step)
+						local progress=C.rules.progress(s,center); local nextLine=math.min(s.length,math.max(0,progress)+(f.objectiveMode=='SHOCK AND AWE' and 900 or f.objectiveMode=='UTTER DESTRUCTION' and 750 or C.rules.step))
 						if f.front=='HOLD' then nextLine=math.max(0,progress) end
 						local side=f.front=='FLANK_LEFT' and -1 or f.front=='FLANK_RIGHT' and 1 or 0
 						target=C.rules.point(s,nextLine,nextLine<s.length-128 and side*s.half*.4 or 0)
-						kind=nextLine>=s.length and 'PUSH' or 'ADVANCE'; reason='Advance main role formation by up to 600 game units; native Fight engages observed opposition.'
+						kind=nextLine>=s.length and 'PUSH' or 'ADVANCE'; reason='Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.'
 						if side==0 and f.front~='HOLD' and target and nextLine<s.length-128 then
 							local risk=C.rules.risk(target,contacts,600)
 							for _,flank in ipairs({-1,1}) do local alternative=C.rules.point(s,nextLine,flank*s.half*.45); if alternative then local flankRisk=C.rules.risk(alternative,contacts,600); if flankRisk+150<risk then target=alternative; risk=flankRisk; reason='Shift main advance toward less observed resistance inside the corridor. Unobserved opposition may remain.' end end end

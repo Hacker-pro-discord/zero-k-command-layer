@@ -27,6 +27,9 @@ function gadget:GameFrame(frame)
 		-- Keep both starting commanders: Zero-K defeat/storage logic depends on them.
 		active=true
 		report('SETUP equal_value='..tostring(value[0]==value[1])..' own_value='..value[0]..' enemy_value='..value[1]..' resource_grant_raw=15000 visible_storage=10000 each; 32 units each')
+	elseif frame==90 and Spring.GetModOptions().cl_test_production=='1' then
+		local id=Spring.CreateUnit('factorycloak',2200,Spring.GetGroundHeight(2200,1400),1400,0,0)
+		report('PRODUCTION_FIXTURE factory='..tostring(id)..'; not an equal-army comparison')
 	elseif frame==180 then
 		for id,p in pairs(armies[1]) do Spring.GiveOrderToUnit(id,CMD.FIGHT,{p.x,Spring.GetGroundHeight(p.x,2400),2400},0) end
 		report('ENEMY_ADVANCE native Fight issued')

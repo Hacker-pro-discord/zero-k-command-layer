@@ -38,7 +38,7 @@ units[401]={x=3100,z=2000,def=1,team=0}
 assert(not C.officer.autoAssign(401))
 C.settings.autoAssign=true
 assert(C.officer.autoAssign(401) and f.members[401] and #calls==count)
-assert(#C.proposals.items[pid].units==400 and not C.proposals.approve(pid,1))
+assert(#C.proposals.items[pid].units==400 and C.proposals.valid(C.proposals.items[pid],true))
 C.registry.release({401},'PLAYER_OVERRIDE'); assert(not C.officer.autoAssign(401))
 assert(C.settings.save().autoAssign)
 
