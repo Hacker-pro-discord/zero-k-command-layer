@@ -91,12 +91,19 @@ return function(C)
 		local rows=math.ceil(#plan.units/columns)
 		local front=math.min(sector.length,math.max(C.rules.progress(sector,plan.center),(rows-1)*rankGap-380))
 		local candidates={}
-		for row=0,math.floor((front+380)/rankGap) do
-			for column=0,columns-1 do
-				local p=C.rules.point(sector,front-row*rankGap,(column-(columns-1)/2)*gap)
-				if p then candidates[#candidates+1]=p end
+		repeat
+			candidates={}
+			for row=0,math.floor((front+380)/rankGap) do
+				for column=0,columns-1 do
+					local p=C.rules.point(sector,front-row*rankGap,(column-(columns-1)/2)*gap)
+					if p then candidates[#candidates+1]=p end
+				end
 			end
-		end
+			if #candidates>=#plan.units or front>=sector.length then break end
+			-- Map edges can clip columns from an oblique corridor. Count actual
+			-- usable slots and extend ranks, never pretend the nominal width fits.
+			front=math.min(sector.length,front+rankGap)
+		until false
 		if #candidates<#plan.units then return nil end -- Never merge slots to pretend the army fits.
 		local ids=C.U.copy(plan.units)
 		table.sort(ids,function(a,b)

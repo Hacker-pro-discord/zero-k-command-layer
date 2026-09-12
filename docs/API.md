@@ -23,3 +23,10 @@
 - `ActivateLogisticsPreset(kind)`: `MEX0/1/2/4`, `AREA_REPAIR`, `PERSISTENT_REPAIR`, `AREA_RECLAIM`, `PERSISTENT_RECLAIM`; arms native command and transient options. Player area gestures still issue the command.
 
 Proposals freeze explicit units, ownership generations, force revision, positions, health and threat signature. Approval rechecks all of them and expiry. Orders checks authority immediately before each dispatch. Operation history retains the latest 100 terminal records; active records remain.
+# Autonomous startup extension (preview 7)
+
+`WG.CommandLayer.StartAutonomous()` requires explicit current single-player/private-test authority. It enables recruitment and factory production, creates an empty receiving force if necessary, and starts a default map-control corridor when the first military unit becomes available. Returns false while locked. It does not enable the session toggle, inspect hidden enemy locations, or persist authority.
+
+`SetAutoAssign(enabled, forceID?)` pins recruitment to the supplied force or current receiving force selection. Completion events and one-second reconciliation share Officer validation; manual releases are not recaptured. `SetAutoProduction(true)` can create an empty receiving force and includes newly completed idle factories. Existing manual queues remain untouched.
+
+Startup owns session orchestration only. Officer still owns membership and dispatch, TacticalController supplies immediate recruit catch-up plans, and Orders validates each command. Startup is revoked on explicit delegation stop/cancellation. Merely reaching zero members does not revoke an opted-in startup; it can restart a fresh tactical controller for later recruits.

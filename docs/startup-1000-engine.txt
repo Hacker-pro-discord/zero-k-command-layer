@@ -1,0 +1,155 @@
+[t=00:00:32.349185][f=-000001] [CommandLayer] LOAD: Officer / Chili controls loaded
+[t=00:00:34.968485][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:35.639769][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:39.031636][f=0000030] [CL-COMBAT] SETUP equal_value=true own_value=91000 enemy_value=91000 resource_grant_raw=15000 visible_storage=10000 each; units_per_side=1000
+[t=00:00:40.529793][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=29385 type=factorycloak; not an equal-army comparison
+[t=00:00:40.538489][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=11451 type=factoryveh; not an equal-army comparison
+[t=00:00:40.548149][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=11239 type=factoryshield; not an equal-army comparison
+[t=00:00:40.556097][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=26239 type=factoryhover; not an equal-army comparison
+[t=00:00:43.520584][f=0000180] [CL-COMBAT] ENEMY_ADVANCE native Fight issued
+[t=00:00:43.560915][f=0000180] [CommandLayer] SESSION: Local/private testing enabled for this session.
+[t=00:00:43.568164][f=0000180] [CommandLayer] ASSIGNED: Force 1 observes only; no orders issued.
+[t=00:00:43.571317][f=0000180] [CommandLayer] OBJECTIVE: Force 1 objective set. Await approval; no orders issued.
+[t=00:00:43.584132][f=0000180] [CommandLayer] DELEGATED: Scout + Raid + Push enabled. Assigned units only; manual orders release units.
+[t=00:00:43.587965][f=0000180] [CL-COMBAT-CLIENT] delegated=true
+[t=00:00:43.594725][f=0000180] [CL-COMBAT-CLIENT] production=true
+[t=00:00:43.601181][f=0000180] [CL-STRESS] t=6 alive=1000 moved32=0 queued=0 mean_forward=0
+[t=00:00:43.605031][f=0000180] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=nil
+[t=00:00:43.609831][f=0000180] [CL-COMBAT-CLIENT] group=RAID alive=4 op=nil
+[t=00:00:43.612003][f=0000180] [CL-COMBAT-CLIENT] group=MAIN alive=994 op=nil
+[t=00:00:43.614502][f=0000180] [CL-COMBAT-CLIENT] t=6 state=ASSEMBLING blocked=0 main_op=nil reason=Explicit Scout + Raid + Push delegation.
+[t=00:00:43.666333][f=0000181] [CommandLayer] PRODUCTION: Factory 11239: queued Thug (ASSAULT), 175 metal. Desired role: ASSAULT
+[t=00:00:43.670538][f=0000181] [CommandLayer] PRODUCTION: Factory 11451: queued Ravager (ASSAULT), 250 metal. Desired role: ASSAULT
+[t=00:00:43.675949][f=0000181] [CommandLayer] PRODUCTION: Factory 26239: queued Halberd (ASSAULT), 210 metal. Desired role: ASSAULT
+[t=00:00:43.680043][f=0000181] [CommandLayer] PRODUCTION: Factory 29385: queued Knight (ASSAULT), 350 metal. Desired role: ASSAULT
+[t=00:00:45.553577][f=0000241] [CommandLayer] EXECUTING: Operation 1: LINE / 2 units
+[t=00:00:45.558482][f=0000241] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:00:45.565668][f=0000241] [CommandLayer] ROUTING: 0 adjusted slots; 0 detours; 2 unresolved terrain checks (native pathfinding remains active).
+[t=00:00:45.569873][f=0000241] [CommandLayer] EXECUTING: Operation 2: LINE / 4 units
+[t=00:00:45.585744][f=0000241] [CommandLayer] TACTICAL: RAID: No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:00:45.659291][f=0000241] [CommandLayer] ROUTING: 2 adjusted slots; 16 detours; 237 unresolved terrain checks (native pathfinding remains active).
+[t=00:00:45.699599][f=0000241] [CommandLayer] EXECUTING: Operation 3: ASSAULT / 994 units
+[t=00:00:45.719386][f=0000241] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:00:47.886603][f=0000300] [CL-COMBAT] RESOURCES team=0 raw_metal=9872 raw_energy=9880 metal_storage=20000 energy_storage=20000
+[t=00:00:47.895360][f=0000300] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:47.915877][f=0000300] [CL-COMBAT] METRIC frame=300 own_count=1000 enemy_count=1000 own_value=91000 enemy_value=91000 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:00:54.868651][f=0000480] [CL-STRESS] t=16 alive=1000 moved32=967 queued=841 mean_forward=129
+[t=00:00:54.885762][f=0000480] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=1
+[t=00:00:54.887625][f=0000480] [CL-COMBAT-CLIENT] group=RAID alive=4 op=2
+[t=00:00:54.889668][f=0000480] [CL-COMBAT-CLIENT] group=MAIN alive=994 op=3
+[t=00:00:54.891631][f=0000480] [CL-COMBAT-CLIENT] t=16 state=ADVANCING blocked=8 main_op=3 reason=Main force advancing toward its current phase line.
+[t=00:00:59.722714][f=0000600] [CL-COMBAT] RESOURCES team=0 raw_metal=9532 raw_energy=9560 metal_storage=20000 energy_storage=20000
+[t=00:00:59.732936][f=0000600] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:59.738934][f=0000600] [CL-COMBAT] METRIC frame=600 own_count=1000 enemy_count=1000 own_value=91000 enemy_value=91000 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:01:03.853387][f=0000698] [CommandLayer] STALLED: Released positioning for unit 4194
+[t=00:01:04.357560][f=0000710] [CommandLayer] REINFORCEMENT: Completed military unit 13024 assigned to Force 1; joins its next authorized movement.
+[t=00:01:04.463228][f=0000712] [CommandLayer] STALLED: Released positioning for unit 6590
+[t=00:01:04.486080][f=0000712] [CommandLayer] STALLED: Released positioning for unit 28814
+[t=00:01:04.672989][f=0000716] [CommandLayer] STALLED: Released positioning for unit 27590
+[t=00:01:04.898130][f=0000721] [CommandLayer] ROUTING: 0 adjusted slots; 0 detours; 1 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:04.919538][f=0000721] [CommandLayer] EXECUTING: Operation 4: ASSAULT / 1 units
+[t=00:01:05.301721][f=0000731] [CommandLayer] COMPLETED: Operation 1 released positioning.
+[t=00:01:07.303929][f=0000780] [CL-STRESS] t=26 alive=1000 moved32=967 queued=575 mean_forward=193
+[t=00:01:07.318563][f=0000780] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=1
+[t=00:01:07.321026][f=0000780] [CL-COMBAT-CLIENT] group=RAID alive=4 op=2
+[t=00:01:07.322975][f=0000780] [CL-COMBAT-CLIENT] group=MAIN alive=995 op=3
+[t=00:01:07.326955][f=0000780] [CL-COMBAT-CLIENT] t=26 state=ADVANCING blocked=45 main_op=3 reason=Main force advancing toward its current phase line.
+[t=00:01:08.695995][f=0000815] [CommandLayer] REINFORCEMENT: Completed military unit 12162 assigned to Force 1; joins its next authorized movement.
+[t=00:01:09.751670][f=0000841] [CommandLayer] ROUTING: 0 adjusted slots; 0 detours; 1 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:09.758515][f=0000841] [CommandLayer] EXECUTING: Operation 5: ASSAULT / 1 units
+[t=00:01:11.821709][f=0000900] [CL-COMBAT] RESOURCES team=0 raw_metal=9186 raw_energy=9228 metal_storage=19500 energy_storage=19500
+[t=00:01:11.828686][f=0000900] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:11.833800][f=0000900] [CL-COMBAT] METRIC frame=900 own_count=1000 enemy_count=975 own_value=91000 enemy_value=89375 own_lost=0 enemy_lost=1625 own_damage_taken=73 enemy_damage_taken=11575
+[t=00:01:13.046752][f=0000935] [CommandLayer] REINFORCEMENT: Completed military unit 553 assigned to Force 1; joins its next authorized movement.
+[t=00:01:13.243834][f=0000940] [CommandLayer] ABORTED: Operation 4 released positioning.
+[t=00:01:13.914961][f=0000961] [CommandLayer] ROUTING: 0 adjusted slots; 0 detours; 1 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:13.922488][f=0000961] [CommandLayer] EXECUTING: Operation 6: ASSAULT / 1 units
+[t=00:01:17.793669][f=0001081] [CL-STRESS] t=36 alive=998 moved32=965 queued=356 mean_forward=204
+[t=00:01:17.813462][f=0001081] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=1
+[t=00:01:17.819587][f=0001081] [CL-COMBAT-CLIENT] group=RAID alive=4 op=2
+[t=00:01:17.821985][f=0001081] [CL-COMBAT-CLIENT] group=MAIN alive=995 op=3
+[t=00:01:17.824007][f=0001081] [CL-COMBAT-CLIENT] t=36 state=ENGAGING blocked=56 main_op=3 reason=Main force is exchanging fire under native unit AI; combat movement is not being overwritten.
+[t=00:01:19.838095][f=0001141] [CommandLayer] EXECUTING: Operation 7: LINE / 2 units
+[t=00:01:19.842719][f=0001141] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:20.586357][f=0001163] [CommandLayer] ABORTED: Operation 6 released positioning.
+[t=00:01:21.826105][f=0001200] [CL-COMBAT] RESOURCES team=0 raw_metal=8809 raw_energy=8851 metal_storage=19500 energy_storage=19500
+[t=00:01:21.831477][f=0001200] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:21.834904][f=0001200] [CL-COMBAT] METRIC frame=1200 own_count=998 enemy_count=972 own_value=90870 enemy_value=89180 own_lost=130 enemy_lost=1820 own_damage_taken=1333 enemy_damage_taken=12976
+[t=00:01:23.186700][f=0001236] [CommandLayer] REINFORCEMENT: Completed military unit 12216 assigned to Force 1; joins its next authorized movement.
+[t=00:01:23.470433][f=0001243] [CommandLayer] REINFORCEMENT: Completed military unit 10873 assigned to Force 1; joins its next authorized movement.
+[t=00:01:24.134795][f=0001261] [CommandLayer] ROUTING: 0 adjusted slots; 0 detours; 2 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:24.148009][f=0001261] [CommandLayer] EXECUTING: Operation 8: ASSAULT / 2 units
+[t=00:01:27.621558][f=0001350] [CommandLayer] STALLED: Released positioning for unit 21674
+[t=00:01:28.849851][f=0001381] [CommandLayer] EXECUTING: Operation 9: LINE / 2 units
+[t=00:01:28.855337][f=0001381] [CommandLayer] TACTICAL: SCOUT: Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:01:28.878941][f=0001381] [CL-STRESS] t=46 alive=940 moved32=907 queued=567 mean_forward=218
+[t=00:01:28.887385][f=0001381] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=9
+[t=00:01:28.889425][f=0001381] [CL-COMBAT-CLIENT] group=RAID alive=4 op=2
+[t=00:01:28.891561][f=0001381] [CL-COMBAT-CLIENT] group=MAIN alive=939 op=3
+[t=00:01:28.896647][f=0001381] [CL-COMBAT-CLIENT] t=46 state=ENGAGING blocked=62 main_op=3 reason=Main force is exchanging fire under native unit AI; combat movement is not being overwritten.
+[t=00:01:31.720259][f=0001453] [CommandLayer] REINFORCEMENT: Completed military unit 719 assigned to Force 1; joins its next authorized movement.
+[t=00:01:33.571368][f=0001500] [CL-COMBAT] RESOURCES team=0 raw_metal=8517 raw_energy=8559 metal_storage=19500 energy_storage=19500
+[t=00:01:33.581455][f=0001500] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:33.586719][f=0001500] [CL-COMBAT] METRIC frame=1500 own_count=834 enemy_count=802 own_value=80210 enemy_value=78130 own_lost=10790 enemy_lost=12870 own_damage_taken=62881 enemy_damage_taken=72214
+[t=00:01:33.652643][f=0001501] [CommandLayer] ROUTING: 0 adjusted slots; 0 detours; 1 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:33.660695][f=0001501] [CommandLayer] EXECUTING: Operation 10: ASSAULT / 1 units
+[t=00:01:33.666699][f=0001501] [CommandLayer] ROUTING: 0 adjusted slots; 1 detours; 0 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:33.673376][f=0001501] [CommandLayer] EXECUTING: Operation 11: LINE / 4 units
+[t=00:01:33.675438][f=0001501] [CommandLayer] TACTICAL: RAID: Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:01:33.897387][f=0001507] [CommandLayer] ABORTED: Operation 8 released positioning.
+[t=00:01:38.353174][f=0001619] [CommandLayer] ABORTED: Operation 5 released positioning.
+[t=00:01:38.440994][f=0001621] [CommandLayer] EXECUTING: Operation 12: COVER / 200 units
+[t=00:01:38.447119][f=0001621] [CommandLayer] COVER: 200 healthy cover units; 112 injured first. Cover lasts at most 12 seconds.
+[t=00:01:38.456512][f=0001621] [CommandLayer] ADAPT: More than 25% of the review force was lost/released. Automatic fallback, role regroup, then a shorter alternate-lane advance. Unknown terrain remains uncertain.
+[t=00:01:38.506325][f=0001621] [CommandLayer] ROUTING: 4 adjusted slots; 11 detours; 13 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:38.524286][f=0001621] [CommandLayer] EXECUTING: Operation 13: ASSAULT / 467 units
+[t=00:01:38.531092][f=0001621] [CommandLayer] RECOVERY: EVACUATING: 467 units; native movement, strategy revision 1
+[t=00:01:38.624429][f=0001623] [CommandLayer] COMPLETED: Operation 12 released positioning.
+[t=00:01:41.008195][f=0001681] [CommandLayer] COVER_RELEASE: Cover taking damage: withdraw immediately.
+[t=00:01:41.054653][f=0001681] [CommandLayer] ROUTING: 1 adjusted slots; 13 detours; 9 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:41.074336][f=0001681] [CommandLayer] EXECUTING: Operation 14: ASSAULT / 630 units
+[t=00:01:41.080697][f=0001681] [CommandLayer] RECOVERY: WITHDRAWING: 630 units; native movement, strategy revision 1
+[t=00:01:41.090640][f=0001681] [CL-STRESS] t=56 alive=684 moved32=651 queued=556 mean_forward=265
+[t=00:01:41.098140][f=0001681] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=nil
+[t=00:01:41.100209][f=0001681] [CL-COMBAT-CLIENT] group=RAID alive=4 op=nil
+[t=00:01:41.167352][f=0001681] [CL-COMBAT-CLIENT] group=MAIN alive=684 op=nil
+[t=00:01:41.175945][f=0001681] [CL-COMBAT-CLIENT] t=56 state=WITHDRAWING blocked=60 main_op=nil reason=Damaged units had first exit; covering units now fall back.
+[t=00:01:41.732788][f=0001693] [CommandLayer] REINFORCEMENT: Completed military unit 15028 assigned to Force 1; joins its next authorized movement.
+[t=00:01:46.522822][f=0001800] [CL-COMBAT] RESOURCES team=0 raw_metal=8273 raw_energy=8315 metal_storage=19500 energy_storage=19500
+[t=00:01:46.533918][f=0001800] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:46.539308][f=0001800] [CL-COMBAT] METRIC frame=1800 own_count=628 enemy_count=579 own_value=66795 enemy_value=63635 own_lost=24205 enemy_lost=27365 own_damage_taken=110397 enemy_damage_taken=122425
+[t=00:01:52.954506][f=0001981] [CL-STRESS] t=66 alive=588 moved32=555 queued=452 mean_forward=203
+[t=00:01:52.959605][f=0001981] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=nil
+[t=00:01:52.961627][f=0001981] [CL-COMBAT-CLIENT] group=RAID alive=4 op=nil
+[t=00:01:52.964895][f=0001981] [CL-COMBAT-CLIENT] group=MAIN alive=589 op=nil
+[t=00:01:52.967418][f=0001981] [CL-COMBAT-CLIENT] t=66 state=WITHDRAWING blocked=67 main_op=nil reason=Damaged units had first exit; covering units now fall back.
+[t=00:01:56.355506][f=0002083] [CommandLayer] REINFORCEMENT: Completed military unit 9687 assigned to Force 1; joins its next authorized movement.
+[t=00:01:56.941578][f=0002100] [CL-COMBAT] RESOURCES team=0 raw_metal=8093 raw_energy=8135 metal_storage=19500 energy_storage=19500
+[t=00:01:56.946954][f=0002100] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:56.955015][f=0002100] [CL-COMBAT] METRIC frame=2100 own_count=576 enemy_count=481 own_value=62785 enemy_value=57265 own_lost=28215 enemy_lost=33735 own_damage_taken=130718 enemy_damage_taken=142919
+[t=00:01:57.511430][f=0002116] [CommandLayer] STALLED: Released positioning for unit 4194
+[t=00:01:57.986206][f=0002131] [CommandLayer] STALLED: Released positioning for unit 27590
+[t=00:01:59.760385][f=0002184] [CommandLayer] STALLED: Released positioning for unit 27509
+[t=00:02:00.123920][f=0002195] [CommandLayer] STALLED: Released positioning for unit 6590
+[t=00:02:01.905280][f=0002248] [CommandLayer] STALLED: Released positioning for unit 18728
+[t=00:02:03.001323][f=0002281] [CL-STRESS] t=76 alive=559 moved32=527 queued=253 mean_forward=163
+[t=00:02:03.006222][f=0002281] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=nil
+[t=00:02:03.008906][f=0002281] [CL-COMBAT-CLIENT] group=RAID alive=5 op=nil
+[t=00:02:03.010951][f=0002281] [CL-COMBAT-CLIENT] group=MAIN alive=560 op=nil
+[t=00:02:03.013183][f=0002281] [CL-COMBAT-CLIENT] t=76 state=WITHDRAWING blocked=81 main_op=nil reason=Damaged units had first exit; covering units now fall back.
+[t=00:02:03.399689][f=0002294] [CommandLayer] REINFORCEMENT: Completed military unit 27227 assigned to Force 1; joins its next authorized movement.
+[t=00:02:06.929598][f=0002400] [CL-COMBAT] RESOURCES team=0 raw_metal=7918 raw_energy=7960 metal_storage=19500 energy_storage=19500
+[t=00:02:06.936947][f=0002400] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:06.941821][f=0002400] [CL-COMBAT] METRIC frame=2400 own_count=550 enemy_count=447 own_value=60575 enemy_value=55055 own_lost=30425 enemy_lost=35945 own_damage_taken=141686 enemy_damage_taken=151279
+[t=00:02:11.122887][f=0002525] [CommandLayer] STALLED: Released positioning for unit 28814
+[t=00:02:12.989777][f=0002581] [CL-STRESS] t=86 alive=542 moved32=510 queued=173 mean_forward=156
+[t=00:02:12.996905][f=0002581] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=nil
+[t=00:02:12.999917][f=0002581] [CL-COMBAT-CLIENT] group=RAID alive=4 op=nil
+[t=00:02:13.001998][f=0002581] [CL-COMBAT-CLIENT] group=MAIN alive=545 op=nil
+[t=00:02:13.004158][f=0002581] [CL-COMBAT-CLIENT] t=86 state=WITHDRAWING blocked=89 main_op=nil reason=Damaged units had first exit; covering units now fall back.
+[t=00:02:16.929365][f=0002700] [CL-COMBAT] RESOURCES team=0 raw_metal=7738 raw_energy=7780 metal_storage=19500 energy_storage=19500
+[t=00:02:16.938448][f=0002700] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:16.942546][f=0002700] [CL-COMBAT] METRIC frame=2700 own_count=535 enemy_count=428 own_value=59160 enemy_value=53620 own_lost=31840 enemy_lost=37380 own_damage_taken=149917 enemy_damage_taken=158458
+[t=00:02:16.950832][f=0002700] [CL-COMBAT] END combat benchmark
+[t=00:02:16.960965][f=0002700] [CommandLayer] DELEGATED: Autonomous control stopped. Native destination orders remain.
+[t=00:02:16.970985][f=0002700] [CL-COMBAT-CLIENT] COMPLETE

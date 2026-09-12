@@ -4,8 +4,9 @@ return function(C)
 		return UI.ch.Button:New{parent=parent,x=x,y=y,width=w,height=34,caption=caption,tooltip=tip,OnClick={fn}}
 	end
 	function UI.build()
+		UI.controlState=tostring(C.settings.autoAssign)..':'..tostring(C.settings.privateSession)..':'..tostring(C.productionControl.enabled)
 		if UI.body then UI.body:Dispose() end
-		UI.body=UI.ch.Panel:New{parent=UI.window,x=0,y=46,width='100%',bottom=125,padding={0,0,0,0}}
+		UI.body=UI.ch.Panel:New{parent=UI.window,x=0,y=46,width='100%',bottom=105,padding={0,0,0,0}}
 		local p=UI.body
 		if UI.tab=='LOGISTICS' then
 			for i,count in ipairs({0,1,2,4}) do local kind='MEX'..count; button(p,((i-1)%2)*190,math.floor((i-1)/2)*40,185,count==0 and 'MEX ONLY' or 'MEX + '..count..' ENERGY','Native Area Mex. Drag region; Shift queues, Space inserts.',function() C.logistics.arm(kind) end) end
@@ -26,7 +27,7 @@ return function(C)
 			button(p,0,42,185,'SET OBJECTIVE','Draw a line in the world; this does not issue orders.',function() UI.showObjectives() end)
 			button(p,190,42,185,'ASK OFFICER','Request a tactical proposal and production advice.',function() if C.advisor then C.advisor.ask(C.registry.activeForce,true) end end)
 			button(p,0,84,375,'LOCAL / PRIVATE TEST SESSION','Explicitly attest this is local/skirmish or private testing. Resets on reload. Autohost/public metadata stays locked.',function()
-				C.officer.setSession(not C.settings.privateSession)
+				C.officer.setSession(not C.settings.privateSession); UI.build()
 			end)
 			button(p,0,126,185,'PREVIOUS FORCE','Select previous assigned-force record.',function() if C.officer.cycle then C.officer.cycle(-1) end end)
 			button(p,190,126,185,'NEXT FORCE','Select next assigned-force record.',function() if C.officer.cycle then C.officer.cycle(1) end end)
@@ -34,33 +35,37 @@ return function(C)
 			button(p,190,168,185,'RESUME','Explicitly resume suspended advice membership, never old approval.',function() if C.officer.resume then C.officer.resume(C.registry.activeForce) end end)
 			button(p,0,210,185,'SHOW DETAILS','Read production advice and its limitations; no build commands.',function() UI.showAdvice() end)
 			button(p,190,210,185,'DISMISS ADVICE','Dismiss the current production recommendation.',function() local f=C.registry.forces[C.registry.activeForce]; if f then f.advice=nil end end)
-			button(p,0,252,375,'ASSIGN ALL MILITARY','Assign all your completed mobile military units now, including air/naval. Excludes builders and structures. No automatic recruitment; no orders.',function() C.officer.assignAll() end)
+			button(p,0,252,375,'ASSIGN ALL MILITARY','Assign all your completed mobile military units now, including air/naval. Excludes builders and structures. No orders until delegated; Auto Assign handles subsequent recruits.',function() C.officer.assignAll() end)
 			for i,front in ipairs({'ADVANCE','HOLD','FLANK_LEFT','FLANK_RIGHT'}) do local directive=front; button(p,(i-1)*95,294,91,front:gsub('_',' '),'Set this force front approach. Cancels maintenance; next action still needs approval. Set an objective line for this front.',function() C.officer.setFront(C.registry.activeForce,directive) end) end
 			button(p,0,338,185,'DELEGATE PRESSURE','Single-player only. Continuously scout, raid and push assigned units inside your objective corridor until stopped. This explicitly authorizes repeated orders.',function() C.officer.setDelegated(C.registry.activeForce,true) end)
 			button(p,190,338,90,'STOP AI','Stop delegation and production; existing native orders remain.',function() C.productionControl.set(false); C.officer.setDelegated(C.registry.activeForce,false) end)
 			button(p,285,338,90,'AI DETAILS','Read groups, observed evidence and current decision.',function() UI.showTactical() end)
 			button(p,0,380,185,'REVIEW ARMY PUSH','Propose one Fight action by the entire assigned force. Draw an objective first. Approval required; delegation ends on approval.',function() C.advisor.ask(C.registry.activeForce,true,true) end)
-			button(p,190,380,185,'AUTO ASSIGN: '..(C.settings.autoAssign and 'ON' or 'OFF'),'Opt in to assigning newly completed military units to the active force. Existing approvals never expand.',function() C.settings.autoAssign=not C.settings.autoAssign; UI.build() end)
+			button(p,190,380,185,'AUTO ASSIGN: '..(C.settings.autoAssign and (C.U.assisted(C.settings) and 'ON' or 'WAIT') or 'OFF'),'Recruit existing unassigned and newly completed military units into a fixed receiving force. Manual releases stay released. Existing approvals never expand.',function() C.officer.setAutoAssign(not C.settings.autoAssign); UI.build() end)
+			button(p,0,420,185,'PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Control existing idle factories. Requires local/private testing; works before your first military unit.',function() C.productionControl.set(not C.productionControl.enabled); UI.build() end)
+			button(p,190,420,185,'START MAP CONTROL','Single-player only: recruit military units, enable idle-factory production and advance toward the opposite map quarter, or your existing objective. Starts with the first unit. No enemy-location lookup. STOP AI cancels.',function() C.startup.start(); UI.build() end)
 			UI.lastDetail=nil
-			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=420,width=367,height=40,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
+			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=458,width=367,height=40,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
 	end
 	function UI.initialize()
 		if not WG.Chili then return false end; UI.ch=WG.Chili
-		UI.window=UI.ch.Window:New{name='CommandLayerWindow',caption='ZERO-K COMMAND LAYER',parent=UI.ch.Screen0,x=C.settings.x,y=C.settings.y,width=410,height=680,draggable=true,resizable=false,padding={12,30,12,12}}
+		UI.window=UI.ch.Window:New{name='CommandLayerWindow',caption='ZERO-K COMMAND LAYER',parent=UI.ch.Screen0,x=C.settings.x,y=C.settings.y,width=410,height=700,draggable=true,resizable=false,padding={12,30,12,12}}
 		for i,tab in ipairs({'LOGISTICS','FORMATIONS','OFFICER'}) do button(UI.window,(i-1)*127,0,122,tab,'Open '..tab:lower(),function() UI.tab=tab; UI.build() end) end
-		UI.status=UI.ch.TextBox:New{parent=UI.window,x=0,bottom=0,width='100%',height=118,text='Officer ready.'}
+		UI.status=UI.ch.TextBox:New{parent=UI.window,x=0,bottom=0,width='100%',height=98,text='Officer ready.'}
 		UI.build(); C.debug.log('LOAD','Officer / Chili controls loaded'); return true
 	end
 	function UI.update(dt)
 		UI.elapsed=UI.elapsed+(dt or .03); if UI.elapsed<.25 then return end; UI.elapsed=0
+		local controls=tostring(C.settings.autoAssign)..':'..tostring(C.settings.privateSession)..':'..tostring(C.productionControl.enabled)
+		if UI.tab=='OFFICER' and controls~=UI.controlState then UI.build() end
 		if UI.status then
 			local text='Formation: '..C.settings.formation..' | '..(C.settings.privateSession and C.settings.mode or 'ARRIVAL (public)')..'\nSpacing: '..C.settings.spacing..' | Constructors: '..tostring(C.settings.constructors)..'\n'..C.debug.message
 			if C.productionControl then text=text..'\nProduction: '..C.productionControl.status end
 			if UI.lastStatus~=text then UI.status:SetText(text); UI.lastStatus=text end
 		end
 		if UI.tab=='OFFICER' and UI.detail then
-			local f=C.registry.forces[C.registry.activeForce]; local text='No adviser force selected.'
+			local f=C.registry.forces[C.registry.activeForce]; local text=C.settings.autoAssign and (C.U.assisted(C.settings) and 'Waiting for receiving force.' or 'AUTO ASSIGN waiting: enable LOCAL / PRIVATE TEST SESSION.') or 'No force yet. Enable local testing, then START MAP CONTROL.'
 			if f then local n=0; for _ in pairs(f.members) do n=n+1 end; text='Force '..f.id..' ['..(f.objectiveMode or 'ADVICE')..'] | '..n..' units | '..f.status..' | '..(f.front or 'ADVANCE')..'\n'..(f.advice and 'Production recommendation available. SHOW DETAILS to read evidence, cost and alternatives.' or 'Set an objective or ask for a reform proposal.') end
 			if text~=UI.lastDetail then UI.detail:SetText(text); UI.lastDetail=text end
 		end

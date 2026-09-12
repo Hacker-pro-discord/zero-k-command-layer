@@ -8,6 +8,9 @@ function widget:Initialize()
 end
 function widget:Update()
 	local A=WG.CommandLayer; local now=Spring.GetGameSeconds(); if not A then return end
+	if not started and now>=6 and Spring.GetModOptions().cl_test_startup=='1' then
+		started=true; A.SetPrivateTestingSession(true); Spring.Echo('[CL-STARTUP] start='..tostring(A.StartAutonomous())); fid=1
+	end
 	if not started and now>=6 then
 		started=true; A.SetPrivateTestingSession(true); A.SetFormationPreset('ASSAULT'); fid=A.AssignAllMilitary()
 		if fid then
@@ -19,8 +22,9 @@ function widget:Update()
 		if fid and Spring.GetModOptions().cl_test_production=='1' then Spring.Echo('[CL-COMBAT-CLIENT] production='..tostring(A.SetAutoProduction(true))) end
 		Spring.SetCameraTarget(2400,Spring.GetGroundHeight(2400,3100),3100,1)
 	end
-	if fid and now-last>=10 then
+	if fid and now-last>=(Spring.GetModOptions().cl_test_startup=='1' and 2 or 10) then
 		last=now; local f=A.GetForce(fid); local d=f and f.delegation
+		if Spring.GetModOptions().cl_test_startup=='1' then local n,q=0,0; for id in pairs(f.members) do n=n+1; if #(Spring.GetCommandQueue(id,1) or {})>0 then q=q+1 end end; Spring.Echo('[CL-STARTUP] time='..math.floor(now)..' assigned='..n..' queued='..q) end
 		local alive,moved,queued,advance=0,0,0,0
 		for id,p in pairs(initial) do local x,_,z=Spring.GetUnitPosition(id); if x and not Spring.GetUnitIsDead(id) then alive=alive+1; if (x-p[1])^2+(z-p[2])^2>32^2 then moved=moved+1 end; advance=advance+z-p[2]; if #(Spring.GetCommandQueue(id,1) or {})>0 then queued=queued+1 end end end
 		Spring.Echo('[CL-STRESS] t='..math.floor(now)..' alive='..alive..' moved32='..moved..' queued='..queued..' mean_forward='..math.floor(advance/math.max(1,alive)))

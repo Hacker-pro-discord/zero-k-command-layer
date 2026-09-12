@@ -1,26 +1,26 @@
 -- Opt-in idle-factory production. Session authority is never persisted.
 return function(C)
-	local P={enabled=false,factories={},created={},last=-100,status='OFF'}
+	local P={enabled=false,factories={},excluded={},created={},last=-100,status='OFF'}
 	function P.createdUnit(id,builder)
 		if P.enabled and P.factories[builder] and C.U.owned(id) then P.created[id]=P.forceID end
 	end
 	function P.set(enabled)
-		P.enabled=false; P.factories={}
+		P.enabled=false; P.factories={}; P.excluded={}
 		if not enabled then P.status='OFF; existing queues preserved'; return true end
-		local f=C.registry.forces[C.registry.activeForce]
+		local f=C.registry.forces[C.registry.activeForce] or C.officer.ensureForce()
 		if not f or not C.U.delegationAllowed(C.settings) then P.status='Assign a force in single-player testing first'; return false end
 		P.forceID=f.id
 		for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}) do
 			local def=UnitDefs[Spring.GetUnitDefID(id)]
 			if C.U.owned(id) and def and def.isFactory then P.factories[id]=true end
 		end
-		P.enabled=true; C.settings.autoAssign=true; P.status='ON: idle existing factories; manual factory commands release control'
+		P.enabled=true; P.last=-100; C.officer.setAutoAssign(true); P.status='ON: idle existing factories; manual factory commands release control'
 		return true
 	end
-	function P.release(id) if P.factories[id] then P.factories[id]=nil; P.status='Factory '..id..' released by manual control' end end
+	function P.release(id) P.excluded[id]=true; if P.factories[id] then P.factories[id]=nil; P.status='Factory '..id..' released by manual control' end end
 	function P.valid(id,unit)
 		if not P.enabled or not P.factories[id] or not C.U.delegationAllowed(C.settings) or not C.U.owned(id) then return false end
-		local f=C.registry.forces[P.forceID]; if not f or #C.officer.members(f)==0 then return false end
+		local f=C.registry.forces[P.forceID]; if not f then return false end
 		local d=UnitDefs[Spring.GetUnitDefID(id)]; local _,_,_,_,built=Spring.GetUnitHealth(id)
 		if not d or not d.isFactory or built and built<1 or Spring.GetUnitIsStunned and Spring.GetUnitIsStunned(id) then return false end
 		local queue=Spring.GetFactoryCommands(id,1); if not queue or #queue>0 then return false end
@@ -31,10 +31,12 @@ return function(C)
 		if not P.enabled then return end
 		if not C.U.delegationAllowed(C.settings) then P.set(false); return end
 		local now=C.U.now(); if now-P.last<5 then return end; P.last=now
-		local f=C.registry.forces[P.forceID]; if not f or #C.officer.members(f)==0 then P.set(false); return end
-		local groups=C.classify.force(C.officer.members(f)); local desired='ASSAULT'
+		local f=C.registry.forces[P.forceID]; if not f then P.set(false); return end
+		for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}) do local def=UnitDefs[Spring.GetUnitDefID(id)]; if def and def.isFactory and C.U.owned(id) and not P.excluded[id] then P.factories[id]=true end end
+		local members=C.officer.members(f); local groups=C.classify.force(members); local desired='ASSAULT'
 		local battle=C.observations.snapshot(C.U.center(C.officer.members(f)),2000)
-		if not groups.ANTI_AIR then desired='ANTI_AIR'
+		if #members<5 then desired='RAIDER'
+		elseif not groups.ANTI_AIR then desired='ANTI_AIR'
 		elseif (battle.composition.RIOT or 0)>=2 then desired='SKIRMISHER'
 		elseif not groups.ARTILLERY then desired='ARTILLERY'
 		elseif not groups.RIOT then desired='RIOT' end

@@ -39,7 +39,7 @@ return function(C)
 				f.objectiveMode=d.mode
 				if d.mode then
 					if d.mode=='SHOCK AND AWE' then f.formation='ASSAULT' end
-					C.settings.autoAssign=true; C.officer.setDelegated(f.id,true)
+					C.officer.setAutoAssign(true,f.id); C.officer.setDelegated(f.id,true)
 				end
 			end
 			I.objective=nil; I.objectiveMode=nil; return true

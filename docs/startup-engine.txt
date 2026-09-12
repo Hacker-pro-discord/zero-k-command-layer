@@ -1,0 +1,483 @@
+[t=00:00:31.910944][f=-000001] [CommandLayer] LOAD: Officer / Chili controls loaded
+[t=00:00:34.403427][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:35.037867][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:37.989480][f=0000030] [CL-COMBAT] SETUP equal_value=true own_value=0 enemy_value=0 resource_grant_raw=15000 visible_storage=10000 each; units_per_side=32
+[t=00:00:39.998523][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=24111 type=factorycloak; not an equal-army comparison
+[t=00:00:40.007675][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=1528 type=factoryveh; not an equal-army comparison
+[t=00:00:40.013278][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=12772 type=factoryshield; not an equal-army comparison
+[t=00:00:40.022094][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=27174 type=factoryhover; not an equal-army comparison
+[t=00:00:42.992332][f=0000180] [CL-COMBAT] ENEMY_ADVANCE native Fight issued
+[t=00:00:43.013737][f=0000180] [CommandLayer] SESSION: Local/private testing enabled for this session.
+[t=00:00:43.017907][f=0000180] [CL-STARTUP] start=true
+[t=00:00:43.019458][f=0000180] [CL-STARTUP] time=6 assigned=0 queued=0
+[t=00:00:43.021415][f=0000180] [CL-STRESS] t=6 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:43.043763][f=0000181] [CommandLayer] PRODUCTION: Factory 1528: queued Scorcher (RAIDER), 130 metal. Desired role: RAIDER
+[t=00:00:43.048498][f=0000181] [CommandLayer] PRODUCTION: Factory 12772: queued Bandit (RAIDER), 75 metal. Desired role: RAIDER
+[t=00:00:43.054205][f=0000181] [CommandLayer] PRODUCTION: Factory 24111: queued Glaive (RAIDER), 65 metal. Desired role: RAIDER
+[t=00:00:43.059705][f=0000181] [CommandLayer] PRODUCTION: Factory 27174: queued Bolas (RAIDER), 180 metal. Desired role: RAIDER
+[t=00:00:45.046519][f=0000241] [CL-STARTUP] time=8 assigned=0 queued=0
+[t=00:00:45.048657][f=0000241] [CL-STRESS] t=8 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:46.999221][f=0000300] [CL-COMBAT] RESOURCES team=0 raw_metal=9867 raw_energy=9875 metal_storage=20000 energy_storage=20000
+[t=00:00:47.010080][f=0000300] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:47.016142][f=0000300] [CL-COMBAT] METRIC frame=300 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:00:47.057646][f=0000301] [CL-STARTUP] time=10 assigned=0 queued=0
+[t=00:00:47.060179][f=0000301] [CL-STRESS] t=10 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:49.041338][f=0000361] [CL-STARTUP] time=12 assigned=0 queued=0
+[t=00:00:49.066952][f=0000361] [CL-STRESS] t=12 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:49.522583][f=0000376] [CommandLayer] REINFORCEMENT: Completed military unit 11600 assigned to Force 1; joins its next authorized movement.
+[t=00:00:50.050343][f=0000391] [CommandLayer] OBJECTIVE: Force 1 objective set. Await approval; no orders issued.
+[t=00:00:50.067073][f=0000391] [CommandLayer] DELEGATED: Scout + Raid + Push enabled. Assigned units only; manual orders release units.
+[t=00:00:50.556159][f=0000407] [CommandLayer] REINFORCEMENT: Completed military unit 24348 assigned to Force 1; joins its next authorized movement.
+[t=00:00:51.041993][f=0000421] [CommandLayer] EXECUTING: Operation 1: ASSAULT / 2 units
+[t=00:00:51.061710][f=0000421] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:00:51.069938][f=0000421] [CL-STARTUP] time=14 assigned=2 queued=2
+[t=00:00:51.072813][f=0000421] [CL-STRESS] t=14 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:51.097794][f=0000421] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=nil
+[t=00:00:51.099138][f=0000421] [CL-COMBAT-CLIENT] group=RAID alive=0 op=nil
+[t=00:00:51.101140][f=0000421] [CL-COMBAT-CLIENT] group=MAIN alive=2 op=1
+[t=00:00:51.103094][f=0000421] [CL-COMBAT-CLIENT] t=14 state=EXECUTING blocked=0 main_op=1 reason=Main force advancing toward its current phase line.
+[t=00:00:53.043177][f=0000481] [CL-STARTUP] time=16 assigned=2 queued=2
+[t=00:00:53.048757][f=0000481] [CL-STRESS] t=16 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:53.051419][f=0000481] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=nil
+[t=00:00:53.053241][f=0000481] [CL-COMBAT-CLIENT] group=RAID alive=0 op=nil
+[t=00:00:53.063265][f=0000481] [CL-COMBAT-CLIENT] group=MAIN alive=2 op=1
+[t=00:00:53.077328][f=0000481] [CL-COMBAT-CLIENT] t=16 state=ADVANCING blocked=0 main_op=1 reason=Main force advancing toward its current phase line.
+[t=00:00:55.042964][f=0000541] [CL-STARTUP] time=18 assigned=2 queued=2
+[t=00:00:55.063807][f=0000541] [CL-STRESS] t=18 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:55.065294][f=0000541] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=nil
+[t=00:00:55.066482][f=0000541] [CL-COMBAT-CLIENT] group=RAID alive=0 op=nil
+[t=00:00:55.067868][f=0000541] [CL-COMBAT-CLIENT] group=MAIN alive=2 op=1
+[t=00:00:55.070160][f=0000541] [CL-COMBAT-CLIENT] t=18 state=ADVANCING blocked=0 main_op=1 reason=Main force advancing toward its current phase line.
+[t=00:00:56.027401][f=0000571] [CommandLayer] REINFORCEMENT: Completed military unit 25860 assigned to Force 1; joins its next authorized movement.
+[t=00:00:56.035998][f=0000571] [CommandLayer] REINFORCEMENT: Completed military unit 30235 assigned to Force 1; joins its next authorized movement.
+[t=00:00:56.993028][f=0000600] [CL-COMBAT] RESOURCES team=0 raw_metal=9528 raw_energy=9556 metal_storage=20000 energy_storage=20000
+[t=00:00:57.002994][f=0000600] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:57.007572][f=0000600] [CL-COMBAT] METRIC frame=600 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:00:57.043907][f=0000601] [CommandLayer] EXECUTING: Operation 2: ASSAULT / 2 units
+[t=00:00:57.047459][f=0000601] [CL-STARTUP] time=20 assigned=4 queued=4
+[t=00:00:57.049539][f=0000601] [CL-STRESS] t=20 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:57.068444][f=0000601] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=nil
+[t=00:00:57.070616][f=0000601] [CL-COMBAT-CLIENT] group=RAID alive=0 op=nil
+[t=00:00:57.072732][f=0000601] [CL-COMBAT-CLIENT] group=MAIN alive=4 op=1
+[t=00:00:57.074811][f=0000601] [CL-COMBAT-CLIENT] t=20 state=ADVANCING blocked=0 main_op=1 reason=Main force advancing toward its current phase line.
+[t=00:00:58.126203][f=0000634] [CommandLayer] REINFORCEMENT: Completed military unit 25382 assigned to Force 1; joins its next authorized movement.
+[t=00:00:59.042238][f=0000661] [CommandLayer] EXECUTING: Operation 3: ASSAULT / 1 units
+[t=00:00:59.063312][f=0000661] [CommandLayer] EXECUTING: Operation 4: LINE / 1 units
+[t=00:00:59.065381][f=0000661] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:00:59.068335][f=0000661] [CL-STARTUP] time=22 assigned=5 queued=5
+[t=00:00:59.070378][f=0000661] [CL-STRESS] t=22 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:00:59.072881][f=0000661] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:00:59.092104][f=0000661] [CL-COMBAT-CLIENT] group=RAID alive=0 op=nil
+[t=00:00:59.095693][f=0000661] [CL-COMBAT-CLIENT] group=MAIN alive=4 op=1
+[t=00:00:59.097999][f=0000661] [CL-COMBAT-CLIENT] t=22 state=ADVANCING blocked=0 main_op=1 reason=Main force advancing toward its current phase line.
+[t=00:00:59.160310][f=0000664] [CommandLayer] COMPLETED: Operation 3 released positioning.
+[t=00:01:01.041136][f=0000721] [CL-STARTUP] time=24 assigned=5 queued=5
+[t=00:01:01.043299][f=0000721] [CL-STRESS] t=24 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:01.045819][f=0000721] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:01.048682][f=0000721] [CL-COMBAT-CLIENT] group=RAID alive=0 op=nil
+[t=00:01:01.053535][f=0000721] [CL-COMBAT-CLIENT] group=MAIN alive=4 op=1
+[t=00:01:01.055474][f=0000721] [CL-COMBAT-CLIENT] t=24 state=ADVANCING blocked=0 main_op=1 reason=Main force advancing toward its current phase line.
+[t=00:01:01.070159][f=0000722] [CommandLayer] REINFORCEMENT: Completed military unit 26736 assigned to Force 1; joins its next authorized movement.
+[t=00:01:01.739866][f=0000742] [CommandLayer] COMPLETED: Operation 1 released positioning.
+[t=00:01:02.524578][f=0000766] [CommandLayer] REINFORCEMENT: Completed military unit 29236 assigned to Force 1; joins its next authorized movement.
+[t=00:01:03.044368][f=0000781] [CL-STARTUP] time=26 assigned=7 queued=5
+[t=00:01:03.055109][f=0000781] [CL-STRESS] t=26 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:03.057699][f=0000781] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:03.059733][f=0000781] [CL-COMBAT-CLIENT] group=RAID alive=0 op=nil
+[t=00:01:03.061927][f=0000781] [CL-COMBAT-CLIENT] group=MAIN alive=6 op=1
+[t=00:01:03.064063][f=0000781] [CL-COMBAT-CLIENT] t=26 state=ADVANCING blocked=0 main_op=1 reason=Main force advancing toward its current phase line.
+[t=00:01:05.042759][f=0000841] [CL-STARTUP] time=28 assigned=7 queued=5
+[t=00:01:05.049308][f=0000841] [CL-STRESS] t=28 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:05.052643][f=0000841] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:05.056109][f=0000841] [CL-COMBAT-CLIENT] group=RAID alive=0 op=nil
+[t=00:01:05.066031][f=0000841] [CL-COMBAT-CLIENT] group=MAIN alive=6 op=1
+[t=00:01:05.068236][f=0000841] [CL-COMBAT-CLIENT] t=28 state=ADVANCING blocked=0 main_op=1 reason=Main force advancing toward its current phase line.
+[t=00:01:06.128695][f=0000874] [CommandLayer] REINFORCEMENT: Completed military unit 4379 assigned to Force 1; joins its next authorized movement.
+[t=00:01:06.992626][f=0000900] [CL-COMBAT] RESOURCES team=0 raw_metal=9207 raw_energy=9255 metal_storage=20000 energy_storage=20000
+[t=00:01:07.000235][f=0000900] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:07.009293][f=0000900] [CL-COMBAT] METRIC frame=900 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:01:07.041528][f=0000901] [CommandLayer] ROUTING: 0 adjusted slots; 1 detours; 0 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:07.070207][f=0000901] [CommandLayer] EXECUTING: Operation 5: LINE / 1 units
+[t=00:01:07.073806][f=0000901] [CommandLayer] TACTICAL: RAID: No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:01:07.095773][f=0000901] [CommandLayer] EXECUTING: Operation 6: ASSAULT / 6 units
+[t=00:01:07.098555][f=0000901] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:01:07.105276][f=0000901] [CL-STARTUP] time=30 assigned=8 queued=3
+[t=00:01:07.107561][f=0000901] [CL-STRESS] t=30 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:07.132988][f=0000901] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:07.137103][f=0000901] [CL-COMBAT-CLIENT] group=RAID alive=1 op=5
+[t=00:01:07.139922][f=0000901] [CL-COMBAT-CLIENT] group=MAIN alive=6 op=6
+[t=00:01:07.162932][f=0000901] [CL-COMBAT-CLIENT] t=30 state=EXECUTING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:07.219096][f=0000903] [CommandLayer] COMPLETED: Operation 2 released positioning.
+[t=00:01:09.041906][f=0000961] [CL-STARTUP] time=32 assigned=8 queued=8
+[t=00:01:09.047376][f=0000961] [CL-STRESS] t=32 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:09.050490][f=0000961] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:09.063961][f=0000961] [CL-COMBAT-CLIENT] group=RAID alive=1 op=5
+[t=00:01:09.069997][f=0000961] [CL-COMBAT-CLIENT] group=MAIN alive=6 op=6
+[t=00:01:09.074532][f=0000961] [CL-COMBAT-CLIENT] t=32 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:09.105004][f=0000962] [CommandLayer] REINFORCEMENT: Completed military unit 15908 assigned to Force 1; joins its next authorized movement.
+[t=00:01:09.494886][f=0000975] [CommandLayer] REINFORCEMENT: Completed military unit 11270 assigned to Force 1; joins its next authorized movement.
+[t=00:01:11.044055][f=0001021] [CommandLayer] EXECUTING: Operation 7: ASSAULT / 2 units
+[t=00:01:11.067274][f=0001021] [CL-STARTUP] time=34 assigned=10 queued=10
+[t=00:01:11.069655][f=0001021] [CL-STRESS] t=34 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:11.072694][f=0001021] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:11.075750][f=0001021] [CL-COMBAT-CLIENT] group=RAID alive=2 op=5
+[t=00:01:11.100087][f=0001021] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=6
+[t=00:01:11.106266][f=0001021] [CL-COMBAT-CLIENT] t=34 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:13.044366][f=0001081] [CL-STARTUP] time=36 assigned=10 queued=9
+[t=00:01:13.056998][f=0001081] [CL-STRESS] t=36 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:13.063197][f=0001081] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:13.065497][f=0001081] [CL-COMBAT-CLIENT] group=RAID alive=2 op=5
+[t=00:01:13.067602][f=0001081] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=6
+[t=00:01:13.070515][f=0001081] [CL-COMBAT-CLIENT] t=36 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:14.056483][f=0001112] [CommandLayer] REINFORCEMENT: Completed military unit 31525 assigned to Force 1; joins its next authorized movement.
+[t=00:01:15.040566][f=0001141] [CommandLayer] EXECUTING: Operation 8: ASSAULT / 1 units
+[t=00:01:15.045704][f=0001141] [CL-STARTUP] time=38 assigned=11 queued=10
+[t=00:01:15.048323][f=0001141] [CL-STRESS] t=38 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:15.051431][f=0001141] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:15.054152][f=0001141] [CL-COMBAT-CLIENT] group=RAID alive=2 op=5
+[t=00:01:15.057221][f=0001141] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=6
+[t=00:01:15.060041][f=0001141] [CL-COMBAT-CLIENT] t=38 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:15.993511][f=0001170] [CommandLayer] REINFORCEMENT: Completed military unit 20843 assigned to Force 1; joins its next authorized movement.
+[t=00:01:16.994094][f=0001200] [CL-COMBAT] RESOURCES team=0 raw_metal=8886 raw_energy=8954 metal_storage=20000 energy_storage=20000
+[t=00:01:17.013116][f=0001200] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:17.017257][f=0001200] [CL-COMBAT] METRIC frame=1200 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:01:17.044127][f=0001201] [CommandLayer] EXECUTING: Operation 9: ASSAULT / 1 units
+[t=00:01:17.049613][f=0001201] [CL-STARTUP] time=40 assigned=12 queued=10
+[t=00:01:17.088754][f=0001201] [CL-STRESS] t=40 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:17.092457][f=0001201] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:17.096736][f=0001201] [CL-COMBAT-CLIENT] group=RAID alive=2 op=5
+[t=00:01:17.101305][f=0001201] [CL-COMBAT-CLIENT] group=MAIN alive=9 op=6
+[t=00:01:17.104817][f=0001201] [CL-COMBAT-CLIENT] t=40 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:18.041092][f=0001231] [CommandLayer] PRODUCTION: Factory 24111: queued Gremlin (ANTI_AIR), 120 metal. Desired role: ANTI_AIR
+[t=00:01:19.042993][f=0001261] [CommandLayer] EXECUTING: Operation 10: ASSAULT / 1 units
+[t=00:01:19.048888][f=0001261] [CL-STARTUP] time=42 assigned=12 queued=8
+[t=00:01:19.050517][f=0001261] [CL-STRESS] t=42 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:19.055740][f=0001261] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:19.058015][f=0001261] [CL-COMBAT-CLIENT] group=RAID alive=2 op=5
+[t=00:01:19.061646][f=0001261] [CL-COMBAT-CLIENT] group=MAIN alive=9 op=6
+[t=00:01:19.079271][f=0001261] [CL-COMBAT-CLIENT] t=42 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:19.523947][f=0001276] [CommandLayer] REINFORCEMENT: Completed military unit 26095 assigned to Force 1; joins its next authorized movement.
+[t=00:01:19.745538][f=0001282] [CommandLayer] COMPLETED: Operation 10 released positioning.
+[t=00:01:21.042771][f=0001321] [CommandLayer] EXECUTING: Operation 11: ASSAULT / 2 units
+[t=00:01:21.061491][f=0001321] [CL-STARTUP] time=44 assigned=13 queued=8
+[t=00:01:21.063805][f=0001321] [CL-STRESS] t=44 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:21.066168][f=0001321] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:21.067981][f=0001321] [CL-COMBAT-CLIENT] group=RAID alive=2 op=5
+[t=00:01:21.071430][f=0001321] [CL-COMBAT-CLIENT] group=MAIN alive=10 op=6
+[t=00:01:21.099789][f=0001321] [CL-COMBAT-CLIENT] t=44 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:21.162635][f=0001324] [CommandLayer] COMPLETED: Operation 6 released positioning.
+[t=00:01:22.061999][f=0001352] [CommandLayer] REINFORCEMENT: Completed military unit 13978 assigned to Force 1; joins its next authorized movement.
+[t=00:01:22.493051][f=0001365] [CommandLayer] REINFORCEMENT: Completed military unit 21822 assigned to Force 1; joins its next authorized movement.
+[t=00:01:23.044888][f=0001381] [CommandLayer] PRODUCTION: Factory 12772: queued Vandal (ANTI_AIR), 90 metal. Desired role: ANTI_AIR
+[t=00:01:23.062227][f=0001381] [CL-STARTUP] time=46 assigned=15 queued=9
+[t=00:01:23.064214][f=0001381] [CL-STRESS] t=46 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:23.067118][f=0001381] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:23.069913][f=0001381] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:23.093814][f=0001381] [CL-COMBAT-CLIENT] group=MAIN alive=11 op=6
+[t=00:01:23.096081][f=0001381] [CL-COMBAT-CLIENT] t=46 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:23.159311][f=0001384] [CommandLayer] COMPLETED: Operation 8 released positioning.
+[t=00:01:25.046512][f=0001441] [CL-STARTUP] time=48 assigned=15 queued=7
+[t=00:01:25.057047][f=0001441] [CL-STRESS] t=48 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:25.059164][f=0001441] [CL-COMBAT-CLIENT] group=SCOUT alive=1 op=4
+[t=00:01:25.063754][f=0001441] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:25.065811][f=0001441] [CL-COMBAT-CLIENT] group=MAIN alive=11 op=6
+[t=00:01:25.068041][f=0001441] [CL-COMBAT-CLIENT] t=48 state=ADVANCING blocked=0 main_op=6 reason=Main force advancing toward its current phase line.
+[t=00:01:26.617189][f=0001488] [CommandLayer] COMPLETED: Operation 7 released positioning.
+[t=00:01:26.992406][f=0001499] [CommandLayer] STALLED: Released positioning for unit 25382
+[t=00:01:27.000232][f=0001499] [CommandLayer] ABORTED: Operation 4 released positioning.
+[t=00:01:27.008191][f=0001500] [CL-COMBAT] RESOURCES team=0 raw_metal=8567 raw_energy=8655 metal_storage=20000 energy_storage=20000
+[t=00:01:27.028744][f=0001500] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:27.195934][f=0001500] [CL-COMBAT] METRIC frame=1500 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:01:27.300805][f=0001501] [CommandLayer] EXECUTING: Operation 12: ASSAULT / 10 units
+[t=00:01:27.753431][f=0001501] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:01:28.197666][f=0001501] [CL-STARTUP] time=50 assigned=15 queued=4
+[t=00:01:28.208607][f=0001501] [CL-STRESS] t=50 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:28.214218][f=0001501] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=4
+[t=00:01:28.321823][f=0001501] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:28.346049][f=0001501] [CL-COMBAT-CLIENT] group=MAIN alive=10 op=12
+[t=00:01:28.357869][f=0001501] [CL-COMBAT-CLIENT] t=50 state=EXECUTING blocked=1 main_op=12 reason=Main force advancing toward its current phase line.
+[t=00:01:28.424427][f=0001503] [CommandLayer] COMPLETED: Operation 9 released positioning.
+[t=00:01:28.437068][f=0001503] [CommandLayer] COMPLETED: Operation 11 released positioning.
+[t=00:01:29.914102][f=0001561] [CommandLayer] EXECUTING: Operation 13: ASSAULT / 2 units
+[t=00:01:29.922117][f=0001561] [CL-STARTUP] time=52 assigned=15 queued=12
+[t=00:01:29.924340][f=0001561] [CL-STRESS] t=52 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:29.926937][f=0001561] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=4
+[t=00:01:29.929093][f=0001561] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:29.931880][f=0001561] [CL-COMBAT-CLIENT] group=MAIN alive=10 op=12
+[t=00:01:29.934329][f=0001561] [CL-COMBAT-CLIENT] t=52 state=ADVANCING blocked=1 main_op=12 reason=Main force advancing toward its current phase line.
+[t=00:01:30.666054][f=0001592] [CommandLayer] REINFORCEMENT: Completed military unit 16691 assigned to Force 1; joins its next authorized movement.
+[t=00:01:31.410685][f=0001621] [CommandLayer] EXECUTING: Operation 14: ASSAULT / 1 units
+[t=00:01:31.513764][f=0001621] [CL-STARTUP] time=54 assigned=16 queued=15
+[t=00:01:31.552558][f=0001621] [CL-STRESS] t=54 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:31.577466][f=0001621] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=4
+[t=00:01:31.582323][f=0001621] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:31.584309][f=0001621] [CL-COMBAT-CLIENT] group=MAIN alive=11 op=12
+[t=00:01:31.586726][f=0001621] [CL-COMBAT-CLIENT] t=54 state=ADVANCING blocked=1 main_op=12 reason=Main force advancing toward its current phase line.
+[t=00:01:32.393921][f=0001651] [CommandLayer] REINFORCEMENT: Completed military unit 445 assigned to Force 1; joins its next authorized movement.
+[t=00:01:34.265378][f=0001681] [CommandLayer] EXECUTING: Operation 15: ASSAULT / 2 units
+[t=00:01:34.455753][f=0001681] [CL-STARTUP] time=56 assigned=17 queued=11
+[t=00:01:34.460180][f=0001681] [CL-STRESS] t=56 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:34.478028][f=0001681] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=4
+[t=00:01:34.481659][f=0001681] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:34.486237][f=0001681] [CL-COMBAT-CLIENT] group=MAIN alive=12 op=12
+[t=00:01:34.496779][f=0001681] [CL-COMBAT-CLIENT] t=56 state=ADVANCING blocked=1 main_op=12 reason=Main force advancing toward its current phase line.
+[t=00:01:35.928742][f=0001741] [CL-STARTUP] time=58 assigned=17 queued=8
+[t=00:01:35.959635][f=0001741] [CL-STRESS] t=58 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:36.215305][f=0001741] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=4
+[t=00:01:36.504492][f=0001741] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:36.910489][f=0001741] [CL-COMBAT-CLIENT] group=MAIN alive=12 op=12
+[t=00:01:37.297700][f=0001741] [CL-COMBAT-CLIENT] t=58 state=ADVANCING blocked=1 main_op=12 reason=Main force advancing toward its current phase line.
+[t=00:01:37.665372][f=0001755] [CommandLayer] REINFORCEMENT: Completed military unit 12322 assigned to Force 1; joins its next authorized movement.
+[t=00:01:38.346095][f=0001780] [CommandLayer] COMPLETED: Operation 12 released positioning.
+[t=00:01:39.387707][f=0001800] [CL-COMBAT] RESOURCES team=0 raw_metal=8233 raw_energy=8341 metal_storage=20000 energy_storage=20000
+[t=00:01:39.393873][f=0001800] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:39.398024][f=0001800] [CL-COMBAT] METRIC frame=1800 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:01:39.447116][f=0001801] [CL-STARTUP] time=60 assigned=18 queued=8
+[t=00:01:39.450693][f=0001801] [CL-STRESS] t=60 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:39.452942][f=0001801] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=4
+[t=00:01:39.454648][f=0001801] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:39.456413][f=0001801] [CL-COMBAT-CLIENT] group=MAIN alive=13 op=12
+[t=00:01:39.458199][f=0001801] [CL-COMBAT-CLIENT] t=60 state=ADVANCING blocked=1 main_op=12 reason=Main force advancing toward its current phase line.
+[t=00:01:39.966820][f=0001816] [CommandLayer] REINFORCEMENT: Completed military unit 30922 assigned to Force 1; joins its next authorized movement.
+[t=00:01:41.002214][f=0001861] [CL-STARTUP] time=62 assigned=19 queued=8
+[t=00:01:41.005091][f=0001861] [CL-STRESS] t=62 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:41.007227][f=0001861] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=4
+[t=00:01:41.009096][f=0001861] [CL-COMBAT-CLIENT] group=RAID alive=3 op=5
+[t=00:01:41.010793][f=0001861] [CL-COMBAT-CLIENT] group=MAIN alive=14 op=12
+[t=00:01:41.026824][f=0001861] [CL-COMBAT-CLIENT] t=62 state=ADVANCING blocked=1 main_op=12 reason=Main force advancing toward its current phase line.
+[t=00:01:42.526783][f=0001921] [CommandLayer] REINFORCEMENT: Completed military unit 14579 assigned to Force 1; joins its next authorized movement.
+[t=00:01:42.556422][f=0001921] [CommandLayer] EXECUTING: Operation 16: ASSAULT / 13 units
+[t=00:01:42.559633][f=0001921] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:01:42.580893][f=0001921] [CL-STARTUP] time=64 assigned=20 queued=9
+[t=00:01:42.584921][f=0001921] [CL-STRESS] t=64 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:42.600027][f=0001921] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=4
+[t=00:01:42.603127][f=0001921] [CL-COMBAT-CLIENT] group=RAID alive=4 op=5
+[t=00:01:42.605904][f=0001921] [CL-COMBAT-CLIENT] group=MAIN alive=13 op=16
+[t=00:01:42.607263][f=0001921] [CL-COMBAT-CLIENT] t=64 state=EXECUTING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:01:42.712852][f=0001925] [CommandLayer] COMPLETED: Operation 14 released positioning.
+[t=00:01:42.718716][f=0001925] [CommandLayer] COMPLETED: Operation 15 released positioning.
+[t=00:01:44.026065][f=0001966] [CommandLayer] REINFORCEMENT: Completed military unit 26290 assigned to Force 1; joins its next authorized movement.
+[t=00:01:44.543804][f=0001981] [CommandLayer] ROUTING: 0 adjusted slots; 1 detours; 0 unresolved terrain checks (native pathfinding remains active).
+[t=00:01:44.551037][f=0001981] [CommandLayer] EXECUTING: Operation 17: ASSAULT / 3 units
+[t=00:01:44.553994][f=0001981] [CommandLayer] EXECUTING: Operation 18: LINE / 2 units
+[t=00:01:44.568835][f=0001981] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:44.575723][f=0001981] [CL-STARTUP] time=66 assigned=21 queued=18
+[t=00:01:44.592445][f=0001981] [CL-STRESS] t=66 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:44.595535][f=0001981] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:01:44.597307][f=0001981] [CL-COMBAT-CLIENT] group=RAID alive=4 op=5
+[t=00:01:44.599771][f=0001981] [CL-COMBAT-CLIENT] group=MAIN alive=14 op=16
+[t=00:01:44.612525][f=0001981] [CL-COMBAT-CLIENT] t=66 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:01:45.945371][f=0002023] [CommandLayer] COMPLETED: Operation 13 released positioning.
+[t=00:01:46.544189][f=0002041] [CL-STARTUP] time=68 assigned=21 queued=19
+[t=00:01:46.551660][f=0002041] [CL-STRESS] t=68 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:46.555898][f=0002041] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:01:46.579681][f=0002041] [CL-COMBAT-CLIENT] group=RAID alive=4 op=5
+[t=00:01:46.581562][f=0002041] [CL-COMBAT-CLIENT] group=MAIN alive=14 op=16
+[t=00:01:46.583615][f=0002041] [CL-COMBAT-CLIENT] t=68 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:01:48.493055][f=0002100] [CL-COMBAT] RESOURCES team=0 raw_metal=7897 raw_energy=8025 metal_storage=20000 energy_storage=20000
+[t=00:01:48.498521][f=0002100] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:48.517221][f=0002100] [CL-COMBAT] METRIC frame=2100 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:01:48.570216][f=0002101] [CL-STARTUP] time=70 assigned=21 queued=18
+[t=00:01:48.582339][f=0002101] [CL-STRESS] t=70 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:48.584668][f=0002101] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:01:48.603446][f=0002101] [CL-COMBAT-CLIENT] group=RAID alive=4 op=5
+[t=00:01:48.609772][f=0002101] [CL-COMBAT-CLIENT] group=MAIN alive=14 op=16
+[t=00:01:48.612321][f=0002101] [CL-COMBAT-CLIENT] t=70 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:01:49.996535][f=0002145] [CommandLayer] REINFORCEMENT: Completed military unit 18043 assigned to Force 1; joins its next authorized movement.
+[t=00:01:50.544159][f=0002161] [CommandLayer] EXECUTING: Operation 19: ASSAULT / 1 units
+[t=00:01:50.550612][f=0002161] [CL-STARTUP] time=72 assigned=22 queued=19
+[t=00:01:50.581694][f=0002161] [CL-STRESS] t=72 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:50.586978][f=0002161] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:01:50.589877][f=0002161] [CL-COMBAT-CLIENT] group=RAID alive=4 op=5
+[t=00:01:50.591826][f=0002161] [CL-COMBAT-CLIENT] group=MAIN alive=15 op=16
+[t=00:01:50.611951][f=0002161] [CL-COMBAT-CLIENT] t=72 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:01:51.526929][f=0002191] [CommandLayer] REINFORCEMENT: Completed military unit 21450 assigned to Force 1; joins its next authorized movement.
+[t=00:01:51.674968][f=0002195] [CommandLayer] ABORTED: Operation 5 released positioning.
+[t=00:01:52.546481][f=0002221] [CommandLayer] EXECUTING: Operation 20: ASSAULT / 1 units
+[t=00:01:52.551064][f=0002221] [CL-STARTUP] time=74 assigned=23 queued=19
+[t=00:01:52.553293][f=0002221] [CL-STRESS] t=74 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:52.584858][f=0002221] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:01:52.587527][f=0002221] [CL-COMBAT-CLIENT] group=RAID alive=5 op=5
+[t=00:01:52.590783][f=0002221] [CL-COMBAT-CLIENT] group=MAIN alive=15 op=16
+[t=00:01:52.612542][f=0002221] [CL-COMBAT-CLIENT] t=74 state=ADVANCING blocked=2 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:01:54.540527][f=0002281] [CommandLayer] PRODUCTION: Factory 1528: queued Badger (ARTILLERY), 270 metal. Desired role: ARTILLERY
+[t=00:01:54.566779][f=0002281] [CL-STARTUP] time=76 assigned=23 queued=15
+[t=00:01:54.568726][f=0002281] [CL-STRESS] t=76 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:54.585495][f=0002281] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:01:54.590887][f=0002281] [CL-COMBAT-CLIENT] group=RAID alive=5 op=5
+[t=00:01:54.613538][f=0002281] [CL-COMBAT-CLIENT] group=MAIN alive=15 op=16
+[t=00:01:54.616954][f=0002281] [CL-COMBAT-CLIENT] t=76 state=ADVANCING blocked=2 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:01:56.493112][f=0002340] [CommandLayer] REINFORCEMENT: Completed military unit 10274 assigned to Force 1; joins its next authorized movement.
+[t=00:01:56.544512][f=0002341] [CommandLayer] EXECUTING: Operation 21: ASSAULT / 1 units
+[t=00:01:56.553286][f=0002341] [CL-STARTUP] time=78 assigned=24 queued=12
+[t=00:01:56.555636][f=0002341] [CL-STRESS] t=78 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:56.580671][f=0002341] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:01:56.584844][f=0002341] [CL-COMBAT-CLIENT] group=RAID alive=5 op=5
+[t=00:01:56.586770][f=0002341] [CL-COMBAT-CLIENT] group=MAIN alive=16 op=16
+[t=00:01:56.588025][f=0002341] [CL-COMBAT-CLIENT] t=78 state=ADVANCING blocked=2 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:01:57.022534][f=0002356] [CommandLayer] REINFORCEMENT: Completed military unit 22903 assigned to Force 1; joins its next authorized movement.
+[t=00:01:58.494059][f=0002400] [CL-COMBAT] RESOURCES team=0 raw_metal=7617 raw_energy=7765 metal_storage=20000 energy_storage=20000
+[t=00:01:58.503303][f=0002400] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:58.506482][f=0002400] [CL-COMBAT] METRIC frame=2400 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:01:58.548698][f=0002401] [CommandLayer] EXECUTING: Operation 22: ASSAULT / 1 units
+[t=00:01:58.551903][f=0002401] [CL-STARTUP] time=80 assigned=25 queued=10
+[t=00:01:58.553947][f=0002401] [CL-STRESS] t=80 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:01:58.582762][f=0002401] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:01:58.585858][f=0002401] [CL-COMBAT-CLIENT] group=RAID alive=5 op=5
+[t=00:01:58.588872][f=0002401] [CL-COMBAT-CLIENT] group=MAIN alive=17 op=16
+[t=00:01:58.610840][f=0002401] [CL-COMBAT-CLIENT] t=80 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:00.544369][f=0002461] [CL-STARTUP] time=82 assigned=25 queued=10
+[t=00:02:00.553537][f=0002461] [CL-STRESS] t=82 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:00.556903][f=0002461] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:00.559675][f=0002461] [CL-COMBAT-CLIENT] group=RAID alive=5 op=5
+[t=00:02:00.579527][f=0002461] [CL-COMBAT-CLIENT] group=MAIN alive=17 op=16
+[t=00:02:00.583084][f=0002461] [CL-COMBAT-CLIENT] t=82 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:00.998734][f=0002475] [CommandLayer] REINFORCEMENT: Completed military unit 17415 assigned to Force 1; joins its next authorized movement.
+[t=00:02:02.545995][f=0002521] [CommandLayer] EXECUTING: Operation 23: ASSAULT / 1 units
+[t=00:02:02.558849][f=0002521] [CL-STARTUP] time=84 assigned=26 queued=10
+[t=00:02:02.561193][f=0002521] [CL-STRESS] t=84 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:02.563611][f=0002521] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:02.567282][f=0002521] [CL-COMBAT-CLIENT] group=RAID alive=5 op=5
+[t=00:02:02.570022][f=0002521] [CL-COMBAT-CLIENT] group=MAIN alive=18 op=16
+[t=00:02:02.571865][f=0002521] [CL-COMBAT-CLIENT] t=84 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:04.541855][f=0002581] [CL-STARTUP] time=86 assigned=26 queued=10
+[t=00:02:04.553853][f=0002581] [CL-STRESS] t=86 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:04.558916][f=0002581] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:04.579789][f=0002581] [CL-COMBAT-CLIENT] group=RAID alive=5 op=5
+[t=00:02:04.584808][f=0002581] [CL-COMBAT-CLIENT] group=MAIN alive=18 op=16
+[t=00:02:04.609895][f=0002581] [CL-COMBAT-CLIENT] t=86 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:06.542926][f=0002641] [CL-STARTUP] time=88 assigned=26 queued=10
+[t=00:02:06.548596][f=0002641] [CL-STRESS] t=88 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:06.551831][f=0002641] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:06.554833][f=0002641] [CL-COMBAT-CLIENT] group=RAID alive=5 op=5
+[t=00:02:06.558300][f=0002641] [CL-COMBAT-CLIENT] group=MAIN alive=18 op=16
+[t=00:02:06.580991][f=0002641] [CL-COMBAT-CLIENT] t=88 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:08.443918][f=0002698] [CommandLayer] COMPLETED: Operation 19 released positioning.
+[t=00:02:08.494178][f=0002700] [CL-COMBAT] RESOURCES team=0 raw_metal=7276 raw_energy=7445 metal_storage=20000 energy_storage=20000
+[t=00:02:08.499725][f=0002700] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:08.503633][f=0002700] [CL-COMBAT] METRIC frame=2700 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:02:08.543474][f=0002701] [CommandLayer] ROUTING: 0 adjusted slots; 0 detours; 1 unresolved terrain checks (native pathfinding remains active).
+[t=00:02:08.549817][f=0002701] [CommandLayer] EXECUTING: Operation 24: LINE / 4 units
+[t=00:02:08.551937][f=0002701] [CommandLayer] TACTICAL: RAID: No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:02:08.556956][f=0002701] [CL-STARTUP] time=90 assigned=26 queued=9
+[t=00:02:08.577651][f=0002701] [CL-STRESS] t=90 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:08.579648][f=0002701] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:08.581465][f=0002701] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:08.583211][f=0002701] [CL-COMBAT-CLIENT] group=MAIN alive=18 op=16
+[t=00:02:08.584995][f=0002701] [CL-COMBAT-CLIENT] t=90 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:08.693165][f=0002705] [CommandLayer] COMPLETED: Operation 20 released positioning.
+[t=00:02:09.002043][f=0002715] [CommandLayer] REINFORCEMENT: Completed military unit 14434 assigned to Force 1; joins its next authorized movement.
+[t=00:02:09.820051][f=0002739] [CommandLayer] COMPLETED: Operation 17 released positioning.
+[t=00:02:09.994703][f=0002745] [CommandLayer] REINFORCEMENT: Completed military unit 11691 assigned to Force 1; joins its next authorized movement.
+[t=00:02:10.543467][f=0002761] [CommandLayer] EXECUTING: Operation 25: ASSAULT / 2 units
+[t=00:02:10.549774][f=0002761] [CL-STARTUP] time=92 assigned=28 queued=12
+[t=00:02:10.552003][f=0002761] [CL-STRESS] t=92 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:10.554134][f=0002761] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:10.556834][f=0002761] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:10.580362][f=0002761] [CL-COMBAT-CLIENT] group=MAIN alive=20 op=16
+[t=00:02:10.582817][f=0002761] [CL-COMBAT-CLIENT] t=92 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:10.812560][f=0002769] [CommandLayer] COMPLETED: Operation 22 released positioning.
+[t=00:02:12.542866][f=0002821] [CL-STARTUP] time=94 assigned=28 queued=11
+[t=00:02:12.551518][f=0002821] [CL-STRESS] t=94 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:12.555030][f=0002821] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:12.558428][f=0002821] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:12.580330][f=0002821] [CL-COMBAT-CLIENT] group=MAIN alive=20 op=16
+[t=00:02:12.582796][f=0002821] [CL-COMBAT-CLIENT] t=94 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:14.542842][f=0002881] [CommandLayer] PRODUCTION: Factory 12772: queued Racketeer (ARTILLERY), 330 metal. Desired role: ARTILLERY
+[t=00:02:14.547741][f=0002881] [CL-STARTUP] time=96 assigned=28 queued=11
+[t=00:02:14.556260][f=0002881] [CL-STRESS] t=96 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:14.558889][f=0002881] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:14.561443][f=0002881] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:14.563359][f=0002881] [CL-COMBAT-CLIENT] group=MAIN alive=20 op=16
+[t=00:02:14.565147][f=0002881] [CL-COMBAT-CLIENT] t=96 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:15.494220][f=0002910] [CommandLayer] REINFORCEMENT: Completed military unit 23137 assigned to Force 1; joins its next authorized movement.
+[t=00:02:16.544296][f=0002941] [CommandLayer] EXECUTING: Operation 26: ASSAULT / 1 units
+[t=00:02:16.549952][f=0002941] [CL-STARTUP] time=98 assigned=29 queued=11
+[t=00:02:16.552143][f=0002941] [CL-STRESS] t=98 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:16.584433][f=0002941] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:16.588060][f=0002941] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:16.589882][f=0002941] [CL-COMBAT-CLIENT] group=MAIN alive=21 op=16
+[t=00:02:16.591668][f=0002941] [CL-COMBAT-CLIENT] t=98 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:17.210726][f=0002961] [CommandLayer] COMPLETED: Operation 18 released positioning.
+[t=00:02:18.492086][f=0003000] [CL-COMBAT] RESOURCES team=0 raw_metal=7016 raw_energy=7204 metal_storage=20000 energy_storage=20000
+[t=00:02:18.503983][f=0003000] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:18.507560][f=0003000] [CL-COMBAT] METRIC frame=3000 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:02:18.543189][f=0003001] [CL-STARTUP] time=100 assigned=29 queued=10
+[t=00:02:18.546014][f=0003001] [CL-STRESS] t=100 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:18.549181][f=0003001] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:18.550991][f=0003001] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:18.553009][f=0003001] [CL-COMBAT-CLIENT] group=MAIN alive=21 op=16
+[t=00:02:18.555046][f=0003001] [CL-COMBAT-CLIENT] t=100 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:18.599576][f=0003002] [CommandLayer] COMPLETED: Operation 23 released positioning.
+[t=00:02:19.542853][f=0003031] [CommandLayer] PRODUCTION: Factory 27174: queued Lance (ARTILLERY), 1100 metal. Desired role: ARTILLERY
+[t=00:02:20.545526][f=0003061] [CL-STARTUP] time=102 assigned=29 queued=9
+[t=00:02:20.554852][f=0003061] [CL-STRESS] t=102 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:20.574601][f=0003061] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:20.580646][f=0003061] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:20.583483][f=0003061] [CL-COMBAT-CLIENT] group=MAIN alive=21 op=16
+[t=00:02:20.585850][f=0003061] [CL-COMBAT-CLIENT] t=102 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:21.494419][f=0003090] [CommandLayer] REINFORCEMENT: Completed military unit 12941 assigned to Force 1; joins its next authorized movement.
+[t=00:02:21.526099][f=0003091] [CommandLayer] REINFORCEMENT: Completed military unit 24882 assigned to Force 1; joins its next authorized movement.
+[t=00:02:22.078741][f=0003107] [CommandLayer] COMPLETED: Operation 21 released positioning.
+[t=00:02:22.544657][f=0003121] [CommandLayer] EXECUTING: Operation 27: ASSAULT / 2 units
+[t=00:02:22.552041][f=0003121] [CL-STARTUP] time=104 assigned=31 queued=10
+[t=00:02:22.554977][f=0003121] [CL-STRESS] t=104 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:22.558742][f=0003121] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:22.579864][f=0003121] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:22.584529][f=0003121] [CL-COMBAT-CLIENT] group=MAIN alive=23 op=16
+[t=00:02:22.587021][f=0003121] [CL-COMBAT-CLIENT] t=104 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:24.546073][f=0003181] [CommandLayer] PRODUCTION: Factory 24111: queued Reaver (RIOT), 210 metal. Desired role: RIOT
+[t=00:02:24.553925][f=0003181] [CL-STARTUP] time=106 assigned=31 queued=10
+[t=00:02:24.573695][f=0003181] [CL-STRESS] t=106 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:24.582154][f=0003181] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:24.585058][f=0003181] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:24.587754][f=0003181] [CL-COMBAT-CLIENT] group=MAIN alive=23 op=16
+[t=00:02:24.616239][f=0003181] [CL-COMBAT-CLIENT] t=106 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:26.545688][f=0003241] [CL-STARTUP] time=108 assigned=31 queued=10
+[t=00:02:26.549681][f=0003241] [CL-STRESS] t=108 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:26.553040][f=0003241] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:26.557396][f=0003241] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:26.580060][f=0003241] [CL-COMBAT-CLIENT] group=MAIN alive=23 op=16
+[t=00:02:26.582286][f=0003241] [CL-COMBAT-CLIENT] t=108 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:28.491900][f=0003300] [CL-COMBAT] RESOURCES team=0 raw_metal=6722 raw_energy=6930 metal_storage=20000 energy_storage=20000
+[t=00:02:28.501948][f=0003300] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:28.507359][f=0003300] [CL-COMBAT] METRIC frame=3300 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:02:28.547975][f=0003301] [CL-STARTUP] time=110 assigned=31 queued=10
+[t=00:02:28.552226][f=0003301] [CL-STRESS] t=110 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:28.555921][f=0003301] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=18
+[t=00:02:28.558261][f=0003301] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:28.582795][f=0003301] [CL-COMBAT-CLIENT] group=MAIN alive=23 op=16
+[t=00:02:28.584641][f=0003301] [CL-COMBAT-CLIENT] t=110 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:29.346286][f=0003325] [CommandLayer] COMPLETED: Operation 26 released positioning.
+[t=00:02:30.543463][f=0003361] [CommandLayer] EXECUTING: Operation 28: LINE / 3 units
+[t=00:02:30.552212][f=0003361] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:02:30.582398][f=0003361] [CL-STARTUP] time=112 assigned=31 queued=9
+[t=00:02:30.584875][f=0003361] [CL-STRESS] t=112 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:30.588137][f=0003361] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=28
+[t=00:02:30.621235][f=0003361] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:30.624912][f=0003361] [CL-COMBAT-CLIENT] group=MAIN alive=23 op=16
+[t=00:02:30.627030][f=0003361] [CL-COMBAT-CLIENT] t=112 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:32.541627][f=0003421] [CL-STARTUP] time=114 assigned=31 queued=12
+[t=00:02:32.548698][f=0003421] [CL-STRESS] t=114 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:32.551660][f=0003421] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=28
+[t=00:02:32.553715][f=0003421] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:32.555583][f=0003421] [CL-COMBAT-CLIENT] group=MAIN alive=23 op=16
+[t=00:02:32.577049][f=0003421] [CL-COMBAT-CLIENT] t=114 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:34.544281][f=0003481] [CL-STARTUP] time=116 assigned=31 queued=12
+[t=00:02:34.547145][f=0003481] [CL-STRESS] t=116 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:34.559407][f=0003481] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=28
+[t=00:02:34.562774][f=0003481] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:34.564771][f=0003481] [CL-COMBAT-CLIENT] group=MAIN alive=23 op=16
+[t=00:02:34.566639][f=0003481] [CL-COMBAT-CLIENT] t=116 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:36.550176][f=0003541] [CL-STARTUP] time=118 assigned=31 queued=12
+[t=00:02:36.555539][f=0003541] [CL-STRESS] t=118 alive=0 moved32=0 queued=0 mean_forward=0
+[t=00:02:36.558934][f=0003541] [CL-COMBAT-CLIENT] group=SCOUT alive=3 op=28
+[t=00:02:36.570034][f=0003541] [CL-COMBAT-CLIENT] group=RAID alive=5 op=24
+[t=00:02:36.572556][f=0003541] [CL-COMBAT-CLIENT] group=MAIN alive=23 op=16
+[t=00:02:36.574420][f=0003541] [CL-COMBAT-CLIENT] t=118 state=ADVANCING blocked=1 main_op=16 reason=Main force advancing toward its current phase line.
+[t=00:02:38.492740][f=0003600] [CL-COMBAT] RESOURCES team=0 raw_metal=6382 raw_energy=6610 metal_storage=20000 energy_storage=20000
+[t=00:02:38.512593][f=0003600] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:38.534659][f=0003600] [CL-COMBAT] METRIC frame=3600 own_count=0 enemy_count=0 own_value=0 enemy_value=0 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:02:38.555252][f=0003600] [CL-COMBAT] END combat benchmark
+[t=00:02:38.561266][f=0003600] [CommandLayer] DELEGATED: Autonomous control stopped. Native destination orders remain.
+[t=00:02:38.583101][f=0003600] [CL-COMBAT-CLIENT] COMPLETE

@@ -164,7 +164,7 @@ return function(C)
 	function T.tick(f,now)
 		local d=f.delegation; if not d or not d.active then return end
 		if not C.U.delegationAllowed(C.settings) then C.officer.setDelegated(f.id,false); return end
-		if #C.officer.members(f)==0 then C.officer.setDelegated(f.id,false); f.status='PLAYER_OVERRIDE'; return end
+		if #C.officer.members(f)==0 then if C.startup and C.startup.enabled and C.startup.forceID==f.id then d.active=false; d.state='WAITING FOR UNITS'; return end; C.officer.setDelegated(f.id,false); f.status='PLAYER_OVERRIDE'; return end
 		-- Congestion gets a bounded retry; manual/unknown queue overrides never do.
 		for id,untilTime in pairs(d.blocked) do if type(untilTime)=='number' and now>=untilTime then d.blocked[id]=nil end end
 		rebalance(f)
@@ -176,6 +176,17 @@ return function(C)
 		if not f.objectiveReached and f.front~='HOLD' and now>=(d.recoverAfter or 0) and (now-d.review.time>=60 or #forceIDs<d.review.count*.75 or C.rules.health(forceIDs)<.4) then
 			local why=#forceIDs<d.review.count*.75 and 'More than 25% of the review force was lost/released.' or C.rules.health(forceIDs)<.4 and 'Average force health below 40%.' or 'No substantial forward progress for 60 game seconds.'
 			T.beginRecovery(f,now,why); T.recoveryTick(f,now); return
+		end
+		-- Catch new recruits up without restarting the army's active movement.
+		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]
+		if d.recruits and main and main.active then
+			local recruits={}
+			for id in pairs(d.recruits) do if f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) and not C.registry.owner[id] then recruits[#recruits+1]=id end end
+			table.sort(recruits)
+			if #recruits>0 then
+				local p=plan(f,recruits,main.plan.center,'MAIN',C.observations.snapshot().contacts)
+				if p and C.officer.executeDelegated(f,recruits,p,'REINFORCE',CMD.FIGHT) then for _,id in ipairs(recruits) do d.recruits[id]=nil end end
+			end
 		end
 		local s=d.sector; local snapshot=C.observations.snapshot(); local contacts={}
 		for _,v in ipairs(snapshot.contacts) do if C.formations.inCorridor(s,v.position) then contacts[#contacts+1]=v end end

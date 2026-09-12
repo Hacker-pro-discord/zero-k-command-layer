@@ -69,6 +69,7 @@ return function(C)
 		if id then local op=C.registry.operations[id]; op.kind=kind; C.input.preview=plan end; return id
 	end
 	function A.setDelegated(forceID,enabled)
+		if not enabled and C.startup then C.startup.stop(forceID) end
 		local f=C.registry.forces[forceID]; if not f then return false end
 		if enabled and (not C.U.delegationAllowed(C.settings) or not C.tactical) then C.debug.log('LOCKED','Autonomous testing requires a single-player game and private-session toggle.'); return false end
 		-- Revoke first, including every parallel detachment operation.
@@ -90,14 +91,31 @@ return function(C)
 		for _,id in ipairs(eligible) do f.members[id]=true end
 		C.registry.forces[f.id]=f; C.registry.activeForce=f.id; C.debug.log('ASSIGNED','Force '..f.id..' observes only; no orders issued.'); return f.id
 	end
+	function A.ensureForce()
+		local f=C.registry.forces[C.registry.activeForce]
+		if f then return f end
+		if not C.U.assisted(C.settings) then return nil end
+		C.registry.nextForce=C.registry.nextForce+1
+		f={id=C.registry.nextForce,members={},suspended={},revision=1,status='WAITING FOR UNITS',front='ADVANCE',formation='ASSAULT',lastSuggestion=-100,declined={}}
+		C.registry.forces[f.id]=f; C.registry.activeForce=f.id
+		return f
+	end
+	function A.setAutoAssign(enabled,forceID)
+		C.settings.autoAssign=enabled==true
+		if enabled and C.U.assisted(C.settings) then
+			local f=C.registry.forces[forceID] or A.ensureForce(); A.recruitForce=f.id
+			for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}) do A.autoAssign(id,f.id) end
+		end
+		return true
+	end
 	function A.autoAssign(id,forceID)
-		local f=C.registry.forces[forceID or C.registry.activeForce]
+		local f=C.registry.forces[forceID or A.recruitForce or C.registry.activeForce]
 		if not C.settings.autoAssign or not f or not C.U.assisted(C.settings) or not C.U.live() or not C.U.owned(id) then return false end
 		local d=C.classify.definition(Spring.GetUnitDefID(id)); local _,_,_,_,built=Spring.GetUnitHealth(id)
 		if not d.mobile or d.builder or built and built<1 or (C.registry.generation[id] or 0)>0 or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 then return false end
 		for _,other in pairs(C.registry.forces) do if other.members[id] then return false end end
 		f.members[id]=true -- Additional recruits do not change the frozen units of an existing approval.
-		if f.delegation and f.delegation.active then f.delegation.groups.MAIN[#f.delegation.groups.MAIN+1]=id end
+		if f.delegation and f.delegation.active then f.delegation.groups.MAIN[#f.delegation.groups.MAIN+1]=id; f.delegation.recruits=f.delegation.recruits or {}; f.delegation.recruits[id]=true end
 		C.debug.log('REINFORCEMENT','Completed military unit '..id..' assigned to Force '..f.id..'; joins its next authorized movement.')
 		return true
 	end
@@ -136,7 +154,7 @@ return function(C)
 		if not enabled then A.cancelAll(); for _,p in pairs(C.proposals.items) do if p.state=='OFFERED' then p.state='INVALIDATED' end end end
 		C.debug.log('SESSION',enabled and 'Local/private testing enabled for this session.' or 'Assisted testing disabled.'); return true
 	end
-	function A.cancelAll() for _,f in pairs(C.registry.forces) do if f.delegation then f.delegation.active=false end end; for id in pairs(C.registry.operations) do A.cancel(id) end; if C.input then C.input.preview=nil end end
+	function A.cancelAll() if C.startup then C.startup.stop() end; for _,f in pairs(C.registry.forces) do if f.delegation then f.delegation.active=false end end; for id in pairs(C.registry.operations) do A.cancel(id) end; if C.input then C.input.preview=nil end end
 
 	function A.cancel(id) local op=C.registry.operations[id]; if op then C.registry.finish(op,'CANCELLED') end end
 	function A.update()

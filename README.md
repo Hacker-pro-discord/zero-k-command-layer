@@ -2,7 +2,7 @@
 
 Experimental local widgets for **Zero-K v1.14.8.0 / engine 2025.06.21**: logistics shortcuts, persistent formations, an approval-based Officer, and optional single-player scouting/raiding/attack automation.
 
-You choose the army and objective. Native Zero-K unit AI still handles firing, aiming and ordinary combat behavior. Normal installation adds uniquely named local widgets; it does not edit stock widgets, game archives or LuaRules. This is a community experiment, not an official Zero-K component or a competitive-play recommendation.
+Choose an army/objective yourself, or explicitly start automatic map control in a local skirmish. Native Zero-K unit AI still handles firing, aiming and ordinary combat behavior. Normal installation adds uniquely named local widgets; it does not edit stock widgets, game archives or LuaRules. This is a community experiment, not an official Zero-K component or a competitive-play recommendation.
 
 ## Install
 
@@ -37,6 +37,25 @@ python tools/install.py --game "C:\path\to\Zero-K"
 ```
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
+
+## Fast autonomous start (preview 7)
+
+In a local skirmish, open **OFFICER**:
+
+1. Enable **LOCAL / PRIVATE TEST SESSION**.
+2. Click **START MAP CONTROL**.
+
+This creates a receiving force, enables automatic recruitment and idle-factory production, and starts movement with the first eligible military unit. You do not need to preselect an army or draw a line. Without an existing objective, it uses a broad corridor toward the opposite map quarter, derived from map geometry and your own units, not hidden enemy locations. The first five units prioritize raider production; scouts split off at five units and harassment groups at eight. New recruits receive catch-up movements while the main army is still advancing.
+
+**PRODUCTION: ON/OFF** is directly visible on the Officer panel and can be enabled even before any military unit exists. It controls eligible idle factories, including newly completed factories. Manual factory commands release that factory. It preserves existing queues and does not place factories, constructors, mexes or economy buildings.
+
+**AUTO ASSIGN: WAIT** means local testing is disabled; **ON** means recruitment is enabled. It creates a receiving force and checks existing unassigned and newly completed military units once per game second. Previously manually released units remain released. Toggling recruitment on pins the receiving force; merely cycling the viewed force does not redirect recruits. Production recruits retain their production-force association.
+
+**STOP AI** stops future combat automation and production for the active force and prevents automatic restart. Existing native orders can finish; issue a manual Stop to halt those too. Changing objectives, fronts or cancelling delegation retains player priority. Autonomous authority is never saved across LuaUI reloads/matches. Manual orders always override it.
+
+This is autonomous military control plus factory queues, not a full economic AI or a guarantee of map-wide victory. It holds at the final objective. Replace its objective if the map's terrain makes the default approach unsuitable.
+
+See [startup, UI and stress-test evidence](docs/STARTUP_TEST.md).
 
 ## Logistics
 
@@ -88,8 +107,8 @@ Production advice uses actual factory build options, friendly capability gaps an
 
 - **REVIEW ARMY PUSH** reviews one Fight action by the entire assigned force, including its scout/raid detachments, toward your drawn objective. Inspect the destination and slots, then approve. Approval ends separate delegation; completion returns to advice. It never invents an enemy-base destination or authorizes a second attack.
 - The push heuristic requires average health above 50% and healthy friendly metal value at least 1.25 times visually identified enemy value near the objective. Otherwise it proposes reforming. This is a coarse comparison, not a prediction of victory; radar and unobserved territory remain uncertain.
-- **AUTO ASSIGN: ON/OFF** is an opt-in, persistent setting in the Officer panel, OFF by default. Newly completed, owned mobile military units join the currently active assigned force. Builders, structures, unfinished units and manually released units are excluded. Toggle it OFF to stop recruitment. There is no retroactive sweep; use Assign All for existing units.
-- New recruits silently join membership without replacing the offered brief or expanding an approved action. Under explicit delegation, reinforcements join a subsequent group movement. Adviser membership alone issues no orders. Selection changes do not change which force is active; use Previous/Next Force.
+- **AUTO ASSIGN: ON/OFF** is an opt-in, persistent setting in the Officer panel, OFF by default. Existing unassigned and newly completed owned mobile military units join the receiving force chosen when recruitment was enabled. Builders, structures, unfinished units and manually released units are excluded. Toggle it OFF to stop recruitment. A once-per-second sweep catches existing eligible units and missed completion events; use Assign All to explicitly reassign manually released units.
+- New recruits silently join membership without replacing the offered brief or expanding an approved action. Under explicit delegation, reinforcements catch up to an active main phase and join subsequent group movements. Adviser membership alone issues no orders. Selection changes do not change which force is active; use Previous/Next Force.
 - Large delegated/whole-army layouts use additional distinct ranks when the requested shape overflows the corridor. Role-zone order is retained; the precise geometric shape may change. Packed ranks use native movement without anchor corrections. If the army cannot fit, the Officer asks for a wider line rather than merging destinations. Terrain navigation still belongs to the engine.
 - Congestion-stalled units retry after 30 game seconds. Unknown queues and manual overrides are not treated as congestion. Partial arrival no longer counts as total group failure.
 - Under explicit delegation, 60 seconds without 128 units of forward progress, loss/release of over 25% of the review membership, or average health below 40% now triggers **automatic fallback and regroup**. No additional approval is needed for this recovery. Adviser-only/one-shot-approved control does not gain this authority. See the preview 5 recovery policy below.
@@ -128,15 +147,15 @@ The widget does not browse the web or learn strategies during a match. The separ
 
 The three autonomous choices explicitly start single-player delegation after the line is drawn and turn Auto Assign on. Choosing a policy without drawing does not change the active operation. Names describe **in-game behavior inside the drawn corridor**, not an automatic map-wide win plan. They neither identify hidden targets nor promise victory. Progress/loss/health checks can automatically withdraw and regroup inside the accepted corridor.
 
-The same chooser contains **AUTO PRODUCTION** and **STOP PRODUCTION**. Production defaults OFF and is session-only. Enabling it authorizes the current existing factories for the selected force; new factories need a fresh opt-in. The controller:
+The same chooser contains **AUTO PRODUCTION** and **STOP PRODUCTION**. Production defaults OFF and is session-only. Enabling it authorizes existing and newly completed idle factories for the receiving force; manually released factories stay excluded until a fresh opt-in. The controller:
 
 - Uses actual factory build options and friendly gaps/visible riot contacts to choose a mobile military unit. It prefers the requested role, with an affordable military fallback.
 - Queues at most one unit per controlled idle factory every five game seconds, reserving their combined metal cost and rotating priority when funds are limited, only into an empty native factory queue. It preserves busy queues and never constructs a factory or changes rally points.
 - Requires the full unit metal cost plus 100 metal in storage and at least 100 stored energy. These are simple reserves, not a complete economic forecast.
-- Releases a factory when you issue a manual command to it. Turning production off preserves already queued units. It disables on leaving the single-player/private-test context or losing the assigned force.
+- Releases a factory when you issue a manual command to it. Turning production off preserves already queued units. It disables on leaving the single-player/private-test context or deletion of the receiving-force record; an empty force can still receive production.
 - Routes completed units from its factories back to its assigned force even if you browse another force in the UI. Existing approval snapshots remain unchanged.
 
-The main status area shows production decisions and waiting reasons. Open Set Objective to stop or re-enable production. Ordinary production advice remains read-only; this controller has separate explicit authority.
+The main status area shows production decisions and waiting reasons. Use PRODUCTION on the main Officer panel to stop or re-enable it; the objective chooser retains the secondary controls. Ordinary production advice remains read-only; this controller has separate explicit authority.
 
 ## Five-unit pressure and automatic recovery (preview 5)
 
@@ -188,7 +207,7 @@ The production scheduler now serves every controlled idle factory per pass inste
 
 ## Test evidence and limitations
 
-- Twenty-one Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
+- Twenty-four Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
 - Preview 2 includes a separate 30-game-second headless engine smoke test. The 400-unit and new approval/recruitment cases are mocked Lua regressions, not a demonstrated 400-unit live battle. The two new buttons have not yet had visual in-game interaction testing.
 - Isolated engine tests verified native orders, actual movement, repeated scout/raid/main operations and cancellation.
 - A visible equal-army test started with 32 identical units and 3,010 metal of combat value each. The corrected two-minute run ended with **nine units and 910 value each**: a stalemate, not a victory or completed objective. The opponent was scripted native Fight, not a full Circuit AI match.
