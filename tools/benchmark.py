@@ -22,7 +22,7 @@ def summarize(target, case, elapsed, timeout=False):
     data = records(target/'infolog.txt')
     text = (target/'infolog.txt').read_text(encoding='utf-8', errors='replace') if (target/'infolog.txt').exists() else ''
     results = [v for v in data if v['kind'] in ('RESULT','CLIENT_RESULT')]
-    errors = [l for l in text.splitlines() if ('Error in ' in l and 'Shutdown' not in l) or any(t in l for t in ('Failed to load the Skirmish AI','Failed to load:','error = 201','error 201','EVENT_INIT','failed to handle event'))]
+    errors = [l for l in text.splitlines() if ('Error in ' in l and 'Shutdown' not in l) or ('Failed to load:' in l and any(w in l for w in ('gui_command_layer','gui_cl_benchmark'))) or any(t in l for t in ('Failed to load the Skirmish AI','error = 201','error 201','EVENT_INIT','failed to handle event'))]
     metrics = [v for v in data if v['kind']=='METRIC']
     if not any(v['kind']=='CLIENT' for v in data): errors.append('Missing player-perspective telemetry')
     if not any(v.get('team')==1 and v.get('army',0)+v.get('builders',0)+v.get('factories',0)>0 for v in metrics): errors.append('Enemy never became active')
@@ -81,7 +81,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--game',type=Path,required=True); p.add_argument('--directory',type=Path,required=True)
     p.add_argument('--split',choices=['train','holdout'],default='train'); p.add_argument('--map-id'); p.add_argument('--case-limit',type=int)
-    p.add_argument('--seconds',type=int,default=1200); p.add_argument('--speed',type=int,default=8); p.add_argument('--jobs',type=int,default=2)
+    p.add_argument('--seconds',type=int,default=1200); p.add_argument('--speed',type=int,default=20); p.add_argument('--jobs',type=int,default=3)
     p.add_argument('--wall-timeout',type=int,default=1800); p.add_argument('--ai',default=AI); p.add_argument('--rerun',action='store_true')
     args=p.parse_args(); args.game=args.game.resolve(); args.directory=args.directory.resolve()
     assert args.directory!=args.game and args.game not in args.directory.parents
@@ -100,6 +100,9 @@ def main():
         for name in ['benchmark_driver.lua','benchmark_observer.lua']: shutil.copyfile(ROOT/'tests'/name,snapshot/'tests'/name)
         metadata={'created':time.time(),'cases':cases,'seconds':args.seconds,'speed':args.speed,'ai':args.ai,'files':{str(f.relative_to(snapshot)):digest(f) for f in snapshot.rglob('*') if f.is_file()},'engineSha256':digest(args.game/'engine/win64/2025.06.21/spring-headless.exe'),'aiSha256':digest(args.game/'AI/Skirmish'/args.ai/'stable/SkirmishAI.dll'),'aiFiles':{str(f.relative_to(args.game/'AI/Skirmish'/args.ai)):digest(f) for f in (args.game/'AI/Skirmish'/args.ai).rglob('*') if f.is_file()}}
         (args.directory/'manifest.json').write_text(json.dumps(metadata,indent=2),encoding='utf-8')
+    metadata=json.loads((args.directory/'manifest.json').read_text(encoding='utf-8'))
+    if metadata['cases']!=cases or metadata['seconds']!=args.seconds or metadata['speed']!=args.speed or metadata['ai']!=args.ai:
+        raise SystemExit('Existing campaign parameters differ; use a new directory')
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as pool:
         futures=[pool.submit(run_case,c,args,snapshot) for c in cases]; results=[]
         for future in concurrent.futures.as_completed(futures):

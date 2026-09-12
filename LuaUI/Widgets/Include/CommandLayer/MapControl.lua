@@ -9,6 +9,10 @@ return function(C)
 		end end
 		return m
 	end
+	function M.failed(f,now,point)
+		local m=f.mapState or M.initialize(f); m.failures=m.failures or {}
+		m.failures[#m.failures+1]={point=C.U.copy(point),time=now}; if #m.failures>16 then table.remove(m.failures,1) end
+	end
 	function M.sector(f,ids,target)
 		local origin=C.U.center(ids); local dx,dz=target[1]-origin[1],target[3]-origin[3]
 		local length=math.sqrt(dx*dx+dz*dz); if length<1 then dx,dz,length=0,1,1 end
@@ -21,12 +25,13 @@ return function(C)
 			if C.U.distance(center,p)<350 or Spring.GetPositionLosState(p[1],p[2],p[3]) then m.visits[i]=now end
 		end
 		local best,score,kind,reason,key
+		local value=0; for _,id in ipairs(ids) do local h,maxh=Spring.GetUnitHealth(id); value=value+C.classify.definition(Spring.GetUnitDefID(id)).cost*(h and maxh and h/math.max(1,maxh) or 1) end
+		local function setback(p) local penalty=0; for _,v in ipairs(m.failures or {}) do if now-v.time<120 and C.U.distance(p,v.point)<900 then penalty=penalty+(120-(now-v.time))*100 end end; return penalty end
 		if group~='SCOUT' then
-			local value=0; for _,id in ipairs(ids) do value=value+C.classify.definition(Spring.GetUnitDefID(id)).cost end
 			for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and v.defID then
 				local def=C.classify.definition(v.defID); local vulnerable=def.builder or def.range==0 or def.role=='ARTILLERY'
 				local risk=C.rules.risk(v.position,contacts,450)
-				if group=='MAIN' or vulnerable and risk<math.max(200,value*1.5) then
+				if (group=='MAIN' and risk<math.max(150,value*1.2) or group~='MAIN' and vulnerable and risk<math.max(200,value*1.5)) and setback(v.position)==0 then
 					local s=C.U.distance(center,v.position)+risk*(group=='MAIN' and .15 or 2)-(vulnerable and 500 or 0)
 					if not score or s<score then best=v.position; score=s; kind='ATTACK CONTACT'; reason='Attack currently visible enemy contact; native Fight chooses local targets.'; key='visual:'..v.id end
 				end
@@ -36,8 +41,9 @@ return function(C)
 			for i,p in ipairs(m.cells) do
 				local age=math.min(600,now-(m.visits[i] or -600)); local tried=now-(m.attempts[i] or -600)
 				local reserved=0; for other,mission in pairs(m.missions) do if other~=group and mission.cell==i and now-mission.time<90 then reserved=8000 end end
-				local s=C.U.distance(center,p)*.35-age*8+math.max(0,90-tried)*100+reserved+C.rules.risk(p,contacts,600)
-				if C.U.distance(center,p)>400 and (not score or s<score) then best=p; score=s; key=i; kind=group=='MAIN' and 'SEARCH ADVANCE' or 'SCOUT MAP'; reason='Search least recently observed map sector '..i..'; unseen space is unknown.' end
+				local risk=C.rules.risk(p,contacts,600)
+				local s=C.U.distance(center,p)*.35-age*8+math.max(0,90-tried)*100+reserved+risk*2+setback(p)
+				if risk<math.max(150,value*1.2) and C.U.distance(center,p)>400 and (not score or s<score) then best=p; score=s; key=i; kind=group=='MAIN' and 'SEARCH ADVANCE' or 'SCOUT MAP'; reason='Search least recently observed map sector '..i..'; unseen space is unknown.' end
 			end
 		end
 		if best then

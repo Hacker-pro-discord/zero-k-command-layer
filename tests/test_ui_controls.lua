@@ -26,3 +26,8 @@ find('ADD BUILD REQUEST').OnClick[1](); assert(C.recovery.armed)
 C.arsenal={status='Arsenal test',enroll=function(ids) C.launchers=ids end,stop=function() C.fireStopped=true end}
 C.ui.showManagement(); find('ARM SELECTED LAUNCHERS').OnClick[1](); assert(C.launchers[1]==1)
 find('STOP STRATEGIC FIRE').OnClick[1](); assert(C.fireStopped)
+
+C.economy={enabled=false,status='Economy test',start=function() C.economy.enabled=true; return true end,stop=function() C.economy.enabled=false end,enroll=function(ids) C.economyBuilders=ids end}
+C.ui.showManagement(); find('ECONOMY: OFF').OnClick[1](); assert(C.economy.enabled and C.settings.autoEconomy)
+find('ADD ECONOMY BUILDERS').OnClick[1](); assert(C.economyBuilders[1]==1)
+find('ECONOMY: ON').OnClick[1](); assert(not C.economy.enabled and not C.settings.autoEconomy)

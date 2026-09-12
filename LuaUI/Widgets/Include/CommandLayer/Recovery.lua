@@ -14,7 +14,7 @@ return function(C)
 		local n=0
 		for _,id in ipairs(ids or Spring.GetSelectedUnits()) do local v=C.classify.definition(Spring.GetUnitDefID(id))
 			if C.U.owned(id) and v.mobile and v.builder and (not automatic or not R.excluded[id]) then
-				C.registry.release({id},'RECOVERY ASSIGNMENT'); R.excluded[id]=nil; R.workers[id]=true; n=n+1
+				if C.economy then C.economy.release(id) end; C.registry.release({id},'RECOVERY ASSIGNMENT'); R.excluded[id]=nil; R.workers[id]=true; n=n+1
 			end
 		end
 		if n>0 then R.enabled=true; R.status='Enrolled '..n..' builders; existing queues preserved' end; return n>0
@@ -66,11 +66,20 @@ return function(C)
 		local ok=C.orders.service('recovery',id,cmd,params)
 		if not ok then R.tasks[id]=nil else C.debug.log('RECOVERY WORK','Builder '..id..': '..job) end; return ok
 	end
+	local function funding(def,economy)
+		local cost=(UnitDefs[def] or {}).metalCost or 0; local m=economy and economy.metal
+		if m and (m.income or 0)>0 then return math.min(cost,math.max(100,m.income*8),math.max(50,(m.storage or cost*2)*.4)) end
+		return cost
+	end
 	function R.reserveMetal()
-		if not R.enabled then return 0 end
-		local need=0
-		for _,job in ipairs(R.requests) do need=math.max(need,(UnitDefs[job.def] or {}).metalCost or 0) end
-		for _,job in pairs(R.missing) do need=math.max(need,(UnitDefs[job.def] or {}).metalCost or 0) end
+		if not R.enabled or not next(R.workers) then return 0 end
+		local need=0; local economy=C.observations.economy()
+		local function consider(job)
+			if Spring.GetPositionLosState(job.point[1],job.point[2],job.point[3]) and not C.observations.nearCombat(job.point,900) then
+				for id in pairs(R.workers) do if C.U.owned(id) and canBuild(id,job.def) then need=math.max(need,funding(job.def,economy)); break end end
+			end
+		end
+		for _,job in ipairs(R.requests) do consider(job) end; for _,job in pairs(R.missing) do consider(job) end
 		return need
 	end
 	function R.hold(p,now)
@@ -85,7 +94,7 @@ return function(C)
 		if not R.enabled then return end
 		if not C.U.delegationAllowed(C.settings) then R.stop(); R.assets={}; R.missing={}; R.sites={}; return end
 		local now=C.U.now(); if now-R.last<2 then return end; R.last=now
-		local own=Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}; local present={}; local damaged={}; local workerCount=0; for id in pairs(R.workers) do if C.U.owned(id) then workerCount=workerCount+1 end end
+		local own=Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}; local military=0; for _,u in ipairs(own) do local v=C.classify.definition(Spring.GetUnitDefID(u)); if v.mobile and not v.builder then military=military+1 end end; local autoGoal=C.economy and C.economy.enabled and (military>=20 and 2 or military>=5 and 1 or 0) or 2; local present={}; local damaged={}; local workerCount=0; for id in pairs(R.workers) do if C.U.owned(id) then workerCount=workerCount+1 end end
 		for _,id in ipairs(own) do if C.U.owned(id) then
 			local defID=Spring.GetUnitDefID(id); local def=UnitDefs[defID]; local p=C.U.position(id); local h,m,_,_,built=Spring.GetUnitHealth(id)
 			if p and infrastructure(def) and not R.ignored[id] then
@@ -93,7 +102,7 @@ return function(C)
 				R.assets[id]=record; present[key(defID,p)]=id
 				if h and m and (h<m*.95 or built and built<1) then damaged[#damaged+1]={id=id,point=p} end
 			end
-			if workerCount<2 and def.name=='cloakcon' and not R.workers[id] and not R.excluded[id] and (not built or built>=1) and #(Spring.GetCommandQueue(id,1) or {})==0 then if R.enroll({id},true) then workerCount=workerCount+1 end end
+			if workerCount<autoGoal and not (C.economy and C.economy.workers[id]) and def.name=='cloakcon' and not R.workers[id] and not R.excluded[id] and (not built or built>=1) and #(Spring.GetCommandQueue(id,1) or {})==0 then if R.enroll({id},true) then workerCount=workerCount+1 end end
 		end end
 		-- Native build snapping may differ by a few game units from a clicked point.
 		local function exists(job)
@@ -135,7 +144,7 @@ return function(C)
 			end
 		end
 		table.sort(available)
-		local budget=C.observations.economy(); budget=budget and budget.metal.current or 0
+		local economy=C.observations.economy(); local budget=economy and economy.metal.current or 0
 		local jobs={}; for _,job in ipairs(R.requests) do jobs[#jobs+1]=job end; for _,job in pairs(R.missing) do jobs[#jobs+1]=job end
 		for _,id in ipairs(available) do
 			local selected
@@ -153,7 +162,7 @@ return function(C)
 					elseif Spring.TestBuildOrder then
 						local allowed,feature=Spring.TestBuildOrder(job.def,job.point[1],job.point[2],job.point[3],job.facing)
 						if feature then local x,y,z=Spring.GetFeaturePosition(feature); local fk='wreck:'..feature; if x and Spring.GetPositionLosState(x,y,z) and not occupied[fk] and now>=(R.retry[fk] or 0) then selected={cmd=CMD.RECLAIM,params={feature+Game.maxUnits},key=fk} end
-						elseif allowed>0 and budget>=((UnitDefs[job.def] or {}).metalCost or 0)+100 then selected={cmd=-job.def,params={job.point[1],job.point[2],job.point[3],job.facing},key=k}; budget=budget-UnitDefs[job.def].metalCost end
+						elseif allowed>0 and budget>=funding(job.def,economy)+100 then selected={cmd=-job.def,params={job.point[1],job.point[2],job.point[3],job.facing},key=k}; budget=budget-funding(job.def,economy) end
 					end
 				end
 				if selected then break end

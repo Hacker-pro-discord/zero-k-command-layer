@@ -1,11 +1,20 @@
 return function(C)
-	local R={forces={},owner={},generation={},operations={},nextForce=0,nextOperation=0,activeForce=nil}
+	local R={forces={},owner={},generation={},birth={},operations={},nextForce=0,nextOperation=0,activeForce=nil}
 	function R.release(ids,reason)
 		for _,id in ipairs(ids) do
 			local old=R.operations[R.owner[id]]; if old then if C.orders then C.orders.clearCorrection(old,id) end; old.endReason=reason or 'PLAYER_OVERRIDE' end
 			R.generation[id]=(R.generation[id] or 0)+1; R.owner[id]=nil
 			for _,f in pairs(R.forces) do if f.members[id] then if C.settings.override=='suspend' and reason=='PLAYER_OVERRIDE' then f.suspended=f.suspended or {}; f.suspended[id]=true else f.members[id]=nil end; f.revision=f.revision+1; f.status=reason or 'PLAYER_OVERRIDE' end end
 		end
+	end
+	function R.born(id)
+		-- Native IDs are recycled. Start a new lifetime without restoring any old grant.
+		R.generation[id]=(R.generation[id] or 0)+1; R.birth[id]=R.generation[id]; R.owner[id]=nil
+		for _,f in pairs(R.forces) do if f.members[id] then f.members[id]=nil; f.revision=f.revision+1 end; if f.suspended then f.suspended[id]=nil end end
+		if C.orders then C.orders.pending[id]=nil end
+		for _,name in ipairs({'economy','recovery','arsenal','productionControl'}) do local service=C[name]; if service then
+			for _,field in ipairs({'excluded','workers','tasks','factories','created','assets','ignored','enrolled','shots'}) do if service[field] then service[field][id]=nil end end
+		end end
 	end
 	function R.claim(ids,op)
 		for _,id in ipairs(ids) do R.generation[id]=(R.generation[id] or 0)+1; R.owner[id]=op.id; op.generations[id]=R.generation[id] end

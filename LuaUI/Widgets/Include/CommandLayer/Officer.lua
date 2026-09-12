@@ -116,7 +116,7 @@ return function(C)
 		local f=C.registry.forces[forceID or A.recruitForce or C.registry.activeForce]
 		if not C.settings.autoAssign or not f or not C.U.assisted(C.settings) or not C.U.live() or not C.U.owned(id) then return false end
 		local d=C.classify.definition(Spring.GetUnitDefID(id)); local _,_,_,_,built=Spring.GetUnitHealth(id)
-		if not d.mobile or d.builder or built and built<1 or (C.registry.generation[id] or 0)>0 or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 then return false end
+		if not d.mobile or d.builder or built and built<1 or (C.registry.generation[id] or 0)>(C.registry.birth[id] or 0) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 then return false end
 		for _,other in pairs(C.registry.forces) do if other.members[id] then return false end end
 		f.members[id]=true -- Additional recruits do not change the frozen units of an existing approval.
 		if f.delegation and f.delegation.active then if C.domains then C.domains.add(f,id) else f.delegation.groups.MAIN[#f.delegation.groups.MAIN+1]=id; f.delegation.recruits=f.delegation.recruits or {}; f.delegation.recruits[id]=true end end

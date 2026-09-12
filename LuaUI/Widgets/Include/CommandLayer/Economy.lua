@@ -25,10 +25,12 @@ return function(C)
 	end
 	function E.workerNeed()
 		if not E.enabled then return 0 end
+		local military=0; for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID())) do local v=C.classify.definition(Spring.GetUnitDefID(id)); if v.mobile and not v.builder then military=military+1 end end
 		local n=0; for id in pairs(E.workers) do if C.U.owned(id) then n=n+1 end end
 		for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID())) do local d=UnitDefs[Spring.GetUnitDefID(id)]; if d and d.isFactory then for _,q in ipairs(Spring.GetFactoryCommands(id,-1) or {}) do if q.id and q.id<0 then local b=C.classify.definition(-q.id); if b.mobile and b.builder then n=n+1 end end end end end
 		local economy=C.observations.economy(); local income=economy and economy.metal.income or 0
-		return math.max(0,math.min(8,2+math.floor(income/12))-n)
+		local goal=military<5 and 1 or math.min(8,2+math.floor(income/20))
+		return math.max(0,goal-n)
 	end
 	local function site(id,def,origin)
 		if not can(id,def) then return end
@@ -62,7 +64,7 @@ return function(C)
 			end
 			if E.workers[id] and p and C.observations.nearCombat(p,600) and (not task or now-task.time>10) then
 				local danger; for _,c in ipairs(C.observations.snapshot().contacts) do if C.U.distance(p,c.position)<600 then danger=c.position; break end end
-				if danger then local dx,dz=p[1]-danger[1],p[3]-danger[3]; local length=math.max(1,math.sqrt(dx*dx+dz*dz)); local x=math.max(32,math.min(Game.mapSizeX-32,p[1]+dx/length*600)); local z=math.max(32,math.min(Game.mapSizeZ-32,p[3]+dz/length*600)); issue(id,Spring.Utilities.CMD.RAW_MOVE,{x,Spring.GetGroundHeight(x,z),z},'withdraw builder'); q=true end
+				if danger then if task then E.retry[task.key]=now+90 end; local dx,dz=p[1]-danger[1],p[3]-danger[3]; local length=math.max(1,math.sqrt(dx*dx+dz*dz)); local x=math.max(32,math.min(Game.mapSizeX-32,p[1]+dx/length*600)); local z=math.max(32,math.min(Game.mapSizeZ-32,p[3]+dz/length*600)); issue(id,Spring.Utilities.CMD.RAW_MOVE,{x,Spring.GetGroundHeight(x,z),z},'withdraw builder'); q=true end
 			end
 			if E.workers[id] then if not q then if task then E.retry[task.key]=now+10 end; E.tasks[id]=nil; available[#available+1]=id elseif E.tasks[id] then occupied[E.tasks[id].key]=true end end
 		end end
@@ -79,8 +81,11 @@ return function(C)
 				local factory=E.opening~='AUTO' and E.opening or Spring.GetGroundHeight(p[1],p[3])<-10 and 'factoryship' or 'factorycloak'
 				job=build(factory,'initial factory '..factory)
 			end
-			if not job and #factories>0 and (ei<mi*1.3+#factories*3 or energy<150) then
+			if not job and #factories>0 and (#mexes>=2 or energy<150 or ei<mi*.8) and (ei<mi*1.3+#factories*3 or energy<150) then
 				job=build(Spring.GetGroundHeight(p[1],p[3])<-5 and 'energywind' or 'energysolar','energy near '..math.floor(p[1]/600)..':'..math.floor(p[3]/600))
+			end
+			if not job and #factories>0 and metal>700 and mi>#factories*18 and ei>mi then
+				local first=UnitDefs[Spring.GetUnitDefID(factories[1])].name; job=build(first,'additional factory '..#factories)
 			end
 			if not job and #factories>0 and metal>40 then
 				local def=named('staticmex'); local best,score

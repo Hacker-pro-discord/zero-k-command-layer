@@ -38,7 +38,9 @@ return function(C)
 		if not C.U.live() then return nil end
 		local out={}
 		for _,resource in ipairs({'metal','energy'}) do local current,storage,pull,income,expense=Spring.GetTeamResources(Spring.GetMyTeamID(),resource); out[resource]={current=current,storage=storage,pull=pull,income=income,expense=expense} end
-		out.overdrive={energyIncome=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_energyIncome'),energyOverdrive=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_energyOverdrive')}
+		out.overdrive={energyChange=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_energyChange'),energyIncome=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_energyIncome'),energyOverdrive=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_energyOverdrive')}
+		-- Match the native Chili economy panel: remove OD transfer, restore gross generation.
+		if out.overdrive.energyIncome~=nil then out.energy.nativeIncome=out.energy.income; out.energy.income=out.energy.income-math.max(0,out.overdrive.energyChange or 0)+out.overdrive.energyIncome end
 		return out
 	end
 	return B

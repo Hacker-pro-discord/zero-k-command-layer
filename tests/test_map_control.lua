@@ -57,3 +57,13 @@ C.officer.cancelAll(); C.productionControl.set(false)
 C.startup=loadModule('Startup')(C); C.settings.privateSession=false
 Spring.GetPlayerList=function() return {0,1} end
 C.startup.boot(); assert(not C.startup.enabled and not C.settings.privateSession)
+
+-- A small force avoids charging a visually overwhelming defended position.
+Spring.GetPlayerList=function() return {0} end; C.settings.privateSession=true
+UnitDefs[8]={name='fort',isBuilding=true,metalCost=3000,maxWeaponRange=900}
+local threat={id=99,position={7000,0,7000},visibility='VISUAL',defID=8,role='OTHER'}
+local target,kind=C.mapControl.choose(f,'MAIN',{1,2},{threat},clock+40)
+assert(kind~='ATTACK CONTACT' and target and C.U.distance(target,threat.position)>600)
+C.mapControl.failed(f,clock+40,target)
+local nextTarget=C.mapControl.choose(f,'MAIN',{1,2},{},clock+41)
+assert(nextTarget and C.U.distance(nextTarget,target)>900,'A failed approach changes subsequent sector preference')

@@ -32,10 +32,11 @@ return function(C)
 				if def and (def.isFactory or def.isBuilding or v.builder or v.role=='ARTILLERY' or v.role=='SUPPORT') then
 					local p=C.U.position(id); local h,m=Spring.GetUnitHealth(id)
 					if p then
-						assets[#assets+1]={id=id,point=p,radius=(def.isFactory or def.isBuilding or v.builder) and 800 or 450}
+						local critical=def.isFactory or v.builder and v.cost>=800
+						assets[#assets+1]={id=id,point=p,critical=critical,radius=critical and 800 or def.isBuilding and 600 or 400}
 						if def.isFactory then local distance=C.U.distance(p,d.sector.origin); if not anchorDistance or distance<anchorDistance then anchor=p; anchorDistance=distance end end
 						local previous=r.health[id]
-						if h and previous and h<previous-1 then r.damage={point=C.U.copy(p),untilTime=now+12,id=id} end
+						if h and previous and h<previous-1 then r.damage={point=C.U.copy(p),untilTime=now+12,id=id,critical=critical} end
 						r.health[id]=h
 					end
 				end
@@ -48,12 +49,13 @@ return function(C)
 			for _,v in ipairs(contacts) do
 				if C.U.distance(asset.point,v.position)<asset.radius and C.formations.inCorridor(d.sector,v.position) then
 					local risk=C.rules.risk(v.position,contacts,600)
-					if risk>best then best=risk; threat={point=C.U.copy(v.position),risk=risk,asset=asset.id,reason=v.visibility=='VISUAL' and 'Observed armed enemies near an owned asset.' or 'Unidentified radar contacts near an owned asset; identity unknown.'} end
+					local priority=risk*(asset.critical and 1.5 or .7)
+					if priority>best then best=priority; threat={point=C.U.copy(v.position),risk=risk,asset=asset.id,critical=asset.critical,reason=v.visibility=='VISUAL' and 'Observed armed enemies near an owned asset.' or 'Unidentified radar contacts near an owned asset; identity unknown.'} end
 				end
 			end
 		end
 		if r.damage and now<r.damage.untilTime and C.formations.inCorridor(d.sector,r.damage.point) then
-			if not threat then threat={point=r.damage.point,risk=195,asset=r.damage.id,reason='Owned asset lost health; attacker identity and position are not inferred.'} end
+			if not threat then threat={point=r.damage.point,risk=195,asset=r.damage.id,critical=r.damage.critical,reason='Owned asset lost health; attacker identity and position are not inferred.'} end
 		end
 		if threat and C.recovery then C.recovery.threat(threat.point) end
 		local recoveryHold=not threat and r.threat and C.recovery and C.recovery.hold(r.threat.point,now)
@@ -81,13 +83,16 @@ return function(C)
 			r.reserveValue=value; r.state='RESERVE READY'
 		else
 			local committed=0; for _,id in ipairs(ids(f,'DEFENSE')) do committed=committed+cost(id) end
-			local desired=math.min(total*.7,math.max(r.targetValue,r.threat.risk*1.3))
+			local desired=math.min(total*(r.threat.critical and .7 or .35),math.max(r.targetValue,r.threat.risk*1.3))
 			local reserve=C.U.copy(d.groups.RESERVE)
 			for _,id in ipairs(reserve) do if eligible(f,id) and suitable(id) then transfer(d,id,'DEFENSE'); committed=committed+cost(id) end end
 			local candidates={}
 			for _,group in ipairs({'MAIN','RAID','SCOUT'}) do for _,id in ipairs(d.groups[group]) do if eligible(f,id) and suitable(id) then candidates[#candidates+1]=id end end end
 			table.sort(candidates,function(a,b) local x,y=C.U.distance(C.U.position(a),r.threat.point),C.U.distance(C.U.position(b),r.threat.point); return x==y and a<b or x<y end)
 			for _,id in ipairs(candidates) do if committed>=desired then break end; transfer(d,id,'DEFENSE'); committed=committed+cost(id) end
+			-- Release excess reinforcements when a threat shrinks; persistent remote contacts cannot accumulate the whole army.
+			local surplus=ids(f,'DEFENSE'); table.sort(surplus,function(a,b) return C.U.distance(C.U.position(a),r.threat.point)>C.U.distance(C.U.position(b),r.threat.point) end)
+			for _,id in ipairs(surplus) do if committed-cost(id)>=desired+math.max(65,desired*.1) then transfer(d,id,'MAIN'); committed=committed-cost(id) end end
 			r.committedValue=committed; r.reserveValue=0; r.state=recoveryHold and 'ESCORTING RECOVERY' or 'DEFENDING'; r.reason=recoveryHold and 'Reserve escort: repair/rebuild/reclaim in progress.' or r.threat.reason
 		end
 		local group=r.threat and 'DEFENSE' or 'RESERVE'; local selected=ids(f,group); table.sort(selected)

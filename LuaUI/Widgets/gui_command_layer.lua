@@ -64,7 +64,7 @@ function widget:MouseRelease(x,y,b) return C.input and C.input.release(x,y,b) en
 function widget:DrawWorld() if C.input then C.input.draw() end end
 function widget:KeyPress(key) if key==27 then if C.recovery then C.recovery.armed=nil end; if C.input then C.input.drag=nil; C.input.objective=nil end; if C.logistics then C.logistics.pending=nil end end end
 function widget:Update(dt) if not ready and C.ui then ready=C.ui.initialize() end; if ready then C.logistics.update(); C.observations.update(); C.enemyModel.update(); C.startup.boot(); C.startup.update(); C.recovery.update(); C.economy.update(); C.arsenal.update(); C.officer.update(); C.proposals.update(); C.advisor.update(); C.tactical.update(); C.productionControl.update(); C.ui.update(dt) end end
-function widget:UnitCreated(id,def,team,builder) if C.productionControl then C.productionControl.createdUnit(id,builder) end end
+function widget:UnitCreated(id,def,team,builder) if C.registry and C.U.owned(id) then C.registry.born(id) end; if C.productionControl then C.productionControl.createdUnit(id,builder) end end
 function widget:UnitFinished(id)
 	if C.officer then C.officer.autoAssign(id,C.productionControl and C.productionControl.created[id]) end
 	if C.productionControl then C.productionControl.created[id]=nil end

@@ -69,6 +69,7 @@ return function(C)
 	end
 	function T.beginRecovery(f,now,why)
 		local d=f.delegation; local center=C.U.center(C.officer.members(f)); local old=d.strategy
+		if f.mapControl and C.mapControl.failed then C.mapControl.failed(f,now,center) end
 		for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active and op.kind~='RESERVE' and op.kind~='DEFENSE' and op.kind~='AIR' and op.kind~='SEA' then C.officer.cancel(op.id) end end
 		for id,blocked in pairs(d.blocked) do if type(blocked)=='number' then d.blocked[id]=nil end end
 		local contacts=C.observations.snapshot().contacts; local along=math.min(d.sector.length,C.rules.progress(d.sector,center)+300)
@@ -169,6 +170,7 @@ return function(C)
 		local d=f.delegation; if not d or not d.active then return end
 		if not C.U.delegationAllowed(C.settings) then C.officer.setDelegated(f.id,false); return end
 		if #C.officer.members(f)==0 then if C.startup and C.startup.enabled and C.startup.forceID==f.id then d.active=false; d.state='WAITING FOR UNITS'; return end; C.officer.setDelegated(f.id,false); f.status='PLAYER_OVERRIDE'; return end
+		for _,list in pairs(d.groups) do for i=#list,1,-1 do if not f.members[list[i]] or not C.U.owned(list[i]) then table.remove(list,i) end end end
 		-- Congestion gets a bounded retry; manual/unknown queue overrides never do.
 		for id,untilTime in pairs(d.blocked) do if type(untilTime)=='number' and now>=untilTime then d.blocked[id]=nil end end
 		if C.defense then C.defense.tick(f,now,plan) end

@@ -60,7 +60,8 @@ return function(C)
 	end
 	function O.production(id,unit)
 		if not C.productionControl or not C.productionControl.valid(id,unit) then return false end
-		local cmd=-unit; local opts=C.U.options({shift=true})
+		-- Native factory build commands append by default. Shift multiplies quantity by five.
+		local cmd=-unit; local opts=C.U.options({})
 		O.sending=true
 		local handled=widgetHandler:UnitCommandNotify(id,cmd,{},opts)
 		local ok=false
