@@ -17,7 +17,7 @@ return function(C)
 	end
 	function R.finish(op,state)
 		op.active=false; op.state=state or 'COMPLETED'
-		if op.forceID and R.forces[op.forceID] then R.forces[op.forceID].status='ADVISER' end
+		if op.forceID and R.forces[op.forceID] then R.forces[op.forceID].status='ADVISER'; if op.kind=='PUSH' and op.state=='COMPLETED' then R.forces[op.forceID].objectiveReached=true end end
 		if op.proposalID and C.proposals and C.proposals.items[op.proposalID] then C.proposals.items[op.proposalID].state=op.state end
 		for _,id in ipairs(op.units) do if R.owner[id]==op.id then R.owner[id]=nil end end
 	end

@@ -8,7 +8,7 @@ return function(C)
 		if not plan then return nil end
 		if not intent.approved then C.registry.release(eligible,'PLAYER_OVERRIDE') end
 		local all=C.U.copy(eligible); for _,id in ipairs(ordinary) do all[#all+1]=id end
-		local op=C.registry.newOperation(all); op.plan=plan; op.command=intent.command or Spring.Utilities.CMD.RAW_MOVE; op.options=C.U.options(intent.options); op.mode=C.settings.privateSession and C.settings.mode or 'ARRIVAL'; op.state='EXECUTING'; op.forceID=intent.forceID; op.proposalID=intent.proposalID
+		local op=C.registry.newOperation(all); op.plan=plan; op.command=intent.command or Spring.Utilities.CMD.RAW_MOVE; op.options=C.U.options(intent.options); op.mode=C.settings.privateSession and (intent.mode or C.settings.mode) or 'ARRIVAL'; op.state='EXECUTING'; op.forceID=intent.forceID; op.proposalID=intent.proposalID
 		for _,id in ipairs(all) do
 			local p=plan.slots[id] or plan.center; p={p[1],Spring.GetGroundHeight(p[1],p[3]),p[3]}; op.slots[id]=p
 			C.orders.issue(op,id,op.command,p,op.options)
@@ -20,6 +20,15 @@ return function(C)
 		local ids={}; if not f then return ids end
 		for id in pairs(f.members) do if C.U.owned(id) and not (f.suspended and f.suspended[id]) then ids[#ids+1]=id end end
 		table.sort(ids); return ids
+	end
+	function A.executeProposal(p)
+		if p.state~='APPROVED' or not C.settings.privateSession then return false end
+		local f=C.registry.forces[p.forceID]; if not f then p.state='INVALIDATED'; return false end
+		p.state='EXECUTING'
+		local id=A.submit({approved=true,forceID=f.id,proposalID=p.id,plan=p.plan,command=CMD.FIGHT,options={},mode=p.mode},p.units)
+		if not id then p.state='ABORTED'; return false end
+		f.operation=id; f.status='EXECUTING'; C.registry.operations[id].kind=p.kind; C.input.preview=p.plan
+		return id
 	end
 	function A.assign(ids)
 		if not C.settings.privateSession or not C.U.live() then C.debug.log('LOCKED','Enable local/private testing before assigning an adviser.'); return nil end

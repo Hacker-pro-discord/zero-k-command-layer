@@ -25,7 +25,7 @@ function widget:Initialize()
 	local disabled=Spring.GetModOptions().disable_local_widgets
 	if disabled and disabled~='0' and disabled~=0 then widgetHandler:RemoveWidget(self); return end
 	C.logistics=module('Logistics')(C)
-	C.classify=module('UnitClassification')(C); C.registry=module('ForceRegistry')(C); C.formations=module('Formations')(C); C.orders=module('Orders')(C); C.officer=module('Officer')(C); C.input=module('Input')(C); C.observations=module('Observations')(C); C.proposals=module('ProposalService')(C)
+	C.classify=module('UnitClassification')(C); C.registry=module('ForceRegistry')(C); C.formations=module('Formations')(C); C.orders=module('Orders')(C); C.officer=module('Officer')(C); C.input=module('Input')(C); C.observations=module('Observations')(C); C.proposals=module('ProposalService')(C); C.advisor=module('TacticalAdvisor')(C)
 	C.ui=module('UI')(C); ready=C.ui.initialize()
 	WG.CommandLayer={version=1,SubmitPlayerIntent=C.officer.submit,IssueFormationMove=C.officer.submit,CancelOperation=C.officer.cancel,GetSelectedForce=function() return C.classify.filter(Spring.GetSelectedUnits()) end,ClassifyForce=C.classify.force,ApplyFormation=C.formations.plan,AssignAdvisedForce=C.officer.assign,SetObjective=C.officer.objective,ReleaseUnits=C.registry.release,ApproveProposal=C.proposals.approve,DeclineProposal=C.proposals.decline,GetForce=function(id) return C.U.copy(C.registry.forces[id]) end,GetProposals=function(id) local list={}; for _,p in pairs(C.proposals.items) do if not id or p.forceID==id then list[#list+1]=C.U.copy(p) end end; return list end,GetVisibleBattleState=C.observations.snapshot,GetEconomyState=C.observations.economy,GetOfficerStatus=function() return {message=C.debug.message} end}
 end
@@ -42,5 +42,5 @@ function widget:MouseMove(x,y) if C.input then C.input.move(x,y) end end
 function widget:MouseRelease(x,y,b) return C.input and C.input.release(x,y,b) end
 function widget:DrawWorld() if C.input then C.input.draw() end end
 function widget:KeyPress(key) if key==27 then if C.input then C.input.drag=nil; C.input.objective=nil end; if C.logistics then C.logistics.pending=nil end end end
-function widget:Update(dt) if ready then C.logistics.update(); C.observations.update(); C.officer.update(); C.proposals.update(); C.ui.update(dt) end end
+function widget:Update(dt) if ready then C.logistics.update(); C.observations.update(); C.officer.update(); C.proposals.update(); C.advisor.update(); C.ui.update(dt) end end
 function widget:Shutdown() if C.ui then C.ui.shutdown() end; WG.CommandLayer=nil end

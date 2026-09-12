@@ -45,6 +45,7 @@ return function(C)
 		gl.DepthTest(false); gl.Color(.25,.85,1,.8); gl.LineWidth(1)
 		for _,p in pairs(plan.slots) do gl.DrawGroundCircle(p[1],p[2]+3,p[3],12,12) end
 		gl.BeginEnd(GL.LINES,function() local m=plan.center; gl.Vertex(m[1],Spring.GetGroundHeight(m[1],m[3])+8,m[3]); gl.Vertex(m[1]+plan.front[1]*100,Spring.GetGroundHeight(m[1],m[3])+8,m[3]+plan.front[2]*100) end)
+		if plan.corridor then gl.Color(.9,.7,.2,.6); gl.BeginEnd(GL.LINE_LOOP,function() for _,p in ipairs(plan.corridor) do gl.Vertex(p[1],Spring.GetGroundHeight(p[1],p[3])+8,p[3]) end end) end
 		gl.Color(1,1,1,1); gl.DepthTest(false)
 	end
 	return I
