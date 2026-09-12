@@ -84,7 +84,7 @@ return function(C)
 			if not job and #factories>0 and (#mexes>=2 or energy<150 or ei<mi*.8) and (ei<mi*1.3+#factories*3 or energy<150) then
 				job=build(Spring.GetGroundHeight(p[1],p[3])<-5 and 'energywind' or 'energysolar','energy near '..math.floor(p[1]/600)..':'..math.floor(p[3]/600))
 			end
-			if not job and #factories>0 and metal>700 and mi>#factories*18 and ei>mi then
+			if not job and #factories>0 and metal>math.min(400,(resources.metal.storage or 1000)*.6) and mi>#factories*18 and ei>mi then
 				local first=UnitDefs[Spring.GetUnitDefID(factories[1])].name; job=build(first,'additional factory '..#factories)
 			end
 			if not job and #factories>0 and metal>40 then
@@ -98,9 +98,6 @@ return function(C)
 					if not Spring.GetPositionLosState(best.pos[1],best.pos[2],best.pos[3]) then job={cmd=Spring.Utilities.CMD.RAW_MOVE,p=best.pos,key=best.key}
 					else local ok,feature=Spring.TestBuildOrder(def,best.pos[1],best.pos[2],best.pos[3],0); if ok and ok>0 and not feature then job={cmd=-def,p={best.pos[1],best.pos[2],best.pos[3],0},key=best.key} else E.retry[best.key]=now+30 end end
 				end
-			end
-			if not job and #factories>0 and metal>1200 and mi>#factories*15 then
-				local first=UnitDefs[Spring.GetUnitDefID(factories[1])].name; job=build(first,'additional factory '..#factories)
 			end
 			if job then if issue(id,job.cmd,job.p,job.key) then occupied[job.key]=true; if job.cmd<0 then metal=metal-math.min(metal,(UnitDefs[-job.cmd].metalCost or 0)) end end end
 		end

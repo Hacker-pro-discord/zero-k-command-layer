@@ -47,3 +47,8 @@ assert(C.recovery.reserveMetal()==100 and C.recovery.reserveMetal()<500)
 clock=50; C.recovery.update(); assert(calls[#calls].id==20 and calls[#calls].cmd==-3)
 Spring.GetPositionLosState=function() return false end
 assert(C.recovery.reserveMetal()==0,'Unsurveyed reconstruction cannot freeze all production')
+
+Spring.GetPositionLosState=function() return true end
+C.observations.economy=function() return {metal={current=350,storage=500,income=40},energy={current=500,income=70}} end
+C.economy=loadModule('Economy')(C); C.economy.enroll({20}); queues[20]={}; clock=80; C.economy.update()
+assert(calls[#calls].id==20 and calls[#calls].cmd==-3,'Additional factories can start below the native storage cap')

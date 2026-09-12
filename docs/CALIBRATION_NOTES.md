@@ -1,6 +1,6 @@
 # Calibration candidate 1
 
-Status: regression-tested; native candidate evaluation pending. The baseline remains an immutable source snapshot in the isolated campaign directory. No holdout results have been used to select these changes.
+Status: 32 Lua regression suites and the native five-minute pilot passed; full candidate training evaluation is running. The pilot maintained one-unit native factory queues, reached five completed military units by 60 seconds, and recorded no controller errors. The baseline remains an immutable source snapshot in the isolated campaign directory. No holdout results have been used to select these changes.
 
 ## Findings and changes
 
@@ -17,3 +17,7 @@ The unfinished user-supplied counter matrix is not active in this candidate. See
 ## Validation limits
 
 Run the full training set against the same pinned stock Brutal build after the native pilot. Keep all wins, losses, time caps and errors. This bundle is not an ablation study: any overall change cannot be attributed to one fix alone, and Circuit's internal randomness can change its factory opening between repeated cases. Consistent performance must be measured, not inferred from regression success.
+
+## Candidate 2 storage correction
+
+Candidate 1 was stopped after the normal-start balances exposed an unreachable 700-metal expansion threshold. All completed preliminary cases and aborted cases are retained separately. Candidate 2 starts extra factory construction when stored metal exceeds the smaller of 400 metal or 60% of storage, with sufficient income/energy; native streaming pays the rest. A regression case uses 350 metal in 500 storage. The complete 32-case training set is restarted from this new source snapshot.

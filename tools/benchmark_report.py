@@ -13,6 +13,7 @@ def analyze(directory, output):
         old=json.loads(path.read_text(encoding='utf-8'))
         case=json.loads((path.parent/'case.json').read_text(encoding='utf-8'))
         s=summarize(path.parent,case,old['wallSeconds'],old['outcome']=='HARNESS_TIMEOUT')
+        if old['outcome'].startswith('ABORTED'): s['outcome']=old['outcome']; s['abortReason']=old.get('abortReason',''); path.write_text(json.dumps(s,indent=2),encoding='utf-8')
         events=[json.loads(line) for line in (path.parent/'events.jsonl').read_text(encoding='utf-8').splitlines() if line]
         clients=[e for e in events if e['kind']=='CLIENT']; metrics=[e for e in events if e['kind']=='METRIC']
         own=s['final'].get('0',{}); enemy=s['final'].get('1',{})
