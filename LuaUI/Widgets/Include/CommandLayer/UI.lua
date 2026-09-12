@@ -3,8 +3,12 @@ return function(C)
 	function UI.initialize()
 		local ch=WG.Chili; if not ch then return false end
 		UI.ch=ch
-		UI.window=ch.Window:New{name='CommandLayerWindow',caption='ZERO-K COMMAND LAYER',parent=ch.Screen0,x=C.settings.x,y=C.settings.y,width=350,height=190,draggable=true,resizable=false,padding={10,30,10,10}}
-		UI.status=ch.TextBox:New{parent=UI.window,x=0,y=0,width='100%',height=105,text='Officer ready.\nPlayer-directed control.\nLogistics and formations loading.'}
+		UI.window=ch.Window:New{name='CommandLayerWindow',caption='ZERO-K COMMAND LAYER',parent=ch.Screen0,x=C.settings.x,y=C.settings.y,width=370,height=270,draggable=true,resizable=false,padding={10,30,10,10}}
+		for i,count in ipairs({0,1,2,4}) do
+			local kind='MEX'..count
+			ch.Button:New{parent=UI.window,x=((i-1)%2)*170,y=math.floor((i-1)/2)*40,width=165,height=36,caption=count==0 and 'MEX ONLY' or 'MEX + '..count..' ENERGY',tooltip='Native Area Mex with '..count..' generator placement attempts per spot.',OnClick={function() C.logistics.arm(kind) end}}
+		end
+		UI.status=ch.TextBox:New{parent=UI.window,x=0,y=100,width='100%',height=110,text='Officer ready.'}
 		C.debug.log('LOAD','Officer / Chili shell loaded')
 		return true
 	end

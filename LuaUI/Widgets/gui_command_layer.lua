@@ -14,8 +14,10 @@ end
 function widget:Initialize()
 	local disabled=Spring.GetModOptions().disable_local_widgets
 	if disabled and disabled~='0' and disabled~=0 then widgetHandler:RemoveWidget(self); return end
+	C.logistics=module('Logistics')(C)
 	C.ui=module('UI')(C); ready=C.ui.initialize()
 	WG.CommandLayer={version=1,GetOfficerStatus=function() return {state='IDLE',message=C.debug.message} end}
 end
-function widget:Update(dt) if ready then C.ui.update() end end
+function widget:CommandNotify(id,params,opts) if C.logistics then C.logistics.notify(id,params,opts) end; return false end
+function widget:Update(dt) if ready then C.logistics.update(); C.ui.update() end end
 function widget:Shutdown() if C.ui then C.ui.shutdown() end; WG.CommandLayer=nil end
