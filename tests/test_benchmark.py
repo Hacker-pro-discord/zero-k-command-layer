@@ -9,6 +9,11 @@ b = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(b)
 
 class Results(unittest.TestCase):
+    def test_decision_timestamps(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'infolog.txt'
+            path.write_text('[f=0000060] [CommandLayer] ECONOMY: mex:25\n[f=60] unrelated text',encoding='utf-8')
+            self.assertEqual(b.records(path), [{'kind':'OFFICER_EVENT','time':2,'category':'ECONOMY','message':'mex:25'}])
     def result(self, extra='', complete=True):
         with tempfile.TemporaryDirectory() as directory:
             target=Path(directory)
