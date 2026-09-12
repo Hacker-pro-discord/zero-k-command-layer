@@ -90,7 +90,7 @@ return function(C)
 			text='Force '..f.id..' | '..(d.active and 'DELEGATED' or 'STOPPED')..' | '..d.state..'\nRules: '..d.version..' (experimental)\n\n'
 			if d.strategy then text=text..'Revision '..d.strategy.revision..': '..d.strategy.formation..', step '..math.floor(d.strategy.step)..', spacing '..math.floor(d.strategy.spacing)..', lane '..(d.strategy.side<0 and 'left' or 'right')..'\n' end
 			if d.recovery and d.recovery.evacuate then text=text..'Retreat: '..d.recovery.injured..' injured; '..#d.recovery.evacuate..' first wave; '..#d.recovery.cover..' temporary cover\n' end
-			for _,group in ipairs({'SCOUT','RAID','MAIN'}) do local n=0; for _,id in ipairs(d.groups[group]) do if f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) then n=n+1 end end; local decision=d.decisions and d.decisions[group]; text=text..group..': '..n..' available units'..(decision and ' | '..decision.state..'\n'..decision.reason:sub(1,100) or '')..'\n' end
+			for _,group in ipairs({'SCOUT','RAID','MAIN','RESERVE','DEFENSE'}) do local n=0; for _,id in ipairs(d.groups[group] or {}) do if f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) then n=n+1 end end; local decision=d.decisions and d.decisions[group]; text=text..group..': '..n..' available units'..(decision and ' | '..decision.state..'\n'..decision.reason:sub(1,100) or '')..'\n' end
 			text=text..'\nObserved contacts (radar stays UNKNOWN):\n'; local keys={}; for role in pairs(d.known or {}) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..role..': '..d.known[role]..'  ' end
 			text=text..'\n\nCurrent decision: '..(d.reason or '')..'\n\nMap Control searches the whole map; drawn-line mode holds at its objective. Manual orders release units. Recruitment follows AUTO ASSIGN.\nResearch rules: docs/TACTICAL_RESEARCH.md. No runtime web execution.'
 		end
@@ -99,10 +99,10 @@ return function(C)
 	function UI.showTactical()
 		if UI.tacticalDialog then UI.tacticalDialog:Dispose() end
 		UI.tacticalForce=C.registry.activeForce; UI.tacticalLast=nil
-		UI.tacticalDialog=UI.ch.Window:New{name='CommandLayerTactical',caption='Tactical Officer - live decisions',parent=UI.ch.Screen0,x=450,y=100,width=520,height=570,draggable=true,resizable=false,padding={12,30,12,12}}
-		UI.tacticalText=UI.ch.TextBox:New{parent=UI.tacticalDialog,x=0,y=0,width='100%',height=440,text=''}
-		button(UI.tacticalDialog,0,470,185,'STOP THIS FORCE','Revoke sustained authority.',function() C.officer.setDelegated(UI.tacticalForce,false) end)
-		button(UI.tacticalDialog,195,470,185,'CLOSE','Close details; keep current authority.',function() UI.tacticalDialog:Dispose(); UI.tacticalDialog=nil; UI.tacticalText=nil end)
+		UI.tacticalDialog=UI.ch.Window:New{name='CommandLayerTactical',caption='Tactical Officer - live decisions',parent=UI.ch.Screen0,x=450,y=100,width=560,height=690,draggable=true,resizable=false,padding={12,30,12,12}}
+		UI.tacticalText=UI.ch.TextBox:New{parent=UI.tacticalDialog,x=0,y=0,width='100%',height=550,text=''}
+		button(UI.tacticalDialog,0,590,185,'STOP THIS FORCE','Revoke sustained authority.',function() C.officer.setDelegated(UI.tacticalForce,false) end)
+		button(UI.tacticalDialog,195,590,185,'CLOSE','Close details; keep current authority.',function() UI.tacticalDialog:Dispose(); UI.tacticalDialog=nil; UI.tacticalText=nil end)
 		UI.updateTactical()
 	end
 	function UI.showObjectives()

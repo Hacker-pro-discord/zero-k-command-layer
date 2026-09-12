@@ -32,7 +32,8 @@ function widget:Update()
 		Spring.Echo('[CL-STRESS] t='..math.floor(now)..' alive='..alive..' moved32='..moved..' queued='..queued..' mean_forward='..math.floor(advance/math.max(1,alive)))
 		if d and f.mapControl then local minX,maxX,minZ,maxZ=Game.mapSizeX,0,Game.mapSizeZ,0; for id in pairs(f.members) do local x,_,z=Spring.GetUnitPosition(id); if x then minX=math.min(minX,x); maxX=math.max(maxX,x); minZ=math.min(minZ,z); maxZ=math.max(maxZ,z) end end; Spring.Echo('[CL-MAP] t='..math.floor(now)..' bounds='..math.floor(minX)..','..math.floor(maxX)..','..math.floor(minZ)..','..math.floor(maxZ)) end
 		if d then
-			for _,group in ipairs({'SCOUT','RAID','MAIN'}) do local n=0; for _,id in ipairs(d.groups[group]) do if f.members[id] and Spring.ValidUnitID(id) then n=n+1 end end; Spring.Echo('[CL-COMBAT-CLIENT] group='..group..' alive='..n..' op='..tostring(d.ops[group])) end
+			for _,group in ipairs({'SCOUT','RAID','MAIN','RESERVE','DEFENSE'}) do local n=0; for _,id in ipairs(d.groups[group] or {}) do if f.members[id] and Spring.ValidUnitID(id) then n=n+1 end end; Spring.Echo('[CL-COMBAT-CLIENT] group='..group..' alive='..n..' op='..tostring(d.ops[group])) end
+			if d.defense then local r=d.defense; local n,near=0,0; for _,group in ipairs({'RESERVE','DEFENSE'}) do for _,id in ipairs(d.groups[group] or {}) do local x,_,z=Spring.GetUnitPosition(id); if x and f.members[id] then n=n+1; local target=r.threat and r.threat.point or r.home; if (x-target[1])^2+(z-target[3])^2<500^2 then near=near+1 end end end end; Spring.Echo('[CL-DEFENSE] t='..math.floor(now)..' state='..r.state..' allocated='..n..' within500='..near..' value='..(r.reserveValue or 0)..' reason='..(r.reason or 'reserve')) end
 			local blocked=0; for _ in pairs(d.blocked) do blocked=blocked+1 end
 			Spring.Echo('[CL-COMBAT-CLIENT] t='..math.floor(now)..' state='..d.state..' blocked='..blocked..' main_op='..tostring(d.ops.MAIN)..' reason='..d.reason)
 		end

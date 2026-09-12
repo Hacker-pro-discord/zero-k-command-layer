@@ -38,7 +38,7 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
-## Automatic map-control AI (preview 8)
+## Automatic map-control AI (preview 9)
 
 With the widget enabled, **map-control AI now starts automatically in local single-player games**, including after `/luaui reload`. No unit selection, drawn line, private-session button or separate production click is required. The local single-player/autohost/spectator checks run before automatic startup.
 
@@ -59,6 +59,18 @@ Player-drawn objectives and explicit front controls revoke that force's map-wide
 This is autonomous military control plus factory queues, not a full economic AI or a guarantee of victory. Explicitly drawn-line forces hold at their final objective; map-control forces keep searching. Terrain and heavy-army congestion remain limitations.
 
 See [map-control evidence](docs/MAP_CONTROL_TEST.md) and [earlier startup/UI stress tests](docs/STARTUP_TEST.md).
+
+## Reserves and defensive response (preview 9)
+
+Autonomous forces now keep **approximately 20% of assigned military metal value** in suitable healthy ground combat units near a home factory (or the force's starting position). This starts at five units: one reserves, one scouts and three advance. Unit costs are indivisible, and a force lacking suitable defenders can miss the target. Artillery, builders and support are not used as disposable reserve troops.
+
+The Officer watches your factories, buildings, constructors/commander and vulnerable artillery/support. Observed armed enemies near these assets, unidentified radar contacts nearby, or a measured loss of asset health trigger defense. It commits the reserve first and redirects nearby compatible troops when more help is needed, targeting up to 70% of assigned value for the response. Damage without a visible attacker sends defenders to the damaged asset; it never reveals the attacker.
+
+After 20 seconds without a current threat, temporary defenders return to the main force and the reserve is rebuilt. Defense and reserve orders use native Fight, a ten-second redispatch cooldown and the existing validated executor. Manual releases, native retreat and Stop AI still win. Reserve/defense units are excluded from the field army's automatic fallback so a stalled push does not pull home defenders away.
+
+Set **Reserve combat value (%)** under **Settings > Interface > Command Layer** (0–40%; default 20%). Zero disables the standing reserve, not emergency defense. **AI DETAILS** shows RESERVE and DEFENSE counts, availability and the response reason. In drawn-line mode, defensive destinations still respect that force's authorized corridor; map-control mode can defend anywhere on the map.
+
+This is an experimental ground-defense response, not a guarantee against every attack; it does not yet choose specialized anti-air reserves or coordinate separate forces' defenses. See [defense test evidence](docs/DEFENSE_TEST.md).
 
 ## Logistics
 
@@ -133,7 +145,7 @@ This explicitly authorizes repeated actions for that force inside the drawn corr
 
 **AI DETAILS** shows group availability, observed composition, rule version, state and reasons. **STOP AI** revokes sustained authority. Manual orders release affected units. Changing the objective/front requires explicit delegation again. Future production joins only when **AUTO ASSIGN** is enabled.
 
-Delegation requires a private-session assertion **and a single-player roster**. Multiplayer delegation is disabled. There is no autonomous base expansion, factory construction, map-wide strategic targeting, reserve commitment, neural model or learned weights. Optional factory queue control is described below.
+Delegation requires a private-session assertion **and a single-player roster**. Multiplayer delegation is disabled. There is no autonomous base expansion, factory construction, neural model or learned weights. Optional factory queue control is described below.
 
 The widget does not browse the web or learn strategies during a match. The separate [research helper](docs/TACTICAL_RESEARCH.md) fetches public source metadata and writes review-only candidates. Those files cannot issue orders or automatically change doctrine rules.
 

@@ -3,6 +3,8 @@ function gadget:GetInfo() return {name='Command Layer Equal Armies Fixture',desc
 if not gadgetHandler:IsSyncedCode() then return end
 local armies={[0]={},[1]={}}; local value={[0]=0,[1]=0}; local losses={[0]=0,[1]=0}; local damage={[0]=0,[1]=0}; local active=false
 local roster={{'cloakraid',18},{'cloakriot',4},{'cloakskirm',4},{'cloakarty',4},{'cloakaa',2}}
+local defense=Spring.GetModOptions().cl_test_defense=='1'
+local homeFactory; local raiders={}
 local stress=Spring.GetModOptions().cl_test_stress=='1'
 if stress then roster={{'cloakraid',240},{'cloakriot',40},{'cloakskirm',40},{'cloakarty',40},{'cloakaa',40}} end
 local thousand=Spring.GetModOptions().cl_test_thousand=='1'
@@ -28,6 +30,7 @@ function gadget:GameFrame(frame)
 			for rank,item in ipairs(roster) do for i=1,item[2] do
 				index=index+1; local x=2400+(i-(item[2]+1)/2)*70
 				local z=team==0 and (2400-(rank-1)*110) or (4000+(rank-1)*110)
+				if defense and team==1 then x=6000+(i-10)*50; z=6000+(rank-1)*100 end
 				if stress then local columns=thousand and 40 or 25; x=600+((index-1)%columns)*(Game.mapSizeX-1200)/(columns-1); z=(team==0 and Game.mapSizeZ*.3 or Game.mapSizeZ*.75)+(team==0 and -1 or 1)*math.floor((index-1)/columns)*64 end
 				local id=Spring.CreateUnit(item[1],x,Spring.GetGroundHeight(x,z),z,team==0 and 0 or 2,team)
 				if id then armies[team][id]={x=x}; value[team]=value[team]+UnitDefs[Spring.GetUnitDefID(id)].metalCost end
@@ -38,15 +41,23 @@ function gadget:GameFrame(frame)
 		-- Keep both starting commanders: Zero-K defeat/storage logic depends on them.
 		active=true
 		report('SETUP equal_value='..tostring(value[0]==value[1])..' own_value='..value[0]..' enemy_value='..value[1]..' resource_grant_raw=15000 visible_storage=10000 each; units_per_side='..(startup and 0 or cover and 10 or early and 5 or thousand and 1000 or stress and 400 or 32))
-	elseif frame==90 and Spring.GetModOptions().cl_test_production=='1' then
+	elseif frame==90 and (defense or Spring.GetModOptions().cl_test_production=='1') then
 		for i,name in ipairs((stress or startup) and {'factorycloak','factoryveh','factoryshield','factoryhover'} or {'factorycloak'}) do
 			local x=800+i*600; local z=stress and 500 or 1400
 			local id=Spring.CreateUnit(name,x,Spring.GetGroundHeight(x,z),z,0,0)
+			if defense then homeFactory=id end
 			report('PRODUCTION_FIXTURE factory='..tostring(id)..' type='..name..'; not an equal-army comparison')
 		end
 	elseif frame==180 then
-		for id,p in pairs(armies[1]) do if early then Spring.GiveOrderToUnit(id,CMD.FIRE_STATE,{0},0) else Spring.GiveOrderToUnit(id,CMD.FIGHT,{p.x,Spring.GetGroundHeight(p.x,2400),2400},0) end end
+		for id,p in pairs(armies[1]) do if early or defense then Spring.GiveOrderToUnit(id,CMD.FIRE_STATE,{0},0) else Spring.GiveOrderToUnit(id,CMD.FIGHT,{p.x,Spring.GetGroundHeight(p.x,2400),2400},0) end end
 		report(early and 'PASSIVE_ENEMY hold fire for controlled recovery test' or 'ENEMY_ADVANCE native Fight issued')
+	elseif defense and frame==900 then
+		for i=1,8 do local x=1700+i*25; local z=1500; local id=Spring.CreateUnit('cloakraid',x,Spring.GetGroundHeight(x,z),z,0,1); if id then raiders[#raiders+1]=id; Spring.GiveOrderToUnit(id,CMD.FIGHT,{1400,Spring.GetGroundHeight(1400,1400),1400},0) end end
+		if homeFactory and Spring.ValidUnitID(homeFactory) then local h=Spring.GetUnitHealth(homeFactory); Spring.SetUnitHealth(homeFactory,h*.8) end
+		report('DEFENSE_RAID eight raiders near home factory; controlled initial damage; not an equal-army benchmark')
+	elseif defense and frame==1800 then
+		for _,id in ipairs(raiders) do if Spring.ValidUnitID(id) and not Spring.GetUnitIsDead(id) then Spring.DestroyUnit(id,false,true) end end
+		report('DEFENSE_CLEAR remaining scripted raiders removed; verify reserve rebuild after cooldown')
 	elseif early and (frame==900 or frame==1500) then
 		local raiders=0
 		for id in pairs(armies[0]) do if Spring.ValidUnitID(id) and not Spring.GetUnitIsDead(id) then

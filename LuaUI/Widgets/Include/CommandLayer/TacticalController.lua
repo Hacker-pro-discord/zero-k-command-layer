@@ -21,7 +21,7 @@ return function(C)
 		local d=f.delegation; if f.objectiveMode=='UTTER DESTRUCTION' then return end; local live=#C.officer.members(f)
 		local wanted={SCOUT=live>=5 and math.min(2,math.max(1,math.floor(live*.1))) or 0,RAID=live>=8 and math.min(4,math.floor(live*.2)) or 0}
 		for _,group in ipairs({'SCOUT','RAID'}) do
-			local count=#members(f,group)
+			local count=0; for _,id in ipairs(d.groups[group]) do if f.members[id] and C.U.owned(id) and not f.suspended[id] then count=count+1 end end -- Retry-blocked detachments still occupy their subgroup slots.
 			if count<wanted[group] then
 				for i=#d.groups.MAIN,1,-1 do
 					local id=d.groups.MAIN[i]; local role=C.classify.definition(Spring.GetUnitDefID(id)).role
@@ -60,15 +60,16 @@ return function(C)
 		return p
 	end
 	local function recoveryIDs(f)
-		local ids={}; local d=f.delegation
+		local ids={}; local d=f.delegation; local protected={}
+		for _,group in ipairs({'RESERVE','DEFENSE'}) do for _,id in ipairs(d.groups[group] or {}) do protected[id]=true end end
 		for _,id in ipairs(C.officer.members(f)) do
-			if not d.blocked[id] and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 then ids[#ids+1]=id end
+			if not protected[id] and not d.blocked[id] and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 then ids[#ids+1]=id end
 		end
 		return ids
 	end
 	function T.beginRecovery(f,now,why)
 		local d=f.delegation; local center=C.U.center(C.officer.members(f)); local old=d.strategy
-		for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active then C.officer.cancel(op.id) end end
+		for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active and op.kind~='RESERVE' and op.kind~='DEFENSE' then C.officer.cancel(op.id) end end
 		for id,blocked in pairs(d.blocked) do if type(blocked)=='number' then d.blocked[id]=nil end end
 		local contacts=C.observations.snapshot().contacts; local along=math.min(d.sector.length,C.rules.progress(d.sector,center)+300)
 		local side=old and -old.side or -1; local best=math.huge
@@ -78,7 +79,7 @@ return function(C)
 		end
 		local previousStep=old and old.step or f.objectiveMode=='SHOCK AND AWE' and 900 or f.objectiveMode=='UTTER DESTRUCTION' and 750 or C.rules.step
 		d.strategy={revision=(old and old.revision or 0)+1,formation='ASSAULT',spacing=math.min(256,(old and old.spacing or C.settings.spacing)*1.2),step=math.max(240,previousStep*.65),side=side,reason=why}
-		d.ops={}; d.failures={}; d.next={}; d.returning={}
+		d.ops={RESERVE=d.ops.RESERVE,DEFENSE=d.ops.DEFENSE}; d.failures={}; d.next={}; d.returning={}
 		d.recovery={phase='WITHDRAWING',target=C.rules.point(d.sector,math.max(0,C.rules.progress(d.sector,center)-450),0),created=now,attempts=0,next=now,reason=why}
 		local selection=C.retreatPriority.select(recoveryIDs(f))
 		-- Units pushed outside the authorized corridor must return, not invalidate
@@ -170,6 +171,7 @@ return function(C)
 		if #C.officer.members(f)==0 then if C.startup and C.startup.enabled and C.startup.forceID==f.id then d.active=false; d.state='WAITING FOR UNITS'; return end; C.officer.setDelegated(f.id,false); f.status='PLAYER_OVERRIDE'; return end
 		-- Congestion gets a bounded retry; manual/unknown queue overrides never do.
 		for id,untilTime in pairs(d.blocked) do if type(untilTime)=='number' and now>=untilTime then d.blocked[id]=nil end end
+		if C.defense then C.defense.tick(f,now,plan) end
 		rebalance(f)
 		local forceIDs=C.officer.members(f); local centerNow=C.U.center(forceIDs)
 		local progressNow=C.rules.progress(d.sector,centerNow)
@@ -183,8 +185,8 @@ return function(C)
 		-- Catch new recruits up without restarting the army's active movement.
 		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]
 		if d.recruits and main and main.active then
-			local recruits={}
-			for id in pairs(d.recruits) do if f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) and not C.registry.owner[id] then recruits[#recruits+1]=id end end
+			local recruits={}; local inMain={}; for _,id in ipairs(d.groups.MAIN) do inMain[id]=true end
+			for id in pairs(d.recruits) do if inMain[id] and f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) and not C.registry.owner[id] then recruits[#recruits+1]=id end end
 			table.sort(recruits)
 			if #recruits>0 then
 				local p=plan(f,recruits,main.plan.center,'MAIN',C.observations.snapshot().contacts)
@@ -243,6 +245,7 @@ return function(C)
 		end
 		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]
 		if main and main.active then d.state=main.state; d.reason=main.state=='ENGAGING' and 'Main force is exchanging fire under native unit AI; combat movement is not being overwritten.' or f.mapControl and (d.decisions.MAIN and d.decisions.MAIN.reason or 'Map-wide search and attack.') or 'Main force advancing toward its current phase line.' end
+		if d.defense and d.defense.threat then d.state='DEFENDING'; d.reason=d.defense.reason end
 		f.status='DELEGATED / '..d.state
 	end
 	function T.update()
