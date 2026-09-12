@@ -16,6 +16,7 @@ p.add_argument('--production', action='store_true', help='Production smoke varia
 p.add_argument('--stress', action='store_true', help='400 units per side and four production factories; not an equal-army benchmark')
 p.add_argument('--early-five', action='store_true', help='Five-unit early advance; controlled damage at 30s and healing at 50s, passive enemy')
 p.add_argument('--cover-retreat', action='store_true', help='Ten mixed units, controlled mixed injuries at 30s, passive enemy')
+p.add_argument('--map-control', action='store_true', help='Automatic map-wide startup against a scripted opponent')
 p.add_argument('--thousand', action='store_true', help='1,000 units per side with four factories')
 p.add_argument('--startup', action='store_true', help='Start with zero combat units, four factories, and use autonomous startup')
 a = p.parse_args()
@@ -49,7 +50,7 @@ IsHost=1; MyPlayerName=CommandLayerCombatTest; StartPosType=0; HostIP=127.0.0.1;
 [TEAM1] {{TeamLeader=0; AllyTeam=1; RGBColor=1 0.3 0.2; Side=Random;}}
 [ALLYTEAM0] {{NumAllies=0;}} [ALLYTEAM1] {{NumAllies=0;}}
 [AI0] {{Name=ScriptedFightOpponent; ShortName=NullAI; Version=0.1; Team=1; Host=0;}}
-[MODOPTIONS] {{startmetal=5000; startenergy=5000; cl_test_duration={a.seconds}; cl_test_exit={int(a.headless)}; cl_test_production={int(a.production or a.stress or a.startup)}; cl_test_stress={int(a.stress)}; cl_test_thousand={int(a.thousand)}; cl_test_startup={int(a.startup)}; cl_test_early={int(a.early_five or a.cover_retreat)}; cl_test_cover={int(a.cover_retreat)};}}
+[MODOPTIONS] {{startmetal=5000; startenergy=5000; cl_test_duration={a.seconds}; cl_test_exit={int(a.headless)}; cl_test_production={int(a.production or a.stress or a.startup)}; cl_test_stress={int(a.stress)}; cl_test_thousand={int(a.thousand)}; cl_test_startup={int(a.startup)}; cl_test_mapcontrol={int(a.map_control)}; cl_test_early={int(a.early_five or a.cover_retreat)}; cl_test_cover={int(a.cover_retreat)};}}
 }}'''
 (target/'test.txt').write_text(script, encoding='utf-8')
 engine = a.game/'engine/win64/2025.06.21'/('spring-headless.exe' if a.headless else 'spring.exe')

@@ -43,7 +43,7 @@ return function(C)
 			button(p,0,380,185,'REVIEW ARMY PUSH','Propose one Fight action by the entire assigned force. Draw an objective first. Approval required; delegation ends on approval.',function() C.advisor.ask(C.registry.activeForce,true,true) end)
 			button(p,190,380,185,'AUTO ASSIGN: '..(C.settings.autoAssign and (C.U.assisted(C.settings) and 'ON' or 'WAIT') or 'OFF'),'Recruit existing unassigned and newly completed military units into a fixed receiving force. Manual releases stay released. Existing approvals never expand.',function() C.officer.setAutoAssign(not C.settings.autoAssign); UI.build() end)
 			button(p,0,420,185,'PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Control existing idle factories. Requires local/private testing; works before your first military unit.',function() C.productionControl.set(not C.productionControl.enabled); UI.build() end)
-			button(p,190,420,185,'START MAP CONTROL','Single-player only: recruit military units, enable idle-factory production and advance toward the opposite map quarter, or your existing objective. Starts with the first unit. No enemy-location lookup. STOP AI cancels.',function() C.startup.start(); UI.build() end)
+			button(p,190,420,185,'START MAP CONTROL','Single-player map-wide control: recruit, produce, search successive sectors and attack visible enemies. Enabled automatically by default. STOP AI cancels for this session.',function() C.startup.start(); UI.build() end)
 			UI.lastDetail=nil
 			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=458,width=367,height=40,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
@@ -60,7 +60,7 @@ return function(C)
 		local controls=tostring(C.settings.autoAssign)..':'..tostring(C.settings.privateSession)..':'..tostring(C.productionControl.enabled)
 		if UI.tab=='OFFICER' and controls~=UI.controlState then UI.build() end
 		if UI.status then
-			local text='Formation: '..C.settings.formation..' | '..(C.settings.privateSession and C.settings.mode or 'ARRIVAL (public)')..'\nSpacing: '..C.settings.spacing..' | Constructors: '..tostring(C.settings.constructors)..'\n'..C.debug.message
+			local text=(C.startup and C.startup.enabled and 'AI: MAP-WIDE CONTROL' or 'Formation: '..C.settings.formation)..' | '..(C.settings.privateSession and C.settings.mode or 'ARRIVAL (public)')..'\nSpacing: '..C.settings.spacing..' | Constructors: '..tostring(C.settings.constructors)..'\n'..C.debug.message
 			if C.productionControl then text=text..'\nProduction: '..C.productionControl.status end
 			if UI.lastStatus~=text then UI.status:SetText(text); UI.lastStatus=text end
 		end
@@ -92,7 +92,7 @@ return function(C)
 			if d.recovery and d.recovery.evacuate then text=text..'Retreat: '..d.recovery.injured..' injured; '..#d.recovery.evacuate..' first wave; '..#d.recovery.cover..' temporary cover\n' end
 			for _,group in ipairs({'SCOUT','RAID','MAIN'}) do local n=0; for _,id in ipairs(d.groups[group]) do if f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) then n=n+1 end end; local decision=d.decisions and d.decisions[group]; text=text..group..': '..n..' available units'..(decision and ' | '..decision.state..'\n'..decision.reason:sub(1,100) or '')..'\n' end
 			text=text..'\nObserved contacts (radar stays UNKNOWN):\n'; local keys={}; for role in pairs(d.known or {}) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..role..': '..d.known[role]..'  ' end
-			text=text..'\n\nCurrent decision: '..(d.reason or '')..'\n\nFinal line: hold under control. Manual orders release units. Recruitment follows AUTO ASSIGN.\nResearch rules: docs/TACTICAL_RESEARCH.md. No runtime web execution.'
+			text=text..'\n\nCurrent decision: '..(d.reason or '')..'\n\nMap Control searches the whole map; drawn-line mode holds at its objective. Manual orders release units. Recruitment follows AUTO ASSIGN.\nResearch rules: docs/TACTICAL_RESEARCH.md. No runtime web execution.'
 		end
 		if text~=UI.tacticalLast then UI.tacticalText:SetText(text); UI.tacticalLast=text end
 	end

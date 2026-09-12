@@ -1,12 +1,20 @@
 -- Explicit session-only map-control authority. No enemy coordinates are consulted.
 return function(C)
-	local S={enabled=false,last=-100}
+	local S={enabled=false,last=-100,booted=false}
+	function S.boot()
+		if S.booted or not C.U.live() then return end
+		S.booted=true
+		local gate=C.U.copy(C.settings); gate.privateSession=true
+		if C.settings.autoPlay and C.U.delegationAllowed(gate) then C.officer.setSession(true); S.start() end
+	end
 	function S.stop(forceID)
-		if not forceID or S.forceID==forceID then S.enabled=false end
+		if not forceID or S.forceID==forceID then S.enabled=false; S.booted=S.booted or C.U.live() end
 	end
 	function S.start()
 		if not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Enable LOCAL / PRIVATE TEST SESSION first; autonomous startup is single-player only.'); return false end
 		local f=C.officer.ensureForce(); if not f then return false end
+		if f.delegation and f.delegation.active then C.officer.setDelegated(f.id,false) end
+		f.objective=nil; f.mapControl=true; if C.mapControl then C.mapControl.initialize(f) end
 		C.officer.setAutoAssign(true); S.forceID=f.id; S.enabled=true; S.last=-100
 		C.productionControl.set(true)
 		S.update(); return true
@@ -23,20 +31,7 @@ return function(C)
 		local f=C.registry.forces[S.forceID]; if not f then S.stop(); return end
 		local ids=C.officer.members(f); if #ids==0 then f.status='WAITING FOR FIRST MILITARY UNIT'; return end
 		if f.delegation and f.delegation.active then return end
-		if not f.objective then
-			local base=C.U.center(ids); local dx,dz=Game.mapSizeX/2-base[1],Game.mapSizeZ/2-base[3]
-			-- Choose the long cardinal approach toward the opposite map quarter.
-			local a,b
-			if math.abs(dx)>math.abs(dz) then
-				local x=Game.mapSizeX*(dx>=0 and .8 or .2)
-				a={x,0,Game.mapSizeZ*.1}; b={x,0,Game.mapSizeZ*.9}
-			else
-				local z=Game.mapSizeZ*(dz>=0 and .8 or .2)
-				a={Game.mapSizeX*.1,0,z}; b={Game.mapSizeX*.9,0,z}
-			end
-			C.officer.objective(f.id,{a,b})
-		end
-		f.objectiveMode='WIN OBJECTIVE'
+		f.mapControl=true; f.objectiveMode='MAP CONTROL'
 		if not C.officer.setDelegated(f.id,true) then S.stop() end
 	end
 	return S

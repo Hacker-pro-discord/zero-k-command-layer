@@ -133,13 +133,13 @@ return function(C)
 		local f=C.registry.forces[forceID]
 		if not f or not ({ADVANCE=true,HOLD=true,FLANK_LEFT=true,FLANK_RIGHT=true})[front] then return false end
 		if f.delegation and f.delegation.active then A.setDelegated(forceID,false) end; if f.operation then A.cancel(f.operation) end
-		f.front=front; f.revision=f.revision+1; f.lastSuggestion=-100
+		f.mapControl=false; f.front=front; f.revision=f.revision+1; f.lastSuggestion=-100
 		C.debug.log('FRONT',front..': ask Officer to review the next bounded action.'); return true
 	end
 	function A.objective(forceID,points)
 		local f=C.registry.forces[forceID]; if not f or not points or #points<2 then return false end
 		for _,p in ipairs(points) do if not C.U.point(p) then return false end end
-		if f.delegation and f.delegation.active then A.setDelegated(forceID,false) end; if f.operation then A.cancel(f.operation) end; f.lastSuggestion=-100; f.objectiveReached=false; f.objective=C.U.copy(points); f.revision=f.revision+1; C.debug.log('OBJECTIVE','Force '..f.id..' objective set. Await approval; no orders issued.'); return true
+		if f.delegation and f.delegation.active then A.setDelegated(forceID,false) end; f.mapControl=false; if f.operation then A.cancel(f.operation) end; f.lastSuggestion=-100; f.objectiveReached=false; f.objective=C.U.copy(points); f.revision=f.revision+1; C.debug.log('OBJECTIVE','Force '..f.id..' objective set. Await approval; no orders issued.'); return true
 	end
 	function A.cycle(step)
 		local n=C.registry.nextForce; if n>0 then C.registry.activeForce=((C.registry.activeForce or 1)-1+step)%n+1 end
@@ -179,7 +179,7 @@ return function(C)
 					if stalled then release=true; C.debug.log('STALLED','Released positioning for unit '..id) end
 					if release then
 						C.orders.clearCorrection(op,id)
-						if not arrived then op.endReason=op.endReason or 'ABORTED'; if op.grant then local f=C.registry.forces[op.forceID]; if f and f.delegation then f.delegation.blocked[id]=stalled and now+30 or true end end end
+						if not arrived then op.endReason=op.endReason or 'ABORTED'; if op.grant then local f=C.registry.forces[op.forceID]; if f and f.delegation then f.delegation.blocked[id]=(stalled or f.mapControl and #queue==0) and now+30 or true; if f.mapControl then C.debug.log('MAP_QUEUE',id..': '..(#queue==0 and 'native queue ended; retry after 30 seconds' or 'changed queue; preserve external control')) end end end end
 						if C.registry.owner[id]==op.id then C.registry.owner[id]=nil end
 					else
 						remaining=remaining+1

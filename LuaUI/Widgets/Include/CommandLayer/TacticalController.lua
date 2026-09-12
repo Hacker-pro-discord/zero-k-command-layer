@@ -3,10 +3,11 @@ return function(C)
 	local T={last=-100}
 	function T.start(f)
 		local ids={}; for _,id in ipairs(C.officer.members(f)) do if not C.classify.definition(Spring.GetUnitDefID(id)).builder then ids[#ids+1]=id end end; local sector=C.rules.sector(ids,f.objective)
+		if f.mapControl and C.mapControl and #ids>0 then sector=C.mapControl.sector(f,ids,{Game.mapSizeX/2,0,Game.mapSizeZ/2}) end
 		if not sector then return false,'Draw an objective line at least 128 units from the force.' end
 		f.grant=(f.grant or 0)+1
-		f.delegation={token=f.grant,active=true,sector=sector,groups=f.objectiveMode=='UTTER DESTRUCTION' and {SCOUT={},RAID={},MAIN=ids} or C.rules.groups(ids),ops={},next={},visits={},blocked={},failures={},returning={},decisions={},state='ASSEMBLING',reason='Explicit Scout + Raid + Push delegation.',version=C.rules.version}
-		C.input.preview={slots={},zones={},gesture=f.objective,center=sector.goal,front={sector.ux,sector.uz},corridor=sector.corridor}
+		f.delegation={token=f.grant,active=true,sector=sector,groups=f.objectiveMode=='UTTER DESTRUCTION' and {SCOUT={},RAID={},MAIN=ids} or C.rules.groups(ids),ops={},next={},visits={},blocked={},failures={},returning={},decisions={},state='ASSEMBLING',reason='Explicit Scout + Raid + Push delegation.',version=f.mapControl and 'map-search-1' or C.rules.version}
+		C.input.preview={slots={},zones={},gesture=f.mapControl and {sector.origin,sector.goal} or f.objective,center=sector.goal,front={sector.ux,sector.uz},corridor=sector.corridor}
 		return true
 	end
 	local function members(f,group)
@@ -33,7 +34,7 @@ return function(C)
 		end
 	end
 	local function plan(f,ids,target,group,contacts)
-		local s=f.delegation.sector; local settings=C.U.copy(C.settings); settings.formation=group=='MAIN' and (f.delegation.strategy and f.delegation.strategy.formation or f.formation) or 'LINE'
+		local s=f.mapControl and C.mapControl and C.mapControl.sector(f,ids,target) or f.delegation.sector; local settings=C.U.copy(C.settings); settings.formation=group=='MAIN' and (f.delegation.strategy and f.delegation.strategy.formation or f.formation) or 'LINE'
 		if f.delegation.strategy then settings.spacing=f.delegation.strategy.spacing end
 		local riots=0; for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and v.role=='RIOT' then riots=riots+1 end end
 		if riots>=2 then settings.spacing=math.min(256,settings.spacing*1.5) end
@@ -149,6 +150,8 @@ return function(C)
 				d.recoverAfter=now+30; d.recovery=nil; d.state='ADVANCING'; d.reason='Regroup complete: shorter phases, wider role zones and revised approach lane.'
 				C.debug.log('ADAPT_RESUME',d.reason); f.status='DELEGATED / ADVANCING'; return
 			elseif not r.ready and r.attempts<3 then r.phase='REFORMING'; r.target=C.U.center(ids)
+			elseif f.mapControl and not r.ready and C.rules.health(ids)>=.5 then
+				d.recovery=nil; d.review={time=now,progress=C.rules.progress(d.sector,C.U.center(ids)),count=#ids}; d.recoverAfter=now+45; d.ops={}; d.next={}; d.failures={}; d.state='SEARCHING'; d.reason='Recovery route exhausted; select a different map sector after bounded retries.'; C.debug.log('MAP_RECOVERY',d.reason); return
 			else r.next=now+20; d.reason=r.ready and 'Regrouped; wait for average health above 50% before another advance.' or 'Recovery route repeatedly failed; holding without order spam. A new objective can restart movement.' end
 		end
 		if r.phase~='HOLDING' and not r.operation and now>=r.next then
@@ -173,7 +176,7 @@ return function(C)
 		d.review=d.review or {time=now,progress=progressNow,count=#forceIDs}
 		if progressNow>d.review.progress+128 then d.review.time=now; d.review.progress=progressNow end
 		if d.recovery then T.recoveryTick(f,now); return end
-		if not f.objectiveReached and f.front~='HOLD' and now>=(d.recoverAfter or 0) and (now-d.review.time>=60 or #forceIDs<d.review.count*.75 or C.rules.health(forceIDs)<.4) then
+		if not f.objectiveReached and f.front~='HOLD' and now>=(d.recoverAfter or 0) and (not f.mapControl and now-d.review.time>=60 or #forceIDs<d.review.count*.75 or C.rules.health(forceIDs)<.4) then
 			local why=#forceIDs<d.review.count*.75 and 'More than 25% of the review force was lost/released.' or C.rules.health(forceIDs)<.4 and 'Average force health below 40%.' or 'No substantial forward progress for 60 game seconds.'
 			T.beginRecovery(f,now,why); T.recoveryTick(f,now); return
 		end
@@ -193,6 +196,7 @@ return function(C)
 		d.observed=snapshot.time; d.known={}; for _,v in ipairs(contacts) do d.known[v.role]=(d.known[v.role] or 0)+1 end
 		for _,group in ipairs({'SCOUT','RAID','MAIN'}) do
 			local ids=members(f,group); local op=d.ops[group] and C.registry.operations[d.ops[group]]
+			if f.mapControl and C.mapControl and #ids>0 then C.mapControl.review(f,group,ids,op,contacts,now); if (d.failures[group] or 0)>=3 then d.failures[group]=0; d.next[group]=now+15 end end
 			if #ids==0 then d.decisions[group]={state='UNAVAILABLE',reason='No eligible surviving units in this detachment.',time=now} elseif op and op.active and d.decisions[group] then d.decisions[group].state=op.state end
 			if op and not op.active and not op.accounted then
 				op.accounted=true
@@ -207,6 +211,8 @@ return function(C)
 					local target,reason,kind,visit; local returning=false
 					if retreat then
 						target=C.rules.point(s,math.max(0,C.rules.progress(s,center)-400),0); reason='Damaged/exposed light detachment returns inside its assigned corridor.'; kind='WITHDRAW'; returning=true
+					elseif f.mapControl and C.mapControl then
+						target,kind,reason=C.mapControl.choose(f,group,ids,contacts,now)
 					elseif group=='SCOUT' then
 						target,visit=C.rules.scout(s,ids,contacts,d.visits,now); reason='Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.'; kind='SCOUT'
 					elseif group=='RAID' then
@@ -236,7 +242,7 @@ return function(C)
 			elseif (d.failures[group] or 0)>=3 then d.reason=group..' paused after three failed movements. Re-delegate after checking terrain.'; d.decisions[group]={state='PAUSED',reason=d.reason,time=now} end
 		end
 		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]
-		if main and main.active then d.state=main.state; d.reason=main.state=='ENGAGING' and 'Main force is exchanging fire under native unit AI; combat movement is not being overwritten.' or 'Main force advancing toward its current phase line.' end
+		if main and main.active then d.state=main.state; d.reason=main.state=='ENGAGING' and 'Main force is exchanging fire under native unit AI; combat movement is not being overwritten.' or f.mapControl and (d.decisions.MAIN and d.decisions.MAIN.reason or 'Map-wide search and attack.') or 'Main force advancing toward its current phase line.' end
 		f.status='DELEGATED / '..d.state
 	end
 	function T.update()

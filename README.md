@@ -38,24 +38,27 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
-## Fast autonomous start (preview 7)
+## Automatic map-control AI (preview 8)
 
-In a local skirmish, open **OFFICER**:
+With the widget enabled, **map-control AI now starts automatically in local single-player games**, including after `/luaui reload`. No unit selection, drawn line, private-session button or separate production click is required. The local single-player/autohost/spectator checks run before automatic startup.
 
-1. Enable **LOCAL / PRIVATE TEST SESSION**.
-2. Click **START MAP CONTROL**.
+It recruits your eligible military units, queues idle factories and searches successive sectors across the whole map. Scouts and harassment groups choose separate sectors; the main force searches too and redirects to currently visible enemies. It does not stop at the first line. Completed searches pick another sector; native empty queues can retry after a cooldown rather than permanently abandoning those units. Unexpected nonempty queues and manual releases remain protected.
 
-This creates a receiving force, enables automatic recruitment and idle-factory production, and starts movement with the first eligible military unit. You do not need to preselect an army or draw a line. Without an existing objective, it uses a broad corridor toward the opposite map quarter, derived from map geometry and your own units, not hidden enemy locations. The first five units prioritize raider production; scouts split off at five units and harassment groups at eight. New recruits receive catch-up movements while the main army is still advancing.
+The search planner uses a 5×5 map grid, visit/attempt history, group reservations and legitimately observed contacts. It does not know where hidden enemies are. RAID prefers vulnerable observed contacts; MAIN uses native Fight toward observed positions. Arrival and no-contact timeouts allow new objectives; native combat and damaged-unit recovery still have priority. This is an experimental heuristic, not a strategic search guarantee.
+
+**STOP AI** stops the active force and production for this session. To prevent automatic startup in future sessions/reloads, disable **Automatically start map-control AI in local single-player** under Settings > Interface > Command Layer, or disable the widget. **START MAP CONTROL** explicitly restarts it. Automatic startup is a saved preference; active assignments, operations and approvals are still not serialized.
+
+Player-drawn objectives and explicit front controls revoke that force's map-wide mode and retain bounded corridor behavior. This gives you an explicit way to direct one force while using autonomous search elsewhere.
 
 **PRODUCTION: ON/OFF** is directly visible on the Officer panel and can be enabled even before any military unit exists. It controls eligible idle factories, including newly completed factories. Manual factory commands release that factory. It preserves existing queues and does not place factories, constructors, mexes or economy buildings.
 
 **AUTO ASSIGN: WAIT** means local testing is disabled; **ON** means recruitment is enabled. It creates a receiving force and checks existing unassigned and newly completed military units once per game second. Previously manually released units remain released. Toggling recruitment on pins the receiving force; merely cycling the viewed force does not redirect recruits. Production recruits retain their production-force association.
 
-**STOP AI** stops future combat automation and production for the active force and prevents automatic restart. Existing native orders can finish; issue a manual Stop to halt those too. Changing objectives, fronts or cancelling delegation retains player priority. Autonomous authority is never saved across LuaUI reloads/matches. Manual orders always override it.
+**STOP AI** stops future combat automation and production for the active force and prevents automatic restart. Existing native orders can finish; issue a manual Stop to halt those too. Changing objectives, fronts or cancelling delegation retains player priority. Individual grants are never saved; the enabled automatic-start preference creates a fresh grant after local-game checks on reload/new matches. Manual orders always override it.
 
-This is autonomous military control plus factory queues, not a full economic AI or a guarantee of map-wide victory. It holds at the final objective. Replace its objective if the map's terrain makes the default approach unsuitable.
+This is autonomous military control plus factory queues, not a full economic AI or a guarantee of victory. Explicitly drawn-line forces hold at their final objective; map-control forces keep searching. Terrain and heavy-army congestion remain limitations.
 
-See [startup, UI and stress-test evidence](docs/STARTUP_TEST.md).
+See [map-control evidence](docs/MAP_CONTROL_TEST.md) and [earlier startup/UI stress tests](docs/STARTUP_TEST.md).
 
 ## Logistics
 
@@ -180,7 +183,7 @@ These are transparent tactical adaptations, not learned or globally optimal stra
 
 Move the Chili window by its title bar. Settings and bindable actions are under **Settings > Interface > Command Layer**: spacing, rank/support/artillery depth, constructors, overlays, maintenance mode, approval lifetime and suggestion interval. Use Zero-K's normal hotkey interface; existing keys are not overwritten. UI sizing follows the global Chili scale.
 
-Settings and window position persist. **Assignments, proposals, operations and private/delegated authority do not.** Formation mode starts OFF after reload. Choose the adviser formation before assignment; reassign to capture a different preset.
+Settings and window position persist. **Assignments, proposals, operations and private/delegated authority do not.** The automatic-start preference can create fresh local single-player map authority on load. Formation mode starts OFF after reload. Choose the adviser formation before assignment; reassign to capture a different preset.
 
 Cancel/Stop/OFF ends future Officer control. It does **not** erase ordinary destination orders already in native queues. Issue a normal Stop/manual command if you also want units to stop moving. Optional suspension requires Resume, which restores advice only.
 
@@ -207,7 +210,7 @@ The production scheduler now serves every controlled idle factory per pass inste
 
 ## Test evidence and limitations
 
-- Twenty-four Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
+- Twenty-five Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
 - Preview 2 includes a separate 30-game-second headless engine smoke test. The 400-unit and new approval/recruitment cases are mocked Lua regressions, not a demonstrated 400-unit live battle. The two new buttons have not yet had visual in-game interaction testing.
 - Isolated engine tests verified native orders, actual movement, repeated scout/raid/main operations and cancellation.
 - A visible equal-army test started with 32 identical units and 3,010 metal of combat value each. The corrected two-minute run ended with **nine units and 910 value each**: a stalemate, not a victory or completed objective. The opponent was scripted native Fight, not a full Circuit AI match.
