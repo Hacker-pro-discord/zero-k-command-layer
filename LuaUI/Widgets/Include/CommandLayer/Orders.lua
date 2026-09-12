@@ -3,6 +3,7 @@ return function(C)
 	local function same(a,b) if not a or not b or #a~=#b then return false end; for i=1,#a do if math.abs(a[i]-b[i])>.1 then return false end end; return true end
 	function O.native(id,params,opts)
 		if not C.U.live() then return false end
+		C.registry.release(Spring.GetSelectedUnits(),'PLAYER_OVERRIDE')
 		O.sending=true; local used=widgetHandler:CommandNotify(id,params,opts); if not used then Spring.GiveOrder(id,params,opts.coded) end; O.sending=false; return true
 	end
 	function O.unit(op,id,cmd,params,opts)
@@ -32,14 +33,25 @@ return function(C)
 		end
 		return O.unit(op,id,sendCmd,params,sendOpts)
 	end
+	function O.clearCorrection(op,id)
+		local t=op.tracking[id]; if not t or not t.correctionTag then return end
+		for _,q in ipairs(Spring.GetCommandQueue(id,24) or {}) do
+			if q.tag==t.correctionTag and q.id==Spring.Utilities.CMD.RAW_MOVE and t.correction and C.U.distance(q.params,t.correction)<2 then
+				O.unit(op,id,CMD.REMOVE,{q.tag},C.U.options({})); break
+			end
+		end
+		t.correction=nil; t.correctionTag=nil
+	end
 	function O.event(id,cmd,params,fromSynced)
 		local list=O.pending[id] or {}
 		for i=#list,1,-1 do local p=list[i]; if p.untilTime<C.U.now() then table.remove(list,i) elseif p.cmd==cmd and same(p.params,params) then table.remove(list,i); return true end end
 		return fromSynced==true -- Native gadget orders are not player override.
 	end
 	function O.budget()
-		local now=C.U.now(); O.tokens=math.min(60,O.tokens+(now-O.last)*60); O.last=now
-		if O.tokens<1 then return false end; O.tokens=O.tokens-1; return true
+		local now=C.U.now(); O.corrections=O.corrections or {}
+		while O.corrections[1] and O.corrections[1]<=now-1 do table.remove(O.corrections,1) end
+		if #O.corrections>=60 then return false end
+		O.corrections[#O.corrections+1]=now; return true
 	end
 	return O
 end

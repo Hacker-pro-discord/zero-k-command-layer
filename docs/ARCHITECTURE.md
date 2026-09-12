@@ -7,7 +7,7 @@ Player and proposal UI -> Officer -> pure Formations -> Orders -> native unit AI
 
 ## Source map
 Sources at https://github.com/ZeroK-RTS/Zero-K/tree/f4c1406722134fb07be6761750bf0822c69afbc0
-- LuaUI/cawidgets.lua: reverse layer order, mouse owner, CommandNotify/UnitCommandNotify, GetConfigData/SetConfigData, disable_local_widgets.
+- LuaUI/cawidgets.lua: ascending input priority (reverse iteration over a descending list), mouse owner, CommandNotify/UnitCommandNotify, GetConfigData/SetConfigData, disable_local_widgets.
 - LuaUI/Widgets/gui_chili_global_commands.lua: WG.Chili.Window/Button, GetCmdDescIndex and SetActiveCommand.
 - LuaUI/Widgets/cmd_mex_placement.lua: Ctrl=1 generator, Alt=2, both=4; native substitutions and WG.CommandInsert. Build orders use negative UnitDef IDs.
 - LuaUI/Widgets/cmd_commandinsert.lua: Shift/Space and CMD.INSERT semantics.
@@ -31,3 +31,7 @@ Ground formations; constructors excluded unless enabled. Loose default; strict a
 
 ## Future Tactical Army AI
 Extend Officer with delegated authority, state-machine doctrines and accepted maneuver corridors. Geometry, observation and execution stay shared. Validate HOLD POSITION then ARTILLERY PUSH, sequential phases, role-compatible reserves, withdrawal, local targets and multiple forces separately. Final delegated objectives hold until cancellation; approved V1 actions return to adviser status. Research produces reviewed, tested game rules, never executable web content. Learning begins as reviewable statistics. Public/ranked autonomous control needs explicit Zero-K developer approval.
+
+Input priority is layer -1339, before native Unit Reclaimer (-1338), Tree Reclaim (-1337) and CommandInsert (5), Chili (1000), Mex (1001) and CustomFormations2 (1000000). Input explicitly yields over Chili controls. UI initialization waits for Chili when necessary. This ordering was corrected by the live Mex +2 and reclaim tests.
+
+Detailed future subsystem design: [Future Tactical Army AI](FUTURE_TACTICAL_ARMY_AI.md).

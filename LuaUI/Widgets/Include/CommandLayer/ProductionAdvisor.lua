@@ -1,7 +1,7 @@
 return function(C)
 	local A={}
 	function A.recommend(f)
-		if not C.settings.privateSession or not C.U.live() then return 'Production advice is available only in a local/private test session.' end
+		if not C.U.assisted(C.settings) or not C.U.live() then return 'Production advice is available only in a local/private test session.' end
 		local ids=C.officer.members(f); local groups=C.classify.force(ids); local center=C.U.center(ids)
 		local battle=C.observations.snapshot(center,1600); local desired,reason='ASSAULT','Add a durable frontline capability.'
 		local air=0; for _,contact in ipairs(battle.contacts) do if contact.defID and UnitDefs[contact.defID].canFly then air=air+1 end end
@@ -15,7 +15,7 @@ return function(C)
 			local defID=Spring.GetUnitDefID(id); local d=defID and UnitDefs[defID]
 			if d then
 				if d.isFactory then existing[defID]=true end
-				if d.isBuilder or d.builder then for _,bid in ipairs(d.buildOptions or {}) do if UnitDefs[bid] and UnitDefs[bid].isFactory then buildable[bid]=true end end end
+				if d.isBuilder then for _,bid in ipairs(d.buildOptions or {}) do if UnitDefs[bid] and UnitDefs[bid].isFactory then buildable[bid]=true end end end
 			end
 		end
 		local function candidate(factories)

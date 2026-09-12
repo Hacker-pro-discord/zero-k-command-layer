@@ -30,5 +30,12 @@ end
 function U.owned(id)
 	return U.live() and Spring.ValidUnitID(id) and not Spring.GetUnitIsDead(id) and Spring.GetUnitTeam(id)==Spring.GetMyTeamID()
 end
+function U.point(p)
+	return type(p)=='table' and type(p[1])=='number' and type(p[3])=='number' and p[1]==p[1] and p[3]==p[3] and p[1]>=0 and p[3]>=0 and p[1]<=Game.mapSizeX and p[3]<=Game.mapSizeZ
+end
+function U.assisted(settings)
+	local m=Spring.GetModOptions and Spring.GetModOptions() or {}
+	return settings.privateSession and U.live() and (not m.sendspringiedata or m.sendspringiedata=='0' or m.sendspringiedata==0)
+end
 function U.now() return Spring.GetGameSeconds() end
 return U

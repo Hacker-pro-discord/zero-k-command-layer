@@ -1,0 +1,24 @@
+RUN final input-priority integration
+PASS test units available
+PASS DOUBLE LINE accepted through Officer
+PASS per-unit native Fight commands reached engine: 16/16
+PASS constructors excluded
+PASS successive line replaces destinations
+PASS local adviser session enabled
+PASS assignment issues zero orders
+PASS objective and proposal issue zero orders
+PASS fresh approval accepted
+PASS double approval rejected
+PASS approved push produced native orders
+PASS manual unit command releases Officer membership
+PASS Mex +2 native preset armed
+PASS installed Mex handler consumed +2 modifiers
+PASS native build queue contains Mex and two generators: mex=2 energy=4
+core integration sequence finished
+PASS world Fight gesture captured before CustomFormations2
+PASS world line dispatched native destination
+PASS native AREA_REPAIR modifier delivered (native Ctrl filtering retained)
+PASS native PERSISTENT_REPAIR modifier delivered (native Ctrl filtering retained)
+PASS native AREA_RECLAIM modifier delivered (native Ctrl filtering retained)
+PASS native PERSISTENT_RECLAIM modifier delivered (native Ctrl filtering retained)
+integration sequence finished

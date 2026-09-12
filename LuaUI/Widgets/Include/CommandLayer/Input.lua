@@ -1,9 +1,10 @@
 return function(C)
 	local I={}
 	function I.armObjective()
-		if C.settings.privateSession and C.registry.activeForce then I.objective=C.registry.activeForce; Spring.SetActiveCommand(nil); C.debug.log('OBJECTIVE','Left-drag an objective line. Escape cancels.') else C.debug.log('LOCKED','Assign an adviser force in a local/private session first.') end
+		if C.U.assisted(C.settings) and C.registry.activeForce then I.objective=C.registry.activeForce; Spring.SetActiveCommand(nil); C.debug.log('OBJECTIVE','Left-drag an objective line. Escape cancels.') else C.debug.log('LOCKED','Assign an adviser force in a local/private session first.') end
 	end
 	function I.press(x,y,button)
+		if I.drag then if button~=I.drag.button then I.drag=nil end; return true end
 		if not C.U.live() or (C.settings.formation=='OFF' and not I.objective) or Spring.IsGUIHidden() or Spring.IsAboveMiniMap(x,y) then return false end
 		local scale=WG.uiScale or 1
 		if WG.Chili and WG.Chili.Screen0:IsAbove(x/scale,y/scale) then return false end
@@ -31,8 +32,9 @@ return function(C)
 		if button~=d.button then I.drag=nil; return true end
 		I.move(x,y); I.drag=nil
 		local opts=C.U.currentOptions()
+		if not d.objective then local current=Spring.GetSelectedUnits(); if #current~=#d.units then return true end; local set={}; for _,id in ipairs(current) do set[id]=true end; for _,id in ipairs(d.units) do if not set[id] then return true end end end
 		if d.objective then C.officer.objective(d.objective,d.points); I.objective=nil; return true end
-		if #d.points<2 or C.U.distance(d.points[1],d.points[#d.points])<20 then C.orders.native(d.command,d.points[1],opts)
+		if #d.points<2 or C.U.distance(d.points[1],d.points[#d.points])<20 then C.officer.nativeCommand(d.command,d.points[1],opts)
 		else C.officer.submit({gesture=d.points,command=d.command,options=opts},d.units) end
 		if d.explicit and not opts.shift then Spring.SetActiveCommand(nil) end
 		return true
@@ -40,10 +42,11 @@ return function(C)
 	function I.draw()
 		if not C.settings.overlays then return end
 		local plan=I.preview
-		if I.drag then local ids=C.classify.filter(I.drag.units); plan=C.formations.plan(ids,I.drag.points) end
+		if I.drag then if not I.lastPreview or C.U.now()-I.lastPreview>.05 then local ids=C.classify.filter(I.drag.units); I.dragPreview=C.formations.plan(ids,I.drag.points); I.lastPreview=C.U.now() end; plan=I.dragPreview else I.lastPreview=nil; I.dragPreview=nil end
 		if not plan then return end
 		gl.DepthTest(false); gl.Color(.25,.85,1,.8); gl.LineWidth(1)
-		for _,p in pairs(plan.slots) do gl.DrawGroundCircle(p[1],p[2]+3,p[3],12,12) end
+		for id,p in pairs(plan.slots) do local zone=plan.zones[id]; if zone==4 then gl.Color(1,.65,.25,.8) elseif zone==2 then gl.Color(.5,1,.5,.8) else gl.Color(.25,.85,1,.8) end; gl.DrawGroundCircle(p[1],p[2]+3,p[3],12,12) end
+		gl.Color(.25,.85,1,.8); gl.BeginEnd(GL.LINE_STRIP,function() for _,p in ipairs(plan.gesture) do gl.Vertex(p[1],Spring.GetGroundHeight(p[1],p[3])+8,p[3]) end end)
 		gl.BeginEnd(GL.LINES,function() local m=plan.center; gl.Vertex(m[1],Spring.GetGroundHeight(m[1],m[3])+8,m[3]); gl.Vertex(m[1]+plan.front[1]*100,Spring.GetGroundHeight(m[1],m[3])+8,m[3]+plan.front[2]*100) end)
 		if plan.corridor then gl.Color(.9,.7,.2,.6); gl.BeginEnd(GL.LINE_LOOP,function() for _,p in ipairs(plan.corridor) do gl.Vertex(p[1],Spring.GetGroundHeight(p[1],p[3])+8,p[3]) end end) end
 		gl.Color(1,1,1,1); gl.DepthTest(false)

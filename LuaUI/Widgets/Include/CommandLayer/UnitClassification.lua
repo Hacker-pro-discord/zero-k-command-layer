@@ -4,7 +4,7 @@ return function(C)
 		if K.cache[id] then return K.cache[id] end
 		local d=UnitDefs[id]; if not d then return {role='OTHER',eligible=false} end
 		local icon=(d.iconType or ''):lower()
-		local builder=d.isBuilder or d.builder or (d.buildOptions and #d.buildOptions>0)
+		local builder=d.isBuilder or (d.buildOptions and #d.buildOptions>0)
 		local mobile=(d.speed or 0)>0 and not d.isFactory and not d.isBuilding
 		local naval=icon:find('^ship') or icon:find('^sub')
 		local v={role=builder and 'CONSTRUCTOR' or 'OTHER',reason='Capability classification',builder=builder,mobile=mobile,ground=mobile and not d.canFly and not naval,cost=d.metalCost or 0,radius=math.max(16,(d.xsize or 2)*4,(d.zsize or 2)*4),range=d.maxWeaponRange or 0,defID=id,name=d.name,display=d.humanName or d.name}

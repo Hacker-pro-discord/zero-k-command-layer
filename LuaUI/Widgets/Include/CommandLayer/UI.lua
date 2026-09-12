@@ -26,19 +26,21 @@ return function(C)
 			button(p,0,42,185,'SET OBJECTIVE','Draw a line in the world; this does not issue orders.',function() if C.input.armObjective then C.input.armObjective() end end)
 			button(p,190,42,185,'ASK OFFICER','Request a tactical proposal and production advice.',function() if C.advisor then C.advisor.ask(C.registry.activeForce,true) end end)
 			button(p,0,84,375,'LOCAL / PRIVATE TEST SESSION','Explicitly attest this is local/skirmish or private testing. Resets on reload. Autohost/public metadata stays locked.',function()
-				local m=Spring.GetModOptions(); if m.sendspringiedata and m.sendspringiedata~='0' and m.sendspringiedata~=0 then C.debug.log('LOCKED','Assisted testing is locked for autohost matches.'); return end
-				C.settings.privateSession=not C.settings.privateSession; C.debug.log('SESSION',C.settings.privateSession and 'Local/private testing enabled for this session.' or 'Assisted testing disabled.'); if not C.settings.privateSession and C.officer.cancelAll then C.officer.cancelAll() end
+				C.officer.setSession(not C.settings.privateSession)
 			end)
 			button(p,0,126,185,'PREVIOUS FORCE','Select previous assigned-force record.',function() if C.officer.cycle then C.officer.cycle(-1) end end)
 			button(p,190,126,185,'NEXT FORCE','Select next assigned-force record.',function() if C.officer.cycle then C.officer.cycle(1) end end)
 			button(p,0,168,185,'CANCEL ACTION','Stop further Officer maintenance for active force.',function() local f=C.registry.forces[C.registry.activeForce]; if f and f.operation then C.officer.cancel(f.operation) end end)
 			button(p,190,168,185,'RESUME','Explicitly resume suspended advice membership, never old approval.',function() if C.officer.resume then C.officer.resume(C.registry.activeForce) end end)
-			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=218,width=367,height=170,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
+			button(p,0,210,185,'SHOW DETAILS','Read production advice and its limitations; no build commands.',function() UI.showAdvice() end)
+			button(p,190,210,185,'DISMISS ADVICE','Dismiss the current production recommendation.',function() local f=C.registry.forces[C.registry.activeForce]; if f then f.advice=nil end end)
+			UI.lastDetail=nil
+			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=258,width=367,height=105,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
 	end
 	function UI.initialize()
 		if not WG.Chili then return false end; UI.ch=WG.Chili
-		UI.window=UI.ch.Window:New{name='CommandLayerWindow',caption='ZERO-K COMMAND LAYER',parent=UI.ch.Screen0,x=C.settings.x,y=C.settings.y,width=410*C.settings.scale,height=610*C.settings.scale,draggable=true,resizable=false,padding={12,30,12,12}}
+		UI.window=UI.ch.Window:New{name='CommandLayerWindow',caption='ZERO-K COMMAND LAYER',parent=UI.ch.Screen0,x=C.settings.x,y=C.settings.y,width=410,height=610,draggable=true,resizable=false,padding={12,30,12,12}}
 		for i,tab in ipairs({'LOGISTICS','FORMATIONS','OFFICER'}) do button(UI.window,(i-1)*127,0,122,tab,'Open '..tab:lower(),function() UI.tab=tab; UI.build() end) end
 		UI.status=UI.ch.TextBox:New{parent=UI.window,x=0,bottom=0,width='100%',height=118,text='Officer ready.'}
 		UI.build(); C.debug.log('LOAD','Officer / Chili controls loaded'); return true
@@ -51,7 +53,7 @@ return function(C)
 		end
 		if UI.tab=='OFFICER' and UI.detail then
 			local f=C.registry.forces[C.registry.activeForce]; local text='No adviser force selected.'
-			if f then local n=0; for _ in pairs(f.members) do n=n+1 end; text='Force '..f.id..' | '..n..' units | '..f.status..'\n'..(f.advice or 'Set an objective or ask for a reform proposal.') end
+			if f then local n=0; for _ in pairs(f.members) do n=n+1 end; text='Force '..f.id..' | '..n..' units | '..f.status..'\n'..(f.advice and 'Production recommendation available. SHOW DETAILS to read evidence, cost and alternatives.' or 'Set an objective or ask for a reform proposal.') end
 			if text~=UI.lastDetail then UI.detail:SetText(text); UI.lastDetail=text end
 		end
 		if C.proposals then UI.showProposal(C.proposals.firstOffered()) end
@@ -61,13 +63,21 @@ return function(C)
 		if id==UI.proposalID then return end
 		if UI.dialog then UI.dialog:Dispose(); UI.dialog=nil end; UI.proposalID=id
 		if not p then return end
-		UI.dialog=UI.ch.Window:New{name='CommandLayerProposal',caption='Officer - Force '..p.forceID,parent=UI.ch.Screen0,x=450,y=160,width=440,height=330,draggable=true,resizable=false,padding={12,30,12,12}}
-		UI.ch.TextBox:New{parent=UI.dialog,x=0,y=0,width='100%',height=220,text=p.summary}
-		button(UI.dialog,0,240,130,'APPROVE '..p.kind,'Execute exactly this one displayed action.',function() C.proposals.approve(p.id,p.revision) end)
-		button(UI.dialog,138,240,120,'DECLINE','No orders. Suppress this suggestion temporarily.',function() C.proposals.decline(p.id) end)
-		button(UI.dialog,266,240,140,'SHOW PLAN','Preview destinations; no orders.',function() C.input.preview=p.plan end)
+		UI.dialog=UI.ch.Window:New{name='CommandLayerProposal',caption='Officer - Force '..p.forceID,parent=UI.ch.Screen0,x=450,y=160,width=440,height=440,draggable=true,resizable=false,padding={12,30,12,12}}
+		UI.ch.TextBox:New{parent=UI.dialog,x=0,y=0,width='100%',height=315,text=p.summary}
+		button(UI.dialog,0,350,130,'APPROVE '..p.kind,'Execute exactly this one displayed action.',function() C.proposals.approve(p.id,p.revision) end)
+		button(UI.dialog,138,350,120,'DECLINE','No orders. Suppress this suggestion temporarily.',function() C.proposals.decline(p.id) end)
+		button(UI.dialog,266,350,140,'SHOW PLAN','Preview destinations; no orders.',function() C.input.preview=p.plan end)
+	end
+	function UI.showAdvice()
+		local f=C.registry.forces[C.registry.activeForce]; if not f or not f.advice then return end
+		if UI.adviceDialog then UI.adviceDialog:Dispose() end
+		UI.adviceDialog=UI.ch.Window:New{name='CommandLayerAdvice',caption='Production advice - Force '..f.id,parent=UI.ch.Screen0,x=450,y=130,width=480,height=460,draggable=true,resizable=false,padding={12,30,12,12}}
+		UI.ch.TextBox:New{parent=UI.adviceDialog,x=0,y=0,width='100%',height=350,text=f.advice}
+		button(UI.adviceDialog,0,365,200,'DISMISS','No production changes.',function() f.advice=nil; UI.adviceDialog:Dispose(); UI.adviceDialog=nil end)
 	end
 	function UI.shutdown()
+		if UI.adviceDialog then UI.adviceDialog:Dispose() end
 		if UI.dialog then UI.dialog:Dispose() end
 		if UI.window then C.settings.x=UI.window.x; C.settings.y=UI.window.y; UI.window:Dispose(); UI.window=nil end
 	end

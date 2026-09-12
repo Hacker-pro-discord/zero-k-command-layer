@@ -2,7 +2,7 @@ return function(C)
 	local T={last=-100}
 	function T.ask(forceID,explicit)
 		local f=C.registry.forces[forceID]
-		if not f or not C.settings.privateSession or not C.U.live() then C.debug.log('LOCKED','Assign an adviser force in local/private testing.'); return nil end
+		if not f or not C.U.assisted(C.settings) or not C.U.live() then C.debug.log('LOCKED','Assign an adviser force in local/private testing.'); return nil end
 		local op=f.operation and C.registry.operations[f.operation]; if op and op.active then return nil end
 		if not explicit and C.U.now()-f.lastSuggestion<30 then return nil end
 		local ids=C.officer.members(f); if #ids==0 then return nil end
@@ -23,12 +23,15 @@ return function(C)
 		local observed=C.observations.snapshot(plan.center,math.max(1000,plan.width))
 		if #observed.contacts>0 then reason=reason..' '..#observed.contacts..' visual/radar contacts nearby; this is not a safety assessment.' else reason=reason..' No contact currently observed near the destination; fog remains unknown.' end
 		local ax,az=plan.origin[1],plan.origin[3]; local bx,bz=plan.center[1],plan.center[3]; local dx,dz=bx-ax,bz-az; local d=math.max(1,math.sqrt(dx*dx+dz*dz)); local px,pz=-dz/d,dx/d; if d<=1 then px,pz=1,0 end
-		local half=plan.width/2+128
-		plan.corridor={{ax+px*half,0,az+pz*half},{bx+px*half,0,bz+pz*half},{bx-px*half,0,bz-pz*half},{ax-px*half,0,az-pz*half}}
+		local ux,uz=dx/d,dz/d; if d<=1 then ux,uz=0,1 end
+		local low,high,left,right=-64,d+64,-plan.width/2-128,plan.width/2+128
+		for _,p in pairs(plan.slots) do local x,z=p[1]-ax,p[3]-az; local along=x*ux+z*uz; local across=x*px+z*pz; low=math.min(low,along-64); high=math.max(high,along+64); left=math.min(left,across-64); right=math.max(right,across+64) end
+		local function corner(along,across) return {ax+ux*along+px*across,0,az+uz*along+pz*across} end
+		plan.corridor={corner(low,left),corner(high,left),corner(high,right),corner(low,right)}
 		return C.proposals.create(f,kind,plan,reason)
 	end
 	function T.update()
-		if not C.settings.privateSession or C.U.now()-T.last<.5 then return end; T.last=C.U.now()
+		if not C.U.assisted(C.settings) or C.U.now()-T.last<.5 then return end; T.last=C.U.now()
 		for id,f in pairs(C.registry.forces) do
 			local has=false; for _,p in pairs(C.proposals.items) do if p.forceID==id and p.state=='OFFERED' then has=true; break end end
 			if not has and C.U.now()-f.lastSuggestion>=30 then T.ask(id,false) end

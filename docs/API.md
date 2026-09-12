@@ -1,0 +1,22 @@
+# Service contracts
+
+`WG.CommandLayer` exists while loaded. Call methods with dots. This is a local integration API, not a security boundary against other installed widgets. UI/input use the same Officer pipeline. Only Orders writes combat commands.
+
+- `SetFormationPreset(name)`: one of the ten names or `OFF`; does not move units.
+- `SubmitPlayerIntent({gesture={{x,y,z},...}, command=CMD.FIGHT, options={shift=true}}, unitIDs)` / `IssueFormationMove(...)`: explicit direct instruction, returning operation ID. Only Move, RAW_MOVE and Fight accepted. Raw approved intents without an internally consumed proposal are rejected.
+- `ApplyFormation(unitIDs, gesture, settings)`: geometry only. Slots, role zones, center, facing and source gesture returned.
+- `GetSelectedForce()`: eligible selection; unsupported ordinary mobiles as second return value.
+- `ClassifyForce(unitIDs)`: grouped roles.
+- `SetPrivateTestingSession(true)`: explicitly attest authorized local/private testing. Fails with autohost metadata, replay or spectator state. False revokes assisted control.
+- `AssignAdvisedForce(unitIDs)`: explicit eligible membership, no orders; returns force ID.
+- `SetObjective(forceID, points)`: new line invalidates old approval and cancels prior active maintenance. No orders.
+- `AskOfficer(forceID)`: advice request; returns proposal ID when available. No orders.
+- `GetForce(forceID)`, `GetOfficerStatus(forceID)`, `GetProposals(forceID)`: copied inspection data. Proposals include retained terminal history and current offers.
+- `ApproveProposal(proposalID, revision)`: fresh validation and one consumed operation; returns operation ID or false. `DeclineProposal(proposalID)` never executes.
+- `ReleaseUnits(unitIDs, reason)`, `CancelOperation(operationID)`: revoke authority, preserve unrelated native orders.
+- `GetVisibleBattleState(center,radius)`: current contacts, composition, timestamp, uncertainty and contact signature. Radar has `defID=nil`, `role=UNKNOWN`; spectator/replay data is empty.
+- `GetKnownEnemyComposition(center,radius)`, `GetKnownThreats(center,radius)`: filtered observation views.
+- `GetEconomyState()`: own resources and exposed overdrive accounting. `GetAvailableConstructors()` lists owned builder units without selecting/commanding them.
+- `ActivateLogisticsPreset(kind)`: `MEX0/1/2/4`, `AREA_REPAIR`, `PERSISTENT_REPAIR`, `AREA_RECLAIM`, `PERSISTENT_RECLAIM`; arms native command and transient options. Player area gestures still issue the command.
+
+Proposals freeze explicit units, ownership generations, force revision, positions, health and threat signature. Approval rechecks all of them and expiry. Orders checks authority immediately before each dispatch. Operation history retains the latest 100 terminal records; active records remain.

@@ -6,6 +6,7 @@ return function(U)
 			local v=data[k]; if type(v)=='number' and v==v and math.abs(v)<10000 then S[k]=v end
 		end
 		S.spacing=math.max(32,math.min(256,S.spacing)); S.rankGap=math.max(32,math.min(400,S.rankGap)); S.scale=math.max(.7,math.min(1.6,S.scale))
+		for _,k in ipairs({'supportDepth','skirmDepth','artilleryDepth'}) do S[k]=math.max(32,math.min(800,S[k])) end
 		for _,k in ipairs({'constructors','overlays','debug'}) do if type(data[k])=='boolean' then S[k]=data[k] end end
 		if data.mode=='LOOSE' or data.mode=='STRICT' or data.mode=='ARRIVAL' then S.mode=data.mode end
 		if data.override=='suspend' then S.override='suspend' end

@@ -1,7 +1,7 @@
 return function(C)
 	local L={}
 	function L.arm(kind)
-		if not C.U.live() then return false end
+		if not C.U.live() or not ({MEX0=true,MEX1=true,MEX2=true,MEX4=true,AREA_REPAIR=true,PERSISTENT_REPAIR=true,AREA_RECLAIM=true,PERSISTENT_RECLAIM=true})[kind] then return false end
 		local id=Spring.Utilities.CMD.AREA_MEX
 		local count=tonumber(kind:match('MEX(%d)'))
 		if not count then id=kind:find('REPAIR') and CMD.REPAIR or CMD.RECLAIM end
