@@ -6,7 +6,7 @@ return function(C)
 		if f.mapControl and C.mapControl and #ids>0 then sector=C.mapControl.sector(f,ids,{Game.mapSizeX/2,0,Game.mapSizeZ/2}) end
 		if not sector then return false,'Draw an objective line at least 128 units from the force.' end
 		f.grant=(f.grant or 0)+1
-		f.delegation={token=f.grant,active=true,sector=sector,groups=f.objectiveMode=='UTTER DESTRUCTION' and {SCOUT={},RAID={},MAIN=ids} or C.rules.groups(ids),ops={},next={},visits={},blocked={},failures={},returning={},decisions={},state='ASSEMBLING',reason='Explicit Scout + Raid + Push delegation.',version=f.mapControl and 'map-search-1' or C.rules.version}
+		f.delegation={token=f.grant,active=true,sector=sector,groups=C.domains and C.domains.groups(ids,f.objectiveMode=='UTTER DESTRUCTION') or (f.objectiveMode=='UTTER DESTRUCTION' and {SCOUT={},RAID={},MAIN=ids} or C.rules.groups(ids)),ops={},next={},visits={},blocked={},failures={},returning={},decisions={},state='ASSEMBLING',reason='Explicit Scout + Raid + Push delegation.',version=f.mapControl and 'map-search-1' or C.rules.version}
 		C.input.preview={slots={},zones={},gesture=f.mapControl and {sector.origin,sector.goal} or f.objective,center=sector.goal,front={sector.ux,sector.uz},corridor=sector.corridor}
 		return true
 	end
@@ -61,7 +61,7 @@ return function(C)
 	end
 	local function recoveryIDs(f)
 		local ids={}; local d=f.delegation; local protected={}
-		for _,group in ipairs({'RESERVE','DEFENSE'}) do for _,id in ipairs(d.groups[group] or {}) do protected[id]=true end end
+		for _,group in ipairs({'RESERVE','DEFENSE','AIR','SEA'}) do for _,id in ipairs(d.groups[group] or {}) do protected[id]=true end end
 		for _,id in ipairs(C.officer.members(f)) do
 			if not protected[id] and not d.blocked[id] and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 then ids[#ids+1]=id end
 		end
@@ -69,7 +69,7 @@ return function(C)
 	end
 	function T.beginRecovery(f,now,why)
 		local d=f.delegation; local center=C.U.center(C.officer.members(f)); local old=d.strategy
-		for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active and op.kind~='RESERVE' and op.kind~='DEFENSE' then C.officer.cancel(op.id) end end
+		for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active and op.kind~='RESERVE' and op.kind~='DEFENSE' and op.kind~='AIR' and op.kind~='SEA' then C.officer.cancel(op.id) end end
 		for id,blocked in pairs(d.blocked) do if type(blocked)=='number' then d.blocked[id]=nil end end
 		local contacts=C.observations.snapshot().contacts; local along=math.min(d.sector.length,C.rules.progress(d.sector,center)+300)
 		local side=old and -old.side or -1; local best=math.huge
@@ -79,7 +79,7 @@ return function(C)
 		end
 		local previousStep=old and old.step or f.objectiveMode=='SHOCK AND AWE' and 900 or f.objectiveMode=='UTTER DESTRUCTION' and 750 or C.rules.step
 		d.strategy={revision=(old and old.revision or 0)+1,formation='ASSAULT',spacing=math.min(256,(old and old.spacing or C.settings.spacing)*1.2),step=math.max(240,previousStep*.65),side=side,reason=why}
-		d.ops={RESERVE=d.ops.RESERVE,DEFENSE=d.ops.DEFENSE}; d.failures={}; d.next={}; d.returning={}
+		d.ops={RESERVE=d.ops.RESERVE,DEFENSE=d.ops.DEFENSE,AIR=d.ops.AIR,SEA=d.ops.SEA}; d.failures={}; d.next={}; d.returning={}
 		d.recovery={phase='WITHDRAWING',target=C.rules.point(d.sector,math.max(0,C.rules.progress(d.sector,center)-450),0),created=now,attempts=0,next=now,reason=why}
 		local selection=C.retreatPriority.select(recoveryIDs(f))
 		-- Units pushed outside the authorized corridor must return, not invalidate
@@ -172,12 +172,13 @@ return function(C)
 		-- Congestion gets a bounded retry; manual/unknown queue overrides never do.
 		for id,untilTime in pairs(d.blocked) do if type(untilTime)=='number' and now>=untilTime then d.blocked[id]=nil end end
 		if C.defense then C.defense.tick(f,now,plan) end
+		if C.domains then C.domains.tick(f,now) end
 		rebalance(f)
 		local forceIDs=C.officer.members(f); local centerNow=C.U.center(forceIDs)
 		local progressNow=C.rules.progress(d.sector,centerNow)
 		d.review=d.review or {time=now,progress=progressNow,count=#forceIDs}
 		if progressNow>d.review.progress+128 then d.review.time=now; d.review.progress=progressNow end
-		if d.recovery then T.recoveryTick(f,now); return end
+		if d.recovery then if #recoveryIDs(f)==0 and C.rules.health(forceIDs)>=.5 then d.recovery=nil; d.recoverAfter=now+30 else T.recoveryTick(f,now); return end end
 		if not f.objectiveReached and f.front~='HOLD' and now>=(d.recoverAfter or 0) and (not f.mapControl and now-d.review.time>=60 or #forceIDs<d.review.count*.75 or C.rules.health(forceIDs)<.4) then
 			local why=#forceIDs<d.review.count*.75 and 'More than 25% of the review force was lost/released.' or C.rules.health(forceIDs)<.4 and 'Average force health below 40%.' or 'No substantial forward progress for 60 game seconds.'
 			T.beginRecovery(f,now,why); T.recoveryTick(f,now); return

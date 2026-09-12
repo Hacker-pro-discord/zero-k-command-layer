@@ -3,6 +3,8 @@ function gadget:GetInfo() return {name='Command Layer Equal Armies Fixture',desc
 if not gadgetHandler:IsSyncedCode() then return end
 local armies={[0]={},[1]={}}; local value={[0]=0,[1]=0}; local losses={[0]=0,[1]=0}; local damage={[0]=0,[1]=0}; local active=false
 local roster={{'cloakraid',18},{'cloakriot',4},{'cloakskirm',4},{'cloakarty',4},{'cloakaa',2}}
+local domains=Spring.GetModOptions().cl_test_domains=='1'
+if domains then roster={{'cloakraid',5},{'planescout',2},{'planeheavyfighter',3},{'bomberprec',2},{'shiptorpraider',4},{'shipriot',2}} end
 local defense=Spring.GetModOptions().cl_test_defense=='1'
 local recovery=Spring.GetModOptions().cl_test_recovery=='1'
 local recoverySolar; local homeX,homeZ=1400,1400
@@ -37,6 +39,7 @@ function gadget:GameFrame(frame)
 				local z=team==0 and (2400-(rank-1)*110) or (4000+(rank-1)*110)
 				if defense and team==1 then x=6000+(i-10)*50; z=6000+(rank-1)*100 end
 				if stress then local columns=thousand and 40 or 25; x=600+((index-1)%columns)*(Game.mapSizeX-1200)/(columns-1); z=(team==0 and Game.mapSizeZ*.3 or Game.mapSizeZ*.75)+(team==0 and -1 or 1)*math.floor((index-1)/columns)*64 end
+				if domains then local def=UnitDefs[UnitDefNames[item[1]].id]; if (def.minWaterDepth or 0)>0 then local found=false; for sx=512,Game.mapSizeX*.48,160 do if found then break end; for sz=512,Game.mapSizeZ-512,160 do local tx=team==0 and sx or Game.mapSizeX-sx; local ty=Spring.GetGroundHeight(tx,sz); if ty<-20 and Spring.TestMoveOrder(def.id,tx,ty,sz,0,0,0,true,true,false) then x=tx; z=sz; found=true; break end end end; report('DOMAIN_SEA_SPAWN valid='..tostring(found)..' team='..team..' x='..x..' z='..z) end end
 				local id=Spring.CreateUnit(item[1],x,Spring.GetGroundHeight(x,z),z,team==0 and 0 or 2,team)
 				if id then armies[team][id]={x=x}; value[team]=value[team]+UnitDefs[Spring.GetUnitDefID(id)].metalCost end
 			end end
@@ -60,7 +63,7 @@ function gadget:GameFrame(frame)
 			report('PRODUCTION_FIXTURE factory='..tostring(id)..' type='..name..'; not an equal-army comparison')
 		end
 	elseif frame==180 then
-		for id,p in pairs(armies[1]) do if early or defense then Spring.GiveOrderToUnit(id,CMD.FIRE_STATE,{0},0) else Spring.GiveOrderToUnit(id,CMD.FIGHT,{p.x,Spring.GetGroundHeight(p.x,2400),2400},0) end end
+		for id,p in pairs(armies[1]) do if early or defense or domains then Spring.GiveOrderToUnit(id,CMD.FIRE_STATE,{0},0) else Spring.GiveOrderToUnit(id,CMD.FIGHT,{p.x,Spring.GetGroundHeight(p.x,2400),2400},0) end end
 		report(early and 'PASSIVE_ENEMY hold fire for controlled recovery test' or 'ENEMY_ADVANCE native Fight issued')
 	elseif defense and frame==900 then
 		for i=1,8 do local x=homeX+300+i*25; local z=homeZ+100; local id=Spring.CreateUnit('cloakraid',x,Spring.GetGroundHeight(x,z),z,0,1); if id then raiders[#raiders+1]=id; Spring.GiveOrderToUnit(id,CMD.FIGHT,{homeX,Spring.GetGroundHeight(homeX,homeZ),homeZ},0) end end

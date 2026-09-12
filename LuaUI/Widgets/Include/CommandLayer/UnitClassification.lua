@@ -7,9 +7,10 @@ return function(C)
 		local builder=d.isBuilder or (d.buildOptions and #d.buildOptions>0)
 		local mobile=(d.speed or 0)>0 and not d.isFactory and not d.isBuilding
 		local naval=icon:find('^ship') or icon:find('^sub')
-		local v={role=builder and 'CONSTRUCTOR' or 'OTHER',reason='Capability classification',builder=builder,mobile=mobile,ground=mobile and not d.canFly and not naval,cost=d.metalCost or 0,radius=math.max(16,(d.xsize or 2)*4,(d.zsize or 2)*4),range=d.maxWeaponRange or 0,defID=id,name=d.name,display=d.humanName or d.name}
+		local domain=d.canFly and 'AIR' or (naval or (d.minWaterDepth or 0)>0) and 'SEA' or 'GROUND'
+		local v={domain=domain,role=builder and 'CONSTRUCTOR' or 'OTHER',reason='Capability classification',builder=builder,mobile=mobile,ground=mobile and domain=='GROUND',cost=d.metalCost or 0,radius=math.max(16,(d.xsize or 2)*4,(d.zsize or 2)*4),range=d.maxWeaponRange or 0,defID=id,name=d.name,display=d.humanName or d.name}
 		if not builder then
-			local rules={{'aa$','ANTI_AIR'},{'scout','SCOUT'},{'raider','RAIDER'},{'lrarty','ARTILLERY'},{'arty','ARTILLERY'},{'sniper','ARTILLERY'},{'tachyon','ARTILLERY'},{'skirm','SKIRMISHER'},{'riot','RIOT'},{'assault','ASSAULT'},{'support','SUPPORT'},{'jammer','SUPPORT'},{'shield','SUPPORT'}}
+			local rules={{'fighter','ANTI_AIR'},{'bomber','ARTILLERY'},{'aa$','ANTI_AIR'},{'scout','SCOUT'},{'raider','RAIDER'},{'lrarty','ARTILLERY'},{'arty','ARTILLERY'},{'sniper','ARTILLERY'},{'tachyon','ARTILLERY'},{'skirm','SKIRMISHER'},{'riot','RIOT'},{'assault','ASSAULT'},{'support','SUPPORT'},{'jammer','SUPPORT'},{'shield','SUPPORT'}}
 			for _,r in ipairs(rules) do if icon:find(r[1]) then v.role=r[2]; v.reason='Role icon: '..icon; break end end
 			if v.role=='OTHER' then
 				local text=(d.tooltip or d.description or ''):lower()

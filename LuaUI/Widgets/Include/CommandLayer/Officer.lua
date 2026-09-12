@@ -39,7 +39,7 @@ return function(C)
 			end
 			C.orders.issue(op,id,op.command,p,options)
 		end
-		C.debug.log('EXECUTING','Operation '..op.id..': '..plan.shape..' / '..#eligible..' units')
+		C.debug.log('EXECUTING','Operation '..op.id..': '..plan.shape..' / '..#all..' units')
 		if op.mode=='ARRIVAL' and not intent.approved and not intent.delegated then C.registry.finish(op) end; return op.id
 	end
 	function A.setFormation(name)
@@ -115,7 +115,7 @@ return function(C)
 		if not d.mobile or d.builder or built and built<1 or (C.registry.generation[id] or 0)>0 or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 then return false end
 		for _,other in pairs(C.registry.forces) do if other.members[id] then return false end end
 		f.members[id]=true -- Additional recruits do not change the frozen units of an existing approval.
-		if f.delegation and f.delegation.active then f.delegation.groups.MAIN[#f.delegation.groups.MAIN+1]=id; f.delegation.recruits=f.delegation.recruits or {}; f.delegation.recruits[id]=true end
+		if f.delegation and f.delegation.active then if C.domains then C.domains.add(f,id) else f.delegation.groups.MAIN[#f.delegation.groups.MAIN+1]=id; f.delegation.recruits=f.delegation.recruits or {}; f.delegation.recruits[id]=true end end
 		C.debug.log('REINFORCEMENT','Completed military unit '..id..' assigned to Force '..f.id..'; joins its next authorized movement.')
 		return true
 	end
@@ -171,7 +171,8 @@ return function(C)
 					local arrived=C.U.distance(pos,target)<math.max(48,C.classify.definition(Spring.GetUnitDefID(id)).radius*2)
 					local inObservedCombat=op.grant and C.observations.nearCombat(pos,C.classify.definition(Spring.GetUnitDefID(id)).range+180)
 					if inObservedCombat then op.state='ENGAGING' end
-					local release=not C.U.assisted(C.settings) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1
+					local nativeService=C.classify.definition(Spring.GetUnitDefID(id)).domain=='AIR' and ((Spring.GetUnitRulesParam(id,'noammo') or 0)>0 or Spring.GetUnitRulesParam(id,'airpadReservation')==1)
+					local release=nativeService or not C.U.assisted(C.settings) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1
 					if arrived then release=true; op.arrivals=(op.arrivals or 0)+1 end
 					if base then t.seen=true elseif t.seen or now-op.created>5 then release=true end
 					if C.U.distance(pos,t.lastPos)>12 then t.progress=now; t.lastPos=pos end
@@ -179,7 +180,7 @@ return function(C)
 					if stalled then release=true; C.debug.log('STALLED','Released positioning for unit '..id) end
 					if release then
 						C.orders.clearCorrection(op,id)
-						if not arrived then op.endReason=op.endReason or 'ABORTED'; if op.grant then local f=C.registry.forces[op.forceID]; if f and f.delegation then f.delegation.blocked[id]=(stalled or f.mapControl and #queue==0) and now+30 or true; if f.mapControl then C.debug.log('MAP_QUEUE',id..': '..(#queue==0 and 'native queue ended; retry after 30 seconds' or 'changed queue; preserve external control')) end end end end
+						if not arrived then op.endReason=op.endReason or 'ABORTED'; if op.grant then local f=C.registry.forces[op.forceID]; if f and f.delegation then f.delegation.blocked[id]=nativeService and now+5 or (stalled or f.mapControl and #queue==0) and now+30 or true; if f.mapControl then C.debug.log('MAP_QUEUE',id..': '..(#queue==0 and 'native queue ended; retry after 30 seconds' or 'changed queue; preserve external control')) end end end end
 						if C.registry.owner[id]==op.id then C.registry.owner[id]=nil end
 					else
 						remaining=remaining+1
