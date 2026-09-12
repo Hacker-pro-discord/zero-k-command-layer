@@ -23,7 +23,7 @@ return function(C)
 		else
 			local function selected() return Spring.GetSelectedUnits() end
 			button(p,0,0,185,'ASSIGN TO OFFICER','Observe and suggest only. Assignment never moves units.',function() if C.officer.assign then C.officer.assign(selected()) end end)
-			button(p,190,0,185,'RELEASE','Release selected units and cancel their pending authority.',function() C.registry.release(selected(),'PLAYER_OVERRIDE'); C.debug.log('RELEASE','Selected units released') end)
+			button(p,190,0,185,'RELEASE','Release selected units and cancel their pending authority.',function() C.officer.releaseUnits(selected(),'PLAYER_OVERRIDE'); C.debug.log('RELEASE','Selected units released') end)
 			button(p,0,42,185,'SET OBJECTIVE','Draw a line in the world; this does not issue orders.',function() UI.showObjectives() end)
 			button(p,190,42,185,'ASK OFFICER','Request a tactical proposal and production advice.',function() if C.advisor then C.advisor.ask(C.registry.activeForce,true) end end)
 			button(p,0,84,375,'LOCAL / PRIVATE TEST SESSION','Explicitly attest this is local/skirmish or private testing. Resets on reload. Autohost/public metadata stays locked.',function()
@@ -60,7 +60,11 @@ return function(C)
 			button(p,0,136,250,'CANCEL BUILD REQUESTS','Cancel pending reconstruction and manual requests. Native orders already issued remain.',function() C.recovery.cancelRequests(); UI.showManagement() end)
 			button(p,260,136,250,'STOP RECOVERY','Release builders from automation; existing native queues remain.',function() C.recovery.stop(); UI.showManagement() end)
 		end
-		local text=C.productionControl.status..(C.recovery and ('\n'..C.recovery.status) or '')
+		if C.arsenal then
+			button(p,0,180,250,'ARM SELECTED LAUNCHERS','Authorize automatic native ammunition production and visual-target fire for selected launchers. Mobile launchers leave army movement control. Manual orders release them.',function() C.arsenal.enroll(Spring.GetSelectedUnits()); UI.showManagement() end)
+			button(p,260,180,250,'STOP STRATEGIC FIRE','Remove only AI attack orders; retain native ammunition queues.',function() C.arsenal.stop(); UI.showManagement() end)
+		end
+		local text=(C.arsenal and C.arsenal.status..'\n' or '')..C.productionControl.status..(C.recovery and ('\n'..C.recovery.status) or '')
 		if C.enemyModel then local model=C.enemyModel.snapshot(); text=text..'\n\nRolling visual intel (half-life '..model.halfLife..'s):'; local keys={}; for role in pairs(model.roles) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..'\n'..role..': '..string.format('%.1f',model.roles[role])..' weighted sightings' end; text=text..'\nUnknown radar contacts: '..model.unknown..'\nOld sightings decay; this is not a current hidden-army count.' end
 		UI.ch.TextBox:New{parent=p,x=0,y=232,width=510,height=300,text=text}
 		button(p,0,590,250,'REFRESH','Refresh current control and intel information.',function() UI.showManagement() end)

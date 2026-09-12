@@ -1,5 +1,9 @@
 return function(C)
 	local A={}
+	function A.releaseUnits(ids,reason)
+		for _,id in ipairs(ids or {}) do for _,name in ipairs({'arsenal','recovery','productionControl'}) do if C[name] then C[name].release(id) end end end
+		C.registry.release(ids or {},reason or 'PLAYER_OVERRIDE')
+	end
 	function A.nativeCommand(command,position,options)
 		if command~=CMD.MOVE and command~=CMD.FIGHT and command~=Spring.Utilities.CMD.RAW_MOVE then return false end
 		if not C.U.live() or not C.U.point(position) then return false end
@@ -26,7 +30,7 @@ return function(C)
 		if not plan or not C.U.point(plan.center) then return nil end
 		for _,id in ipairs(eligible) do if not C.U.point(plan.slots[id]) then return nil end end
 		local all=C.U.copy(eligible); for _,id in ipairs(ordinary) do all[#all+1]=id end
-		if not intent.approved and not intent.delegated then C.registry.release(all,'PLAYER_OVERRIDE') end
+		if not intent.approved and not intent.delegated then A.releaseUnits(all,'PLAYER_OVERRIDE') end
 		local op=C.registry.newOperation(all); op.ordinary={}; for _,id in ipairs(ordinary) do op.ordinary[id]=true end; op.plan=plan; op.command=intent.command or Spring.Utilities.CMD.RAW_MOVE; op.options=C.U.options(intent.options); op.mode=C.U.assisted(C.settings) and (intent.mode or C.settings.mode) or 'ARRIVAL'; op.state='EXECUTING'; op.forceID=intent.forceID; op.proposalID=intent.proposalID; op.grant=intent.delegated and intent.grant or nil
 		-- Packed transit ranks use native movement without conflicting anchor corrections.
 		if plan.packed then op.mode='ARRIVAL' end
@@ -86,7 +90,7 @@ return function(C)
 	function A.assign(ids)
 		if not C.U.assisted(C.settings) or not C.U.live() then C.debug.log('LOCKED','Enable local/private testing before assigning an adviser.'); return nil end
 		local eligible,ordinary=C.classify.filter(ids); for _,id in ipairs(ordinary) do eligible[#eligible+1]=id end; if #eligible==0 then C.debug.log('UNAVAILABLE','Select mobile military units.'); return nil end
-		C.registry.release(eligible,'REASSIGNED'); C.registry.nextForce=C.registry.nextForce+1
+		A.releaseUnits(eligible,'REASSIGNED'); C.registry.nextForce=C.registry.nextForce+1
 		local f={id=C.registry.nextForce,members={},suspended={},revision=1,status='ADVISER',front='ADVANCE',formation=C.settings.formation=='OFF' and 'DOUBLE LINE' or C.settings.formation,lastSuggestion=-100,declined={}}
 		for _,id in ipairs(eligible) do f.members[id]=true end
 		C.registry.forces[f.id]=f; C.registry.activeForce=f.id; C.debug.log('ASSIGNED','Force '..f.id..' observes only; no orders issued.'); return f.id
@@ -212,5 +216,6 @@ return function(C)
 			end
 		end
 	end
+	function A.executeStrategic(id,cmd,params) return C.orders.service('arsenal',id,cmd,params) end
 	return A
 end

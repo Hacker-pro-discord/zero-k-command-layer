@@ -10,6 +10,11 @@ return function(C)
 		elseif (battle.composition.RAIDER or 0)>=3 and not groups.RIOT then desired='RIOT'; reason='Visible raiders and no riot capability in this force.'
 		elseif not groups.ANTI_AIR then desired='ANTI_AIR'; reason='The assigned force lacks AA; this is a composition gap, not evidence of enemy air.'
 		elseif not groups.ARTILLERY then desired='ARTILLERY'; reason='The assigned force lacks long-range support.' end
+		if C.enemyModel and C.U.delegationAllowed(C.settings) then
+			local weights,model=C.enemyModel.weights(); local friendly,total=C.enemyModel.friendly(); local sum=0; for _,weight in pairs(weights) do sum=sum+weight end
+			local deficit=-math.huge; for role,weight in pairs(weights) do local missing=(total+1000)*weight/math.max(1,sum)-(friendly[role] or 0); if missing>deficit then desired=role; deficit=missing end end
+			reason='Shared army/queue composition gap with decaying visual counter intel (half-life '..model.halfLife..'s). '..model.unknown..' radar contacts remain unidentified. Role weights are a heuristic.'
+		end
 		local existing={}; local buildable={}
 		for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID())) do
 			local defID=Spring.GetUnitDefID(id); local d=defID and UnitDefs[defID]

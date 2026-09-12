@@ -3,7 +3,7 @@ return function(C)
 	local function same(a,b) if not a or not b or #a~=#b then return false end; for i=1,#a do if math.abs(a[i]-b[i])>.1 then return false end end; return true end
 	function O.native(id,params,opts)
 		if not C.U.live() then return false end
-		C.registry.release(Spring.GetSelectedUnits(),'PLAYER_OVERRIDE')
+		C.officer.releaseUnits(Spring.GetSelectedUnits(),'PLAYER_OVERRIDE')
 		O.sending=true; local used=widgetHandler:CommandNotify(id,params,opts); if not used then Spring.GiveOrder(id,params,opts.coded) end; O.sending=false; return true
 	end
 	function O.unit(op,id,cmd,params,opts)

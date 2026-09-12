@@ -22,3 +22,7 @@ C.recovery={status='Recovery test',enroll=function(ids) C.builders=ids end,cance
 C.ui.showManagement(); find('RE-ENROLL SELECTED FACTORIES').OnClick[1](); assert(C.enrolled[1]==1)
 find('ADD SELECTED BUILDERS').OnClick[1](); assert(C.builders[1]==1)
 find('ADD BUILD REQUEST').OnClick[1](); assert(C.recovery.armed)
+
+C.arsenal={status='Arsenal test',enroll=function(ids) C.launchers=ids end,stop=function() C.fireStopped=true end}
+C.ui.showManagement(); find('ARM SELECTED LAUNCHERS').OnClick[1](); assert(C.launchers[1]==1)
+find('STOP STRATEGIC FIRE').OnClick[1](); assert(C.fireStopped)

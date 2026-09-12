@@ -3,6 +3,9 @@ function gadget:GetInfo() return {name='Command Layer Equal Armies Fixture',desc
 if not gadgetHandler:IsSyncedCode() then return end
 local armies={[0]={},[1]={}}; local value={[0]=0,[1]=0}; local losses={[0]=0,[1]=0}; local damage={[0]=0,[1]=0}; local active=false
 local roster={{'cloakraid',18},{'cloakriot',4},{'cloakskirm',4},{'cloakarty',4},{'cloakaa',2}}
+local arsenal=Spring.GetModOptions().cl_test_arsenal=='1'
+local launchers={}
+if arsenal then roster={} end
 local domains=Spring.GetModOptions().cl_test_domains=='1'
 if domains then roster={{'cloakraid',5},{'planescout',2},{'planeheavyfighter',3},{'bomberprec',2},{'shiptorpraider',4},{'shipriot',2}} end
 local defense=Spring.GetModOptions().cl_test_defense=='1'
@@ -27,8 +30,8 @@ local function metric()
 	report('METRIC frame='..Spring.GetGameFrame()..' own_count='..totals[0][1]..' enemy_count='..totals[1][1]..' own_value='..totals[0][2]..' enemy_value='..totals[1][2]..' own_lost='..losses[0]..' enemy_lost='..losses[1]..' own_damage_taken='..math.floor(damage[0])..' enemy_damage_taken='..math.floor(damage[1]))
 end
 function gadget:GameFrame(frame)
-	if recovery and frame==1 then
-		Spring.SetHeightMapFunc(function() Spring.LevelHeightMap(64,64,math.min(Game.mapSizeX-64,3600),math.min(Game.mapSizeZ-64,3200),170) end)
+	if (recovery or arsenal) and frame==1 then
+		Spring.SetHeightMapFunc(function() Spring.LevelHeightMap(64,64,math.min(Game.mapSizeX-64,arsenal and 7000 or 3600),math.min(Game.mapSizeZ-64,arsenal and 7000 or 3200),170) end)
 		report('RECOVERY_TEST_PAD flat construction pad in isolated test only; not a routing benchmark')
 	elseif frame==30 then
 		-- Identical combat rosters, separate from starting commanders.
@@ -48,7 +51,12 @@ function gadget:GameFrame(frame)
 		end
 		-- Keep both starting commanders: Zero-K defeat/storage logic depends on them.
 		active=true
+		if stress then report('SCALE_FIXTURE commanders protected from damage to prevent early game-over; not a victory benchmark') end
 		report('SETUP equal_value='..tostring(value[0]==value[1])..' own_value='..value[0]..' enemy_value='..value[1]..' resource_grant_raw=15000 visible_storage=10000 each; units_per_side='..(startup and 0 or cover and 10 or early and 5 or thousand and 1000 or stress and 400 or 32))
+	elseif frame==90 and arsenal then
+		for i,name in ipairs({'staticnuke','staticmissilesilo'}) do local x=1000+i*700; local id=Spring.CreateUnit(name,x,170,1000,0,0); launchers[#launchers+1]=id; if name=='staticnuke' then Spring.SetUnitStockpile(id,1,0) end; report('ARSENAL_SETUP '..name..'='..tostring(id)) end
+		for i=1,3 do local target=Spring.CreateUnit('staticheavyarty',5900+i*100,170,5000,0,1); Spring.GiveOrderToUnit(target,CMD.FIRE_STATE,{0},0) end
+		local scout=Spring.CreateUnit('planescout',6000,170,3700,0,0); report('ARSENAL_SCOUT '..tostring(scout)..' native Owl sight; no full-LOS cheat')
 	elseif frame==90 and (defense or Spring.GetModOptions().cl_test_production=='1') then
 		for i,name in ipairs((stress or startup) and {'factorycloak','factoryveh','factoryshield','factoryhover'} or {'factorycloak'}) do
 			local x=800+i*600; local z=stress and 500 or 1400
@@ -65,6 +73,8 @@ function gadget:GameFrame(frame)
 	elseif frame==180 then
 		for id,p in pairs(armies[1]) do if early or defense or domains then Spring.GiveOrderToUnit(id,CMD.FIRE_STATE,{0},0) else Spring.GiveOrderToUnit(id,CMD.FIGHT,{p.x,Spring.GetGroundHeight(p.x,2400),2400},0) end end
 		report(early and 'PASSIVE_ENEMY hold fire for controlled recovery test' or 'ENEMY_ADVANCE native Fight issued')
+	elseif arsenal and frame==2100 then
+		local target=Spring.CreateUnit('staticheavyarty',4000,170,3500,0,1); Spring.GiveOrderToUnit(target,CMD.FIRE_STATE,{0},0); local scout=Spring.CreateUnit('planescout',4000,170,2500,0,0); report('ARSENAL_SECOND_TARGET '..tostring(target)..' scout='..tostring(scout)..' for completed Eos test')
 	elseif defense and frame==900 then
 		for i=1,8 do local x=homeX+300+i*25; local z=homeZ+100; local id=Spring.CreateUnit('cloakraid',x,Spring.GetGroundHeight(x,z),z,0,1); if id then raiders[#raiders+1]=id; Spring.GiveOrderToUnit(id,CMD.FIGHT,{homeX,Spring.GetGroundHeight(homeX,homeZ),homeZ},0) end end
 		if homeFactory and Spring.ValidUnitID(homeFactory) then local h=Spring.GetUnitHealth(homeFactory); Spring.SetUnitHealth(homeFactory,h*.8) end
@@ -84,9 +94,18 @@ function gadget:GameFrame(frame)
 		report(frame==900 and (cover and 'CONTROLLED_DAMAGE six=5% four=90%' or 'CONTROLLED_DAMAGE health=30%') or 'CONTROLLED_HEAL health=100%')
 	elseif active and frame%300==0 then
 		metric()
+		if arsenal then for _,id in ipairs(launchers) do local ready,queued=Spring.GetUnitStockpile(id); report('ARSENAL_AMMO '..id..' ready='..tostring(ready)..' queued='..tostring(queued)) end end
 		if recovery then local parts={}; for _,id in ipairs(Spring.GetTeamUnits(0)) do local def=UnitDefs[Spring.GetUnitDefID(id)]; if def.name=='energysolar' or def.name=='factorycloak' or def.name=='cloakcon' then local _,_,_,_,built=Spring.GetUnitHealth(id); parts[#parts+1]=def.name..':'..id..':'..string.format('%.2f',built or 0) end end; table.sort(parts); report('RECOVERY_ASSETS '..table.concat(parts,',')) end
 		if frame==30*(tonumber(Spring.GetModOptions().cl_test_duration) or 120) then report('END combat benchmark') end
 	end
 end
 function gadget:UnitDamaged(id,def,team,amount) if active and armies[team] and armies[team][id] then damage[team]=damage[team]+amount end end
 function gadget:UnitDestroyed(id,def,team) if active and armies[team] and armies[team][id] then losses[team]=losses[team]+UnitDefs[def].metalCost; armies[team][id]=nil end end
+
+function gadget:ProjectileCreated(id,owner,weapon) if arsenal and owner and Spring.GetUnitTeam(owner)==0 then local w=WeaponDefs[weapon]; if w and (w.stockpile or (w.range or 0)>3000) then report('ARSENAL_PROJECTILE owner='..owner..' weapon='..w.name) end end end
+
+-- Scale fixture protection avoids early game-over; not a combat victory test.
+function gadget:UnitPreDamaged(id,def,team,damage)
+ if stress and UnitDefs[def].customParams and (UnitDefs[def].customParams.commtype or UnitDefs[def].customParams.dynamic_comm) then return 0 end
+ return damage
+end

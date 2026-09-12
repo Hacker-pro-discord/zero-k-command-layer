@@ -49,8 +49,8 @@ return function(C)
 				local op=d.ops[group] and C.registry.operations[d.ops[group]]
 				local emergency=d.defense and d.defense.threat and ('defend:'..tostring(d.defense.threat.asset)) or d.recovery and ('recover:'..d.recovery.created)
 				if op and op.active then
-					local recruits={}; for _,id in ipairs(ids) do if not C.registry.owner[id] and C.U.distance(C.U.position(id),op.slots[id] or op.plan.center)>200 then recruits[#recruits+1]=id end end
-					if #recruits>0 then local p=D.plan(f,recruits,op.plan.center,group); local reinforcement=#p.units>0 and C.officer.executeDelegated(f,p.units,p,group,CMD.FIGHT); if reinforcement then C.registry.operations[reinforcement].mode='ARRIVAL' end end
+					local recruits={}; for _,id in ipairs(ids) do if not C.registry.owner[id] and (not op.slots[id] or C.U.distance(C.U.position(id),op.slots[id])>200) then recruits[#recruits+1]=id end end
+					if #recruits>0 then local p=D.plan(f,recruits,op.plan.center,group); local reinforcement=#p.units>0 and C.officer.executeDelegated(f,p.units,p,group,CMD.FIGHT); if reinforcement then C.registry.operations[reinforcement].mode='ARRIVAL'; for _,id in ipairs(p.units) do op.slots[id]=p.slots[id] end end end
 					local arrived=0; for _,id in ipairs(ids) do if op.slots[id] and C.U.distance(C.U.position(id),op.slots[id])<200 then arrived=arrived+1 end end
 					if emergency~=state.emergency and (not state.emergency or now>=state.next) or not C.observations.nearCombat(C.U.center(ids),600) and (arrived/#ids>=.7 or now-op.created>=60) then C.officer.cancel(op.id); state.next=now end
 				end

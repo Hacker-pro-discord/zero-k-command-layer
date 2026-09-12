@@ -1,6 +1,7 @@
 -- Runs only in the separately named test session; never installed with the suite.
 function widget:GetInfo() return {name='Command Layer Combat Test',desc='Equal-army combat driver',author='Command Layer',layer=2000000,enabled=true} end
 local fid,started,last,stopped=nil,false,-100,false
+local arsenal=Spring.GetModOptions().cl_test_arsenal=='1'; local arsenalLog=-100
 local initial={}; local bootConfigured=false
 function widget:Initialize()
 	if Spring.GetPlayerInfo(Spring.GetMyPlayerID())~='CommandLayerCombatTest' then widgetHandler:RemoveWidget(self); return end
@@ -10,6 +11,8 @@ end
 function widget:Update()
 	local A=WG.CommandLayer; local now=Spring.GetGameSeconds(); if not A then return end
 	if not bootConfigured then bootConfigured=true; if Spring.GetModOptions().cl_test_mapcontrol~='1' then A.SetAutomaticMapControl(false) end end
+	if arsenal and not started and now>=6 then started=true; A.SetPrivateTestingSession(true); local ids={}; for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID())) do local d=UnitDefs[Spring.GetUnitDefID(id)]; if d.name=='staticnuke' or d.name=='staticmissilesilo' then ids[#ids+1]=id end end; Spring.Echo('[CL-ARSENAL] enrolled='..tostring(A.EnrollLaunchers(ids))) end
+	if arsenal and now-arsenalLog>=2 then arsenalLog=now; Spring.Echo('[CL-ARSENAL] '..A.GetStrategicFireStatus()); for _,u in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID())) do local d=UnitDefs[Spring.GetUnitDefID(u)]; if d and d.name=='tacnuke' then local h,m,_,_,b=Spring.GetUnitHealth(u); local q=(Spring.GetCommandQueue(u,1) or {})[1]; Spring.Echo('[CL-MISSILE] '..u..' parent='..tostring((Spring.GetUnitRulesParam(u,'missile_parentSilo')))..' built='..tostring(b)..' stun='..tostring((Spring.GetUnitIsStunned(u)))..' cmd='..tostring(q and q.id)) end end end
 	if not started and now>=6 and Spring.GetModOptions().cl_test_mapcontrol=='1' then started=true; fid=1; local f=A.GetForce(1); if f then for id in pairs(f.members) do local x,_,z=Spring.GetUnitPosition(id); initial[id]={x,z} end end; Spring.Echo('[CL-MAP] automatic startup force='..tostring(A.GetForce(1)~=nil)) end
 	if not started and now>=6 and Spring.GetModOptions().cl_test_startup=='1' then
 		started=true; A.SetPrivateTestingSession(true); Spring.Echo('[CL-STARTUP] start='..tostring(A.StartAutonomous())); fid=1
@@ -42,5 +45,7 @@ function widget:Update()
 			Spring.Echo('[CL-COMBAT-CLIENT] t='..math.floor(now)..' state='..d.state..' blocked='..blocked..' main_op='..tostring(d.ops.MAIN)..' reason='..d.reason)
 		end
 	end
-	if fid and now>=(tonumber(Spring.GetModOptions().cl_test_duration) or 120) and not stopped then stopped=true; A.SetDelegatedControl(fid,false); Spring.Echo('[CL-COMBAT-CLIENT] COMPLETE'); if Spring.GetModOptions().cl_test_exit=='1' then Spring.SendCommands('quitforce') end end
+	if (fid or arsenal) and now>=(tonumber(Spring.GetModOptions().cl_test_duration) or 120) and not stopped then stopped=true; if fid then A.SetDelegatedControl(fid,false) end; if arsenal then A.StopStrategicFire() end; Spring.Echo('[CL-COMBAT-CLIENT] COMPLETE'); if Spring.GetModOptions().cl_test_exit=='1' then Spring.SendCommands('quitforce') end end
 end
+
+function widget:UnitCommand(id,def,team,cmd,params) if arsenal and team==Spring.GetMyTeamID() and (cmd==CMD.ATTACK or cmd==CMD.STOCKPILE or cmd==CMD.REMOVE or cmd==-UnitDefNames.tacnuke.id) then Spring.Echo('[CL-ARSENAL-ORDER] '..id..' '..UnitDefs[def].name..' cmd='..cmd..' params='..table.concat(params,',')) end end
