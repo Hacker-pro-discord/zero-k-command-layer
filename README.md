@@ -65,3 +65,6 @@ Assisted features and maintenance require explicit local/private testing enabled
 Ordinary tools and advice are joined by an experimental single-player delegated pressure controller. Native aiming, firing, target acquisition and tactical AI remain enabled. Geometry is approximate on curves, map edges and difficult terrain; the engine handles navigation and stalled positioning is released. Tight curves can compress adjacent ranks. Observation snapshots contain current visual and anonymous radar contacts; stale history is reserved for later work. No learned weights, runtime web research execution, autonomous reserves or strategic economy control are included.
 
 See [validation](docs/VALIDATION.md), [architecture and research](docs/ARCHITECTURE.md), [attribution](docs/ATTRIBUTION.md), [milestone evidence](docs/MILESTONES.md), and [service contracts](docs/API.md).
+
+
+Equal-army combat testing, results and the separate-session launcher are documented in [COMBAT_TEST.md](docs/COMBAT_TEST.md).

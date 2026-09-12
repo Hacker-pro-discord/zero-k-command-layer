@@ -120,6 +120,7 @@ return function(C)
 		local now=C.U.now(); if A.lastUpdate and now-A.lastUpdate<.1 then return end; A.lastUpdate=now
 		for _,op in pairs(C.registry.operations) do
 			if op.active then
+				if op.grant then op.state='ADVANCING' end
 				local live={}; for _,id in ipairs(op.units) do if C.registry.valid(op,id) then live[#live+1]=id end end
 				local positioned={}; for _,id in ipairs(live) do if not op.ordinary[id] then positioned[#positioned+1]=id end end; local anchor=C.U.center(positioned) or C.U.center(live); local remaining=0
 				for _,id in ipairs(live) do
@@ -128,6 +129,7 @@ return function(C)
 					for i,q in ipairs(queue) do if q.id==op.command and #q.params>=3 and C.U.distance(q.params,target)<2 then baseIndex=i; base=q; break end end
 					local arrived=C.U.distance(pos,target)<math.max(48,C.classify.definition(Spring.GetUnitDefID(id)).radius*2)
 					local inObservedCombat=op.grant and C.observations.nearCombat(pos,C.classify.definition(Spring.GetUnitDefID(id)).range+180)
+					if inObservedCombat then op.state='ENGAGING' end
 					local release=not C.U.assisted(C.settings) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1
 					if arrived then release=true end
 					if base then t.seen=true elseif t.seen or now-op.created>5 then release=true end

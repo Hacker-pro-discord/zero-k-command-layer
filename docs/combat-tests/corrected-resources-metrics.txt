@@ -1,0 +1,208 @@
+[t=00:00:13.192229][f=0000030] [CL-COMBAT] SETUP equal_value=true own_value=3010 enemy_value=3010 starting_metal=5000 starting_energy=5000 each; 32 units each
+[t=00:00:18.178684][f=0000180] [CL-COMBAT] ENEMY_ADVANCE native Fight issued
+[t=00:00:18.192928][f=0000180] [CL-COMBAT-CLIENT] delegated=true
+[t=00:00:18.192962][f=0000180] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=nil
+[t=00:00:18.192966][f=0000180] [CL-COMBAT-CLIENT] group=RAID alive=4 op=nil
+[t=00:00:18.192973][f=0000180] [CL-COMBAT-CLIENT] group=MAIN alive=26 op=nil
+[t=00:00:18.192983][f=0000180] [CL-COMBAT-CLIENT] t=6 state=ASSEMBLING blocked=0 main_op=nil reason=Explicit Scout + Raid + Push delegation.
+[t=00:00:22.185417][f=0000300] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:22.185434][f=0000300] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:22.185485][f=0000300] [CL-COMBAT] METRIC frame=300 own_count=32 enemy_count=32 own_value=3010 enemy_value=3010 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:00:28.184782][f=0000480] [CL-COMBAT-CLIENT] group=SCOUT alive=2 op=1
+[t=00:00:28.184791][f=0000480] [CL-COMBAT-CLIENT] group=RAID alive=4 op=2
+[t=00:00:28.184798][f=0000480] [CL-COMBAT-CLIENT] group=MAIN alive=26 op=3
+[t=00:00:28.184803][f=0000480] [CL-COMBAT-CLIENT] t=16 state=ADVANCE blocked=0 main_op=3 reason=Advance main role formation by up to 600 game units; native Fight engages observed opposition.
+[t=00:00:32.176752][f=0000600] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:32.176761][f=0000600] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:32.176789][f=0000600] [CL-COMBAT] METRIC frame=600 own_count=28 enemy_count=32 own_value=2750 enemy_value=3010 own_lost=260 enemy_lost=0 own_damage_taken=1450 enemy_damage_taken=939
+[t=00:00:38.192721][f=0000780] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:00:38.192732][f=0000780] [CL-COMBAT-CLIENT] group=RAID alive=4 op=4
+[t=00:00:38.192738][f=0000780] [CL-COMBAT-CLIENT] group=MAIN alive=15 op=3
+[t=00:00:38.192774][f=0000780] [CL-COMBAT-CLIENT] t=26 state=WITHDRAW blocked=0 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:00:42.182962][f=0000900] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:42.182978][f=0000900] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:42.183044][f=0000900] [CL-COMBAT] METRIC frame=900 own_count=18 enemy_count=17 own_value=2100 enemy_value=2035 own_lost=910 enemy_lost=975 own_damage_taken=4351 enemy_damage_taken=4178
+[t=00:00:48.234936][f=0001081] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:00:48.234946][f=0001081] [CL-COMBAT-CLIENT] group=RAID alive=4 op=4
+[t=00:00:48.234951][f=0001081] [CL-COMBAT-CLIENT] group=MAIN alive=12 op=3
+[t=00:00:48.234957][f=0001081] [CL-COMBAT-CLIENT] t=36 state=WITHDRAW blocked=0 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:00:52.175731][f=0001200] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:52.175741][f=0001200] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:00:52.175760][f=0001200] [CL-COMBAT] METRIC frame=1200 own_count=15 enemy_count=12 own_value=1470 enemy_value=1420 own_lost=1540 enemy_lost=1590 own_damage_taken=7278 enemy_damage_taken=7409
+[t=00:00:58.226347][f=0001381] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:00:58.226356][f=0001381] [CL-COMBAT-CLIENT] group=RAID alive=2 op=5
+[t=00:00:58.226363][f=0001381] [CL-COMBAT-CLIENT] group=MAIN alive=10 op=3
+[t=00:00:58.226388][f=0001381] [CL-COMBAT-CLIENT] t=46 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:01:02.182523][f=0001500] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:02.182533][f=0001500] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:02.182575][f=0001500] [CL-COMBAT] METRIC frame=1500 own_count=10 enemy_count=10 own_value=1000 enemy_value=1000 own_lost=2010 enemy_lost=2010 own_damage_taken=8535 enemy_damage_taken=8528
+[t=00:01:08.234806][f=0001681] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:01:08.234815][f=0001681] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:01:08.234822][f=0001681] [CL-COMBAT-CLIENT] group=MAIN alive=10 op=3
+[t=00:01:08.234828][f=0001681] [CL-COMBAT-CLIENT] t=56 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:01:12.173553][f=0001800] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:12.173563][f=0001800] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:12.173581][f=0001800] [CL-COMBAT] METRIC frame=1800 own_count=10 enemy_count=9 own_value=1000 enemy_value=910 own_lost=2010 enemy_lost=2100 own_damage_taken=8535 enemy_damage_taken=9168
+[t=00:01:18.226365][f=0001981] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:01:18.226374][f=0001981] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:01:18.226380][f=0001981] [CL-COMBAT-CLIENT] group=MAIN alive=10 op=3
+[t=00:01:18.226386][f=0001981] [CL-COMBAT-CLIENT] t=66 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:01:22.182863][f=0002100] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:22.182896][f=0002100] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:22.182914][f=0002100] [CL-COMBAT] METRIC frame=2100 own_count=10 enemy_count=9 own_value=1000 enemy_value=910 own_lost=2010 enemy_lost=2100 own_damage_taken=8761 enemy_damage_taken=9348
+[t=00:01:28.235281][f=0002281] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:01:28.235290][f=0002281] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:01:28.235317][f=0002281] [CL-COMBAT-CLIENT] group=MAIN alive=10 op=3
+[t=00:01:28.235323][f=0002281] [CL-COMBAT-CLIENT] t=76 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:01:32.174132][f=0002400] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:32.174142][f=0002400] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:32.174192][f=0002400] [CL-COMBAT] METRIC frame=2400 own_count=10 enemy_count=9 own_value=1000 enemy_value=910 own_lost=2010 enemy_lost=2100 own_damage_taken=8901 enemy_damage_taken=9528
+[t=00:01:38.226797][f=0002581] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:01:38.226806][f=0002581] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:01:38.226812][f=0002581] [CL-COMBAT-CLIENT] group=MAIN alive=10 op=3
+[t=00:01:38.226818][f=0002581] [CL-COMBAT-CLIENT] t=86 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:01:42.187711][f=0002700] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:42.187721][f=0002700] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:42.187739][f=0002700] [CL-COMBAT] METRIC frame=2700 own_count=9 enemy_count=9 own_value=910 enemy_value=910 own_lost=2100 enemy_lost=2100 own_damage_taken=9202 enemy_damage_taken=9528
+[t=00:01:48.218356][f=0002881] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:01:48.218365][f=0002881] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:01:48.218371][f=0002881] [CL-COMBAT-CLIENT] group=MAIN alive=9 op=3
+[t=00:01:48.218378][f=0002881] [CL-COMBAT-CLIENT] t=96 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:01:52.178220][f=0003000] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:52.178251][f=0003000] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:01:52.178269][f=0003000] [CL-COMBAT] METRIC frame=3000 own_count=9 enemy_count=9 own_value=910 enemy_value=910 own_lost=2100 enemy_lost=2100 own_damage_taken=9202 enemy_damage_taken=9708
+[t=00:01:58.227722][f=0003181] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:01:58.227732][f=0003181] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:01:58.227764][f=0003181] [CL-COMBAT-CLIENT] group=MAIN alive=9 op=3
+[t=00:01:58.227770][f=0003181] [CL-COMBAT-CLIENT] t=106 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:02:02.184658][f=0003300] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:02.184673][f=0003300] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:02.184713][f=0003300] [CL-COMBAT] METRIC frame=3300 own_count=9 enemy_count=9 own_value=910 enemy_value=910 own_lost=2100 enemy_lost=2100 own_damage_taken=9382 enemy_damage_taken=9827
+[t=00:02:08.219026][f=0003481] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:02:08.219039][f=0003481] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:02:08.219044][f=0003481] [CL-COMBAT-CLIENT] group=MAIN alive=9 op=3
+[t=00:02:08.219051][f=0003481] [CL-COMBAT-CLIENT] t=116 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:02:12.175944][f=0003600] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:12.175954][f=0003600] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:12.175976][f=0003600] [CL-COMBAT] METRIC frame=3600 own_count=9 enemy_count=9 own_value=910 enemy_value=910 own_lost=2100 enemy_lost=2100 own_damage_taken=9562 enemy_damage_taken=9827
+[t=00:02:12.176024][f=0003600] [CL-COMBAT] END 120-second combat benchmark
+[t=00:02:12.189450][f=0003600] [CL-COMBAT-CLIENT] COMPLETE; test session remains open
+[t=00:02:18.227506][f=0003781] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:02:18.227515][f=0003781] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:02:18.227521][f=0003781] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:02:18.227527][f=0003781] [CL-COMBAT-CLIENT] t=126 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:02:22.183538][f=0003900] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:22.183570][f=0003900] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:22.183587][f=0003900] [CL-COMBAT] METRIC frame=3900 own_count=8 enemy_count=7 own_value=790 enemy_value=730 own_lost=2220 enemy_lost=2280 own_damage_taken=10062 enemy_damage_taken=10326
+[t=00:02:28.235623][f=0004081] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:02:28.235660][f=0004081] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:02:28.235669][f=0004081] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:02:28.235678][f=0004081] [CL-COMBAT-CLIENT] t=136 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:02:32.174984][f=0004200] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:32.174994][f=0004200] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:32.175035][f=0004200] [CL-COMBAT] METRIC frame=4200 own_count=8 enemy_count=7 own_value=790 enemy_value=730 own_lost=2220 enemy_lost=2280 own_damage_taken=10062 enemy_damage_taken=10326
+[t=00:02:38.227241][f=0004381] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:02:38.227249][f=0004381] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:02:38.227255][f=0004381] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:02:38.227261][f=0004381] [CL-COMBAT-CLIENT] t=146 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:02:42.184033][f=0004500] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:42.184045][f=0004500] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:42.184061][f=0004500] [CL-COMBAT] METRIC frame=4500 own_count=8 enemy_count=7 own_value=790 enemy_value=730 own_lost=2220 enemy_lost=2280 own_damage_taken=10062 enemy_damage_taken=10326
+[t=00:02:48.235358][f=0004681] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:02:48.235367][f=0004681] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:02:48.235373][f=0004681] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:02:48.235380][f=0004681] [CL-COMBAT-CLIENT] t=156 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:02:52.176071][f=0004800] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:52.176109][f=0004800] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:02:52.176127][f=0004800] [CL-COMBAT] METRIC frame=4800 own_count=8 enemy_count=6 own_value=790 enemy_value=640 own_lost=2220 enemy_lost=2370 own_damage_taken=10062 enemy_damage_taken=10506
+[t=00:02:58.227549][f=0004981] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:02:58.227593][f=0004981] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:02:58.227600][f=0004981] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:02:58.227608][f=0004981] [CL-COMBAT-CLIENT] t=166 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:03:02.183663][f=0005100] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:02.183695][f=0005100] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:02.183714][f=0005100] [CL-COMBAT] METRIC frame=5100 own_count=8 enemy_count=6 own_value=790 enemy_value=640 own_lost=2220 enemy_lost=2370 own_damage_taken=10062 enemy_damage_taken=10506
+[t=00:03:08.235702][f=0005281] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:03:08.235712][f=0005281] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:03:08.235719][f=0005281] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:03:08.235726][f=0005281] [CL-COMBAT-CLIENT] t=176 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:03:12.177081][f=0005400] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:12.177152][f=0005400] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:12.177179][f=0005400] [CL-COMBAT] METRIC frame=5400 own_count=8 enemy_count=5 own_value=790 enemy_value=520 own_lost=2220 enemy_lost=2490 own_damage_taken=10203 enemy_damage_taken=11146
+[t=00:03:18.227487][f=0005581] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:03:18.227496][f=0005581] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:03:18.227523][f=0005581] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:03:18.227531][f=0005581] [CL-COMBAT-CLIENT] t=186 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:03:22.183729][f=0005700] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:22.183746][f=0005700] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:22.183816][f=0005700] [CL-COMBAT] METRIC frame=5700 own_count=8 enemy_count=4 own_value=790 enemy_value=400 own_lost=2220 enemy_lost=2610 own_damage_taken=10203 enemy_damage_taken=11745
+[t=00:03:28.219129][f=0005881] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:03:28.219141][f=0005881] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:03:28.219150][f=0005881] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:03:28.219158][f=0005881] [CL-COMBAT-CLIENT] t=196 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:03:32.176707][f=0006000] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:32.176718][f=0006000] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:32.176735][f=0006000] [CL-COMBAT] METRIC frame=6000 own_count=8 enemy_count=4 own_value=790 enemy_value=400 own_lost=2220 enemy_lost=2610 own_damage_taken=10203 enemy_damage_taken=12025
+[t=00:03:38.227651][f=0006181] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:03:38.227659][f=0006181] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:03:38.227666][f=0006181] [CL-COMBAT-CLIENT] group=MAIN alive=8 op=3
+[t=00:03:38.227673][f=0006181] [CL-COMBAT-CLIENT] t=206 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:03:42.184972][f=0006300] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:42.185005][f=0006300] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:42.185022][f=0006300] [CL-COMBAT] METRIC frame=6300 own_count=7 enemy_count=4 own_value=700 enemy_value=400 own_lost=2310 enemy_lost=2610 own_damage_taken=10623 enemy_damage_taken=12105
+[t=00:03:48.219441][f=0006481] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:03:48.219450][f=0006481] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:03:48.219477][f=0006481] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=3
+[t=00:03:48.219485][f=0006481] [CL-COMBAT-CLIENT] t=216 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:03:52.178636][f=0006600] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:52.178647][f=0006600] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:03:52.178686][f=0006600] [CL-COMBAT] METRIC frame=6600 own_count=7 enemy_count=4 own_value=700 enemy_value=400 own_lost=2310 enemy_lost=2610 own_damage_taken=10763 enemy_damage_taken=12105
+[t=00:03:58.227741][f=0006781] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:03:58.227752][f=0006781] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:03:58.227758][f=0006781] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=3
+[t=00:03:58.227766][f=0006781] [CL-COMBAT-CLIENT] t=226 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:04:02.171136][f=0006900] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:02.171146][f=0006900] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:02.171163][f=0006900] [CL-COMBAT] METRIC frame=6900 own_count=7 enemy_count=4 own_value=700 enemy_value=400 own_lost=2310 enemy_lost=2610 own_damage_taken=10763 enemy_damage_taken=12105
+[t=00:04:08.219388][f=0007081] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:04:08.219400][f=0007081] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:04:08.219409][f=0007081] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=3
+[t=00:04:08.219420][f=0007081] [CL-COMBAT-CLIENT] t=236 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:04:12.177312][f=0007200] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:12.177347][f=0007200] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:12.177364][f=0007200] [CL-COMBAT] METRIC frame=7200 own_count=7 enemy_count=4 own_value=700 enemy_value=400 own_lost=2310 enemy_lost=2610 own_damage_taken=10763 enemy_damage_taken=12484
+[t=00:04:18.228093][f=0007381] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:04:18.228102][f=0007381] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:04:18.228355][f=0007381] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=3
+[t=00:04:18.228364][f=0007381] [CL-COMBAT-CLIENT] t=246 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:04:22.178384][f=0007500] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:22.178395][f=0007500] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:22.178432][f=0007500] [CL-COMBAT] METRIC frame=7500 own_count=7 enemy_count=2 own_value=700 enemy_value=200 own_lost=2310 enemy_lost=2810 own_damage_taken=10763 enemy_damage_taken=12714
+[t=00:04:28.220030][f=0007681] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:04:28.220039][f=0007681] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:04:28.220046][f=0007681] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=3
+[t=00:04:28.220054][f=0007681] [CL-COMBAT-CLIENT] t=256 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:04:32.183072][f=0007800] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:32.183088][f=0007800] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:32.183113][f=0007800] [CL-COMBAT] METRIC frame=7800 own_count=7 enemy_count=2 own_value=700 enemy_value=200 own_lost=2310 enemy_lost=2810 own_damage_taken=10763 enemy_damage_taken=12714
+[t=00:04:38.227928][f=0007981] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:04:38.227937][f=0007981] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:04:38.227943][f=0007981] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=3
+[t=00:04:38.227952][f=0007981] [CL-COMBAT-CLIENT] t=266 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:04:42.183896][f=0008100] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:42.183934][f=0008100] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:42.183954][f=0008100] [CL-COMBAT] METRIC frame=8100 own_count=7 enemy_count=2 own_value=700 enemy_value=200 own_lost=2310 enemy_lost=2810 own_damage_taken=10763 enemy_damage_taken=12714
+[t=00:04:48.220437][f=0008281] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:04:48.220448][f=0008281] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:04:48.220478][f=0008281] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=3
+[t=00:04:48.220487][f=0008281] [CL-COMBAT-CLIENT] t=276 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:04:52.186428][f=0008400] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:52.186438][f=0008400] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:04:52.186477][f=0008400] [CL-COMBAT] METRIC frame=8400 own_count=7 enemy_count=2 own_value=700 enemy_value=200 own_lost=2310 enemy_lost=2810 own_damage_taken=10763 enemy_damage_taken=12714
+[t=00:04:58.229506][f=0008581] [CL-COMBAT-CLIENT] group=SCOUT alive=0 op=1
+[t=00:04:58.229520][f=0008581] [CL-COMBAT-CLIENT] group=RAID alive=0 op=5
+[t=00:04:58.229530][f=0008581] [CL-COMBAT-CLIENT] group=MAIN alive=7 op=3
+[t=00:04:58.229550][f=0008581] [CL-COMBAT-CLIENT] t=286 state=HARASS blocked=0 main_op=3 reason=No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:05:02.186239][f=0008700] [CL-COMBAT] RESOURCES team=0 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:05:02.186249][f=0008700] [CL-COMBAT] RESOURCES team=1 raw_metal=10006 raw_energy=10008 metal_storage=20000 energy_storage=20000
+[t=00:05:02.186265][f=0008700] [CL-COMBAT] METRIC frame=8700 own_count=6 enemy_count=2 own_value=610 enemy_value=200 own_lost=2400 enemy_lost=2810 own_damage_t

@@ -1,0 +1,41 @@
+[t=00:00:14.030646][f=0000030] [CL-COMBAT] SETUP equal_value=true own_value=3010 enemy_value=3010 starting_metal=5000 starting_energy=5000 each; 32 units each
+[t=00:00:19.003239][f=0000180] [CL-COMBAT] ENEMY_ADVANCE native Fight issued
+[t=00:00:19.014846][f=0000180] [CL-COMBAT-CLIENT] delegated=true
+[t=00:00:19.014884][f=0000180] [CL-COMBAT-CLIENT] t=6 state=ASSEMBLING blocked=0 main_op=nil reason=Explicit Scout + Raid + Push delegation.
+[t=00:00:23.012398][f=0000300] [CL-COMBAT] METRIC frame=300 own_count=32 enemy_count=32 own_value=3010 enemy_value=3010 own_lost=0 enemy_lost=0 own_damage_taken=0 enemy_damage_taken=0
+[t=00:00:29.023396][f=0000480] [CL-COMBAT-CLIENT] t=16 state=ADVANCE blocked=0 main_op=3 reason=Advance main role formation by up to 600 game units; native Fight engages observed opposition.
+[t=00:00:33.002548][f=0000600] [CL-COMBAT] METRIC frame=600 own_count=29 enemy_count=32 own_value=2815 enemy_value=3010 own_lost=195 enemy_lost=0 own_damage_taken=1167 enemy_damage_taken=1336
+[t=00:00:39.015071][f=0000780] [CL-COMBAT-CLIENT] t=26 state=ADVANCE blocked=0 main_op=3 reason=Advance main role formation by up to 600 game units; native Fight engages observed opposition.
+[t=00:00:43.007282][f=0000900] [CL-COMBAT] METRIC frame=900 own_count=19 enemy_count=17 own_value=2165 enemy_value=2035 own_lost=845 enemy_lost=975 own_damage_taken=3583 enemy_damage_taken=4227
+[t=00:00:49.056517][f=0001081] [CL-COMBAT-CLIENT] t=36 state=WITHDRAW blocked=0 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:00:53.013229][f=0001200] [CL-COMBAT] METRIC frame=1200 own_count=14 enemy_count=14 own_value=1695 enemy_value=1840 own_lost=1315 enemy_lost=1170 own_damage_taken=5168 enemy_damage_taken=6261
+[t=00:00:59.048154][f=0001381] [CL-COMBAT-CLIENT] t=46 state=WITHDRAW blocked=0 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:01:03.005098][f=0001500] [CL-COMBAT] METRIC frame=1500 own_count=12 enemy_count=12 own_value=1275 enemy_value=1420 own_lost=1735 enemy_lost=1590 own_damage_taken=6715 enemy_damage_taken=8136
+[t=00:01:09.056885][f=0001681] [CL-COMBAT-CLIENT] t=56 state=SCOUT blocked=0 main_op=3 reason=Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:13.015209][f=0001800] [CL-COMBAT] METRIC frame=1800 own_count=12 enemy_count=11 own_value=1275 enemy_value=1210 own_lost=1735 enemy_lost=1800 own_damage_taken=6951 enemy_damage_taken=8284
+[t=00:01:19.048186][f=0001981] [CL-COMBAT-CLIENT] t=66 state=SCOUT blocked=0 main_op=3 reason=Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:23.006902][f=0002100] [CL-COMBAT] METRIC frame=2100 own_count=12 enemy_count=10 own_value=1275 enemy_value=1000 own_lost=1735 enemy_lost=2010 own_damage_taken=7131 enemy_damage_taken=8913
+[t=00:01:29.056932][f=0002281] [CL-COMBAT-CLIENT] t=76 state=SCOUT blocked=0 main_op=3 reason=Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:33.014043][f=0002400] [CL-COMBAT] METRIC frame=2400 own_count=12 enemy_count=10 own_value=1275 enemy_value=1000 own_lost=1735 enemy_lost=2010 own_damage_taken=7131 enemy_damage_taken=8913
+[t=00:01:39.065362][f=0002581] [CL-COMBAT-CLIENT] t=86 state=SCOUT blocked=0 main_op=3 reason=Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:43.004826][f=0002700] [CL-COMBAT] METRIC frame=2700 own_count=12 enemy_count=10 own_value=1275 enemy_value=1000 own_lost=1735 enemy_lost=2010 own_damage_taken=7131 enemy_damage_taken=9093
+[t=00:01:49.056751][f=0002881] [CL-COMBAT-CLIENT] t=96 state=SCOUT blocked=0 main_op=3 reason=Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:53.016606][f=0003000] [CL-COMBAT] METRIC frame=3000 own_count=12 enemy_count=8 own_value=1275 enemy_value=820 own_lost=1735 enemy_lost=2190 own_damage_taken=7311 enemy_damage_taken=9531
+[t=00:01:59.048145][f=0003181] [CL-COMBAT-CLIENT] t=106 state=SCOUT blocked=0 main_op=3 reason=Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:02:03.006312][f=0003300] [CL-COMBAT] METRIC frame=3300 own_count=12 enemy_count=8 own_value=1275 enemy_value=820 own_lost=1735 enemy_lost=2190 own_damage_taken=7311 enemy_damage_taken=9583
+[t=00:02:09.059133][f=0003481] [CL-COMBAT-CLIENT] t=116 state=WITHDRAW blocked=1 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:02:13.011880][f=0003600] [CL-COMBAT] METRIC frame=3600 own_count=12 enemy_count=7 own_value=1275 enemy_value=730 own_lost=1735 enemy_lost=2280 own_damage_taken=7491 enemy_damage_taken=10049
+[t=00:02:13.011891][f=0003600] [CL-COMBAT] END 120-second combat benchmark
+[t=00:02:13.026940][f=0003600] [CL-COMBAT-CLIENT] COMPLETE; test session remains open
+[t=00:02:19.048791][f=0003781] [CL-COMBAT-CLIENT] t=126 state=WITHDRAW blocked=1 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:02:23.005891][f=0003900] [CL-COMBAT] METRIC frame=3900 own_count=12 enemy_count=7 own_value=1275 enemy_value=730 own_lost=1735 enemy_lost=2280 own_damage_taken=7631 enemy_damage_taken=10049
+[t=00:02:29.057083][f=0004081] [CL-COMBAT-CLIENT] t=136 state=WITHDRAW blocked=1 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:02:33.012640][f=0004200] [CL-COMBAT] METRIC frame=4200 own_count=11 enemy_count=7 own_value=1210 enemy_value=730 own_lost=1800 enemy_lost=2280 own_damage_taken=7771 enemy_damage_taken=10049
+[t=00:02:39.065288][f=0004381] [CL-COMBAT-CLIENT] t=146 state=WITHDRAW blocked=1 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:02:43.005402][f=0004500] [CL-COMBAT] METRIC frame=4500 own_count=11 enemy_count=7 own_value=1210 enemy_value=730 own_lost=1800 enemy_lost=2280 own_damage_taken=7771 enemy_damage_taken=10049
+[t=00:02:49.056935][f=0004681] [CL-COMBAT-CLIENT] t=156 state=WITHDRAW blocked=1 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:02:53.015292][f=0004800] [CL-COMBAT] METRIC frame=4800 own_count=11 enemy_count=7 own_value=1210 enemy_value=730 own_lost=1800 enemy_lost=2280 own_damage_taken=7771 enemy_damage_taken=10049
+[t=00:02:59.049010][f=0004981] [CL-COMBAT-CLIENT] t=166 state=WITHDRAW blocked=1 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:03:03.007577][f=0005100] [CL-COMBAT] METRIC frame=5100 own_count=11 enemy_count=7 own_value=1210 enemy_value=730 own_lost=1800 enemy_lost=2280 own_damage_taken=7771 enemy_damage_taken=10049
+[t=00:03:09.057568][f=0005281] [CL-COMBAT-CLIENT] t=176 state=WITHDRAW blocked=1 main_op=3 reason=Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:03:13.014749][f=0005400] [CL-COMBAT] METRIC frame=5400 own_count=11 enemy_count=7 own_value=1210 enemy_value=730 own_lost=1

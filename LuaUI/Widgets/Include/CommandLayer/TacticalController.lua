@@ -61,6 +61,7 @@ return function(C)
 		d.observed=snapshot.time; d.known={}; for _,v in ipairs(contacts) do d.known[v.role]=(d.known[v.role] or 0)+1 end
 		for _,group in ipairs({'SCOUT','RAID','MAIN'}) do
 			local ids=members(f,group); local op=d.ops[group] and C.registry.operations[d.ops[group]]
+			if #ids==0 then d.decisions[group]={state='UNAVAILABLE',reason='No eligible surviving units in this detachment.',time=now} elseif op and op.active and d.decisions[group] then d.decisions[group].state=op.state end
 			if op and not op.active and not op.accounted then
 				op.accounted=true
 				if op.state~='COMPLETED' then d.failures[group]=(d.failures[group] or 0)+1 else d.failures[group]=0 end
@@ -95,13 +96,15 @@ return function(C)
 					if target then
 						local p=plan(f,ids,target,group,contacts)
 						if p then
-							local id=C.officer.executeDelegated(f,ids,p,kind,group=='SCOUT' and Spring.Utilities.CMD.RAW_MOVE or CMD.FIGHT)
+							local id=C.officer.executeDelegated(f,ids,p,kind,(group=='SCOUT' or kind=='WITHDRAW') and Spring.Utilities.CMD.RAW_MOVE or CMD.FIGHT)
 							if id then d.decisions[group]={state=kind,reason=reason,time=now}; d.ops[group]=id; d.state=kind; d.reason=reason; d.next[group]=now+10; if visit then d.visits[visit]=now end; d.returning[group]=returning; C.debug.log('TACTICAL',group..': '..reason) end
 						else d.next[group]=now+15; d.reason='No formation fits this map boundary. Draw a different objective corridor.' end
 					end
 				end
 			elseif (d.failures[group] or 0)>=3 then d.reason=group..' paused after three failed movements. Re-delegate after checking terrain.'; d.decisions[group]={state='PAUSED',reason=d.reason,time=now} end
 		end
+		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]
+		if main and main.active then d.state=main.state; d.reason=main.state=='ENGAGING' and 'Main force is exchanging fire under native unit AI; combat movement is not being overwritten.' or 'Main force advancing toward its current phase line.' end
 		f.status='DELEGATED / '..d.state
 	end
 	function T.update()
