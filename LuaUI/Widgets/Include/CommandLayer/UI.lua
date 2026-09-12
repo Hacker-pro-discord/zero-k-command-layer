@@ -11,8 +11,10 @@ return function(C)
 		for i,kind in ipairs({'AREA_REPAIR','PERSISTENT_REPAIR','AREA_RECLAIM','PERSISTENT_RECLAIM'}) do
 			ch.Button:New{parent=UI.window,x=((i-1)%2)*170,y=80+math.floor((i-1)/2)*40,width=165,height=36,caption=kind:gsub('_',' '),tooltip='Drag a native area. Persistent areas wait for new targets; Ctrl retains native secondary behavior.',OnClick={function() C.logistics.arm(kind) end}}
 		end
-		UI.window:Resize(370,360)
-		UI.status=ch.TextBox:New{parent=UI.window,x=0,y=175,width='100%',height=110,text='Officer ready.'}
+		UI.window:Resize(370,430)
+		ch.Button:New{parent=UI.window,x=0,y=165,width=165,height=36,caption="LINE",OnClick={function() C.settings.formation="LINE"; C.debug.log("MODE","LINE active. Draw Move / Fight lines.") end}}
+		ch.Button:New{parent=UI.window,x=170,y=165,width=165,height=36,caption="FORMATION OFF",OnClick={function() C.settings.formation="OFF"; for id in pairs(C.registry.operations) do C.officer.cancel(id) end end}}
+		UI.status=ch.TextBox:New{parent=UI.window,x=0,y=215,width='100%',height=110,text='Officer ready.'}
 		C.debug.log('LOAD','Officer / Chili shell loaded')
 		return true
 	end
