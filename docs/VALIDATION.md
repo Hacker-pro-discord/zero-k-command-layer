@@ -1,4 +1,4 @@
-# Validation â€” 2026-09-12
+# Validation  -  2026-09-12
 
 ## Passed automated Lua checks
 

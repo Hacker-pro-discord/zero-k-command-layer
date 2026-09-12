@@ -4,7 +4,7 @@ Planning only. The autonomous controller is not implemented in V1.
 
 ## Architecture and data flow
 
-Extend the existing Officer with a fourth authority level: explicit, sustained delegation of a named force and bounded objective. Do not introduce another combat controller. Player intent or approved doctrine â†’ Officer state machine â†’ observation snapshot and role-zone plan â†’ ownership-validated Orders â†’ native Zero-K unit AI.
+Extend the existing Officer with a fourth authority level: explicit, sustained delegation of a named force and bounded objective. Do not introduce another combat controller. Player intent or approved doctrine  >  Officer state machine  >  observation snapshot and role-zone plan  >  ownership-validated Orders  >  native Zero-K unit AI.
 
 ForceRegistry, classification, geometry, observations, settings and diagnostics remain independent services. Logistics remains independent of combat decisions. ProductionAdvisor continues to offer advice only. The Officer does not manage economy, choose construction sites, expand, recruit automatically or take over production.
 
@@ -34,7 +34,7 @@ Advance to Line A, reform, then Line B and the final objective. Aggressive progr
 
 ## Reserves and preservation
 
-Start with 20% of eligible mobile combat value, configurable to 10â€“30%. Keep compatible reserve units behind the engagement. Commit according to explicit triggers: frontline collapse, local breakthrough, threatened flank/support or a validated push opportunity. Record the reason and amount committed. Rebalance after losses without repurposing protected artillery or support as a disposable screen.
+Start with 20% of eligible mobile combat value, configurable to 10-30%. Keep compatible reserve units behind the engagement. Commit according to explicit triggers: frontline collapse, local breakthrough, threatened flank/support or a validated push opportunity. Record the reason and amount committed. Rebalance after losses without repurposing protected artillery or support as a disposable screen.
 
 Retreat rules combine unit value, health, observed nearby friendly/enemy value, isolation and loss rate. Prioritize expensive units and endangered artillery/support. Require distinct enter/exit thresholds and cooldowns. Withdrawal destinations must lie within a player-authorized policy/area; V1 does not choose them. Respect native retreat and release conflicting higher-level control.
 
@@ -42,7 +42,7 @@ Retreat rules combine unit value, health, observed nearby friendly/enemy value, 
 
 Expose force, doctrine version, state, phase, confidence, subgroup counts, visual composition, anonymous radar count, decision, evidence, uncertainty, next action and control-ending condition. Maintain a bounded decision trace. An explanation must cite actual evaluated rule inputs, not a generated post-hoc justification.
 
-Research stays outside execution: public source â†’ abstract concept â†’ Zero-K interpretation â†’ candidate rule â†’ offline validation â†’ promoted doctrine version. For example, reserve theory becomes a percentage of suitable Zero-K combat value and explicit game-state triggers. No real-world targeting or weapons planning; no web content can issue game commands.
+Research stays outside execution: public source  >  abstract concept  >  Zero-K interpretation  >  candidate rule  >  offline validation  >  promoted doctrine version. For example, reserve theory becomes a percentage of suitable Zero-K combat value and explicit game-state triggers. No real-world targeting or weapons planning; no web content can issue game commands.
 
 Begin learning with transparent outcome statistics and reviewable weight-change proposals. Record damage/value loss, objective success, artillery survival and reserve use only when legitimately observable and attributable. Stratify comparisons by force/enemy composition and uncertainty; do not treat a small sample as proof. Investigate a small model only after a measured rules baseline, with high-level outputs such as HOLD, REFORM or COMMIT_RESERVE. Orders and ownership remain authoritative.
 

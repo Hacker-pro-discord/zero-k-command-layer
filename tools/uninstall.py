@@ -4,7 +4,7 @@ import argparse
 import hashlib
 
 p = argparse.ArgumentParser()
-p.add_argument('--game', default=r'C:\common_attachment\Steam\steamapps\common\Zero-K')
+p.add_argument('--game', required=True)
 p.add_argument('--dry-run', action='store_true')
 a = p.parse_args()
 root = Path(__file__).resolve().parents[1]

@@ -1,4 +1,4 @@
-# Equal-army combat test â€” 2026-09-12
+# Equal-army combat test  -  2026-09-12
 
 ## Environment
 
@@ -37,7 +37,7 @@ Logs are in [combat-tests](combat-tests/corrected-resources-metrics.txt). Fixtur
 ## Repeat in another new session
 
 ```powershell
-python tools/run_combat_test.py --directory "C:\path\outside-the-game\combat-test"
+python tools/run_combat_test.py --game "C:\path\to\Zero-K" --directory "C:\path\outside-the-game\combat-test"
 ```
 
 The launcher creates a separate data directory and test mutator, selects a free local port and starts a new visible game process. Use `--headless --seconds 30` for a short engine check that exits automatically. Default visible duration is 120 seconds; it remains open afterward. This launcher does not stop existing matches. Do not reuse a directory while its test session is running.

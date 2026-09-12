@@ -4,7 +4,7 @@ Copyright 2026 Command Layer contributors. GPL version 2 or later; see LICENSE.
 
 This follows Zero-K patterns without replacing stock widgets. Credit to Zero-K contributors, particularly Google Frog (Mex/native commands), Niobium, jK, gunblob and Skasi (Custom Formations), dizekat (command insertion), jK (Chili), and contributors to roles, retreat and tactical AI.
 
-Inspected directory: `C:\common_attachment\Steam\steamapps\common\Zero-K`. Archive `games/zk-stable.sdz`, v1.14.8.0. Engine `engine/win64/2025.06.21/spring.exe`. Lua 5.1 execution baseline.
+Inspected a local Windows Zero-K installation. Archive `games/zk-stable.sdz`, v1.14.8.0. Engine `engine/win64/2025.06.21/spring.exe`. Lua 5.1 execution baseline.
 
 [Zero-K source baseline](https://github.com/ZeroK-RTS/Zero-K/tree/f4c1406722134fb07be6761750bf0822c69afbc0). Installed Mex placement and CustomFormations2 compared with that source. [Engine baseline](https://github.com/beyond-all-reason/spring/tree/2025.06.21).
 

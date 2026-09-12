@@ -9,7 +9,7 @@ import subprocess
 
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--directory', type=Path, required=True, help='Separate test data directory')
-p.add_argument('--game', type=Path, default=Path(r'C:\common_attachment\Steam\steamapps\common\Zero-K'))
+p.add_argument('--game', type=Path, required=True)
 p.add_argument('--headless', action='store_true')
 p.add_argument('--seconds', type=int, default=120)
 a = p.parse_args()
