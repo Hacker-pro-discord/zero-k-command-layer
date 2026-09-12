@@ -42,10 +42,9 @@ assert(#C.proposals.items[pid].units==400 and C.proposals.valid(C.proposals.item
 C.registry.release({401},'PLAYER_OVERRIDE'); assert(not C.officer.autoAssign(401))
 assert(C.settings.save().autoAssign)
 
--- Prolonged stalled delegation yields a changed, non-executing role regroup proposal.
+-- Prolonged stalled delegation now falls back under the existing grant, without a proposal.
 C.officer.objective(fid,{{2000,0,7400},{5000,0,7400}})
 assert(C.officer.setDelegated(fid,true)); clock=30; C.tactical.tick(f,clock)
-count=#calls; clock=91; C.tactical.tick(f,clock)
-assert(not f.delegation.active and #calls==count and f.reviewReason)
-local review=C.proposals.items[C.proposals.nextID]
-assert(review.wholeArmy and review.kind=='REFORM' and review.plan.shape=='ASSAULT')
+count=#calls; local proposalCount=C.proposals.nextID; clock=91; C.tactical.tick(f,clock)
+assert(f.delegation.active and f.delegation.recovery and f.delegation.strategy.step<600)
+assert(C.proposals.nextID==proposalCount)

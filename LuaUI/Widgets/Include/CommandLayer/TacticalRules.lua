@@ -1,6 +1,6 @@
 -- Reviewed, game-only rules. Sources and experimental status: docs/TACTICAL_RESEARCH.md.
 return function(C)
-	local R={version='pressure-1',scoutFraction=.1,raidFraction=.2,step=600}
+	local R={version='pressure-2',scoutFraction=.1,raidFraction=.2,step=600}
 	function R.groups(ids)
 		local groups={SCOUT={},RAID={},MAIN={}}; local candidates={}
 		for _,id in ipairs(ids) do local d=C.classify.definition(Spring.GetUnitDefID(id)); if d.ground and not d.builder and (d.role=='SCOUT' or d.role=='RAIDER') then candidates[#candidates+1]=id end end

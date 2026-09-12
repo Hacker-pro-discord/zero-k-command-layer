@@ -1,0 +1,79 @@
+[t=00:00:26.976143][f=-000001] [CommandLayer] LOAD: Officer / Chili controls loaded
+[t=00:00:29.916310][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:30.350507][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:38.883756][f=0000180] [CommandLayer] SESSION: Local/private testing enabled for this session.
+[t=00:00:38.892094][f=0000180] [CommandLayer] ASSIGNED: Force 1 observes only; no orders issued.
+[t=00:00:38.906398][f=0000180] [CommandLayer] OBJECTIVE: Force 1 objective set. Await approval; no orders issued.
+[t=00:00:38.918462][f=0000180] [CommandLayer] DELEGATED: Scout + Raid + Push enabled. Assigned units only; manual orders release units.
+[t=00:00:39.007360][f=0000180] [CL-STRESS] t=6 alive=400 moved32=0 queued=0 mean_forward=0
+[t=00:00:39.070857][f=0000181] [CommandLayer] PRODUCTION: Factory 593: queued Thug (ASSAULT), 175 metal. Desired role: ASSAULT
+[t=00:00:39.077280][f=0000181] [CommandLayer] PRODUCTION: Factory 8963: queued Halberd (ASSAULT), 210 metal. Desired role: ASSAULT
+[t=00:00:39.082743][f=0000181] [CommandLayer] PRODUCTION: Factory 24879: queued Ravager (ASSAULT), 250 metal. Desired role: ASSAULT
+[t=00:00:39.112601][f=0000181] [CommandLayer] PRODUCTION: Factory 31278: queued Knight (ASSAULT), 350 metal. Desired role: ASSAULT
+[t=00:00:40.899825][f=0000241] [CommandLayer] EXECUTING: Operation 1: LINE / 2 units
+[t=00:00:40.903557][f=0000241] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:00:40.911071][f=0000241] [CommandLayer] EXECUTING: Operation 2: LINE / 4 units
+[t=00:00:40.936616][f=0000241] [CommandLayer] TACTICAL: RAID: No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:00:40.963691][f=0000241] [CommandLayer] EXECUTING: Operation 3: ASSAULT / 394 units
+[t=00:00:40.971088][f=0000241] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:00:48.870646][f=0000480] [CL-STRESS] t=16 alive=400 moved32=398 queued=347 mean_forward=217
+[t=00:00:56.544433][f=0000711] [CommandLayer] REINFORCEMENT: Completed military unit 28728 assigned to Force 1; joins its next authorized movement.
+[t=00:00:58.868825][f=0000780] [CL-STRESS] t=26 alive=400 moved32=398 queued=235 mean_forward=345
+[t=00:01:00.053997][f=0000816] [CommandLayer] REINFORCEMENT: Completed military unit 1111 assigned to Force 1; joins its next authorized movement.
+[t=00:01:04.080316][f=0000937] [CommandLayer] REINFORCEMENT: Completed military unit 20582 assigned to Force 1; joins its next authorized movement.
+[t=00:01:04.901091][f=0000961] [CommandLayer] EXECUTING: Operation 4: LINE / 4 units
+[t=00:01:04.903178][f=0000961] [CommandLayer] TACTICAL: RAID: Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:01:06.632433][f=0001013] [CommandLayer] UNIT_LOST: Operation 1 released positioning.
+[t=00:01:08.914019][f=0001081] [CL-STRESS] t=36 alive=396 moved32=394 queued=294 mean_forward=371
+[t=00:01:14.146214][f=0001238] [CommandLayer] UNIT_LOST: Operation 4 released positioning.
+[t=00:01:14.177853][f=0001239] [CommandLayer] REINFORCEMENT: Completed military unit 31589 assigned to Force 1; joins its next authorized movement.
+[t=00:01:14.312179][f=0001243] [CommandLayer] REINFORCEMENT: Completed military unit 4286 assigned to Force 1; joins its next authorized movement.
+[t=00:01:18.914861][f=0001381] [CL-STRESS] t=46 alive=317 moved32=315 queued=265 mean_forward=347
+[t=00:01:21.282189][f=0001453] [CommandLayer] REINFORCEMENT: Completed military unit 11267 assigned to Force 1; joins its next authorized movement.
+[t=00:01:22.934708][f=0001501] [CommandLayer] ADAPT: More than 25% of the review force was lost/released. Automatic fallback, role regroup, then a shorter alternate-lane advance. Unknown terrain remains uncertain.
+[t=00:01:22.951586][f=0001501] [CommandLayer] EXECUTING: Operation 5: ASSAULT / 286 units
+[t=00:01:22.970479][f=0001501] [CommandLayer] RECOVERY: WITHDRAWING: 286 units; native movement, strategy revision 1
+[t=00:01:28.918732][f=0001681] [CL-STRESS] t=56 alive=262 moved32=260 queued=235 mean_forward=238
+[t=00:01:29.282064][f=0001693] [CommandLayer] REINFORCEMENT: Completed military unit 411 assigned to Force 1; joins its next authorized movement.
+[t=00:01:33.093115][f=0001806] [CommandLayer] STALLED: Released positioning for unit 4286
+[t=00:01:33.107111][f=0001806] [CommandLayer] STALLED: Released positioning for unit 20582
+[t=00:01:33.113335][f=0001806] [CommandLayer] STALLED: Released positioning for unit 28728
+[t=00:01:38.909314][f=0001981] [CL-STRESS] t=66 alive=247 moved32=245 queued=170 mean_forward=147
+[t=00:01:42.279060][f=0002083] [CommandLayer] REINFORCEMENT: Completed military unit 26893 assigned to Force 1; joins its next authorized movement.
+[t=00:01:42.304482][f=0002083] [CommandLayer] STALLED: Released positioning for unit 1111
+[t=00:01:42.536948][f=0002090] [CommandLayer] STALLED: Released positioning for unit 11267
+[t=00:01:48.035686][f=0002255] [CommandLayer] STALLED: Released positioning for unit 31589
+[t=00:01:48.907474][f=0002281] [CL-STRESS] t=76 alive=237 moved32=235 queued=129 mean_forward=124
+[t=00:01:49.315833][f=0002294] [CommandLayer] REINFORCEMENT: Completed military unit 14204 assigned to Force 1; joins its next authorized movement.
+[t=00:01:58.905271][f=0002581] [CL-STRESS] t=86 alive=226 moved32=224 queued=116 mean_forward=101
+[t=00:02:03.283489][f=0002713] [CommandLayer] REINFORCEMENT: Completed military unit 26276 assigned to Force 1; joins its next authorized movement.
+[t=00:02:08.903222][f=0002881] [CL-STRESS] t=96 alive=193 moved32=191 queued=110 mean_forward=106
+[t=00:02:18.899249][f=0003181] [CL-STRESS] t=106 alive=162 moved32=160 queued=97 mean_forward=106
+[t=00:02:24.278363][f=0003343] [CommandLayer] REINFORCEMENT: Completed military unit 8395 assigned to Force 1; joins its next authorized movement.
+[t=00:02:24.811983][f=0003359] [CommandLayer] REINFORCEMENT: Completed military unit 15050 assigned to Force 1; joins its next authorized movement.
+[t=00:02:28.903144][f=0003481] [CommandLayer] EXECUTING: Operation 6: ASSAULT / 130 units
+[t=00:02:28.905167][f=0003481] [CommandLayer] RECOVERY: REFORMING: 130 units; native movement, strategy revision 1
+[t=00:02:28.911140][f=0003481] [CommandLayer] PRODUCTION: Factory 8963: queued Scalpel (SKIRMISHER), 220 metal. Desired role: SKIRMISHER
+[t=00:02:28.914077][f=0003481] [CL-STRESS] t=116 alive=126 moved32=124 queued=70 mean_forward=144
+[t=00:02:38.897754][f=0003781] [CL-STRESS] t=126 alive=106 moved32=104 queued=80 mean_forward=90
+[t=00:02:38.962687][f=0003783] [CommandLayer] STALLED: Released positioning for unit 411
+[t=00:02:38.966042][f=0003783] [CommandLayer] STALLED: Released positioning for unit 4286
+[t=00:02:38.970266][f=0003783] [CommandLayer] STALLED: Released positioning for unit 11267
+[t=00:02:38.973875][f=0003783] [CommandLayer] STALLED: Released positioning for unit 20582
+[t=00:02:38.977309][f=0003783] [CommandLayer] STALLED: Released positioning for unit 28728
+[t=00:02:45.564285][f=0003981] [CommandLayer] STALLED: Released positioning for unit 14204
+[t=00:02:46.335795][f=0004004] [CommandLayer] STALLED: Released positioning for unit 31589
+[t=00:02:46.563944][f=0004011] [CommandLayer] STALLED: Released positioning for unit 15050
+[t=00:02:48.898952][f=0004081] [CL-STRESS] t=136 alive=90 moved32=88 queued=52 mean_forward=114
+[t=00:02:50.914929][f=0004142] [CommandLayer] REINFORCEMENT: Completed military unit 29602 assigned to Force 1; joins its next authorized movement.
+[t=00:02:58.830375][f=0004379] [CommandLayer] STALLED: Released positioning for unit 8395
+[t=00:02:58.899172][f=0004381] [CL-STRESS] t=146 alive=84 moved32=82 queued=38 mean_forward=140
+[t=00:03:00.280131][f=0004423] [CommandLayer] REINFORCEMENT: Completed military unit 26527 assigned to Force 1; joins its next authorized movement.
+[t=00:03:00.430450][f=0004427] [CommandLayer] STALLED: Released positioning for unit 26893
+[t=00:03:08.900761][f=0004681] [CL-STRESS] t=156 alive=77 moved32=75 queued=33 mean_forward=122
+[t=00:03:13.277272][f=0004813] [CommandLayer] REINFORCEMENT: Completed military unit 14123 assigned to Force 1; joins its next authorized movement.
+[t=00:03:18.896292][f=0004981] [CL-STRESS] t=166 alive=74 moved32=72 queued=28 mean_forward=126
+[t=00:03:28.898599][f=0005281] [CL-STRESS] t=176 alive=73 moved32=71 queued=28 mean_forward=102
+[t=00:03:32.857521][f=0005400] [CL-COMBAT] METRIC frame=5400 own_count=71 enemy_count=105 own_value=9420 enemy_value=12850 own_lost=26980 enemy_lost=23550 own_damage_taken=142443 enemy_damage_taken=105676
+[t=00:03:32.879449][f=0005400] [CommandLayer] DELEGATED: Autonomous control stopped. Native destination orders remain.
+[t=00:03:32.882371][f=0005400] [CL-COMBAT-CLIENT] COMPLETE

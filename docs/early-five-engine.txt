@@ -1,0 +1,60 @@
+[t=00:00:34.540713][f=-000001] [CommandLayer] LOAD: Officer / Chili controls loaded
+[t=00:00:37.330343][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:38.098100][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:45.784365][f=0000180] [CommandLayer] SESSION: Local/private testing enabled for this session.
+[t=00:00:45.792931][f=0000180] [CommandLayer] ASSIGNED: Force 1 observes only; no orders issued.
+[t=00:00:45.794607][f=0000180] [CommandLayer] OBJECTIVE: Force 1 objective set. Await approval; no orders issued.
+[t=00:00:45.797090][f=0000180] [CommandLayer] DELEGATED: Scout + Raid + Push enabled. Assigned units only; manual orders release units.
+[t=00:00:45.820186][f=0000180] [CL-STRESS] t=6 alive=5 moved32=0 queued=0 mean_forward=0
+[t=00:00:47.804821][f=0000241] [CommandLayer] EXECUTING: Operation 1: LINE / 1 units
+[t=00:00:47.809846][f=0000241] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:00:47.815523][f=0000241] [CommandLayer] EXECUTING: Operation 2: ASSAULT / 4 units
+[t=00:00:47.820636][f=0000241] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:00:52.719183][f=0000388] [CommandLayer] COMPLETED: Operation 2 released positioning.
+[t=00:00:54.971110][f=0000456] [CommandLayer] COMPLETED: Operation 1 released positioning.
+[t=00:00:55.773932][f=0000480] [CL-STRESS] t=16 alive=5 moved32=5 queued=0 mean_forward=557
+[t=00:00:57.813486][f=0000541] [CommandLayer] EXECUTING: Operation 3: ASSAULT / 4 units
+[t=00:00:57.837881][f=0000541] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:01:04.515331][f=0000742] [CommandLayer] COMPLETED: Operation 3 released positioning.
+[t=00:01:05.773804][f=0000780] [CL-STRESS] t=26 alive=5 moved32=5 queued=0 mean_forward=1036
+[t=00:01:07.809553][f=0000841] [CommandLayer] EXECUTING: Operation 4: LINE / 1 units
+[t=00:01:07.838401][f=0000841] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:09.754099][f=0000900] [CL-COMBAT] CONTROLLED_DAMAGE health=30%
+[t=00:01:09.812812][f=0000901] [CommandLayer] ADAPT: Average force health below 40%. Automatic fallback, role regroup, then a shorter alternate-lane advance. Unknown terrain remains uncertain.
+[t=00:01:09.841813][f=0000901] [CommandLayer] EXECUTING: Operation 5: ASSAULT / 5 units
+[t=00:01:15.812862][f=0001081] [CL-STRESS] t=36 alive=5 moved32=5 queued=2 mean_forward=624
+[t=00:01:16.906941][f=0001114] [CommandLayer] COMPLETED: Operation 5 released positioning.
+[t=00:01:21.812136][f=0001261] [CommandLayer] EXECUTING: Operation 6: ASSAULT / 5 units
+[t=00:01:21.908242][f=0001264] [CommandLayer] COMPLETED: Operation 6 released positioning.
+[t=00:01:25.812841][f=0001381] [CL-STRESS] t=46 alive=5 moved32=5 queued=0 mean_forward=605
+[t=00:01:29.755344][f=0001500] [CL-COMBAT] CONTROLLED_HEAL health=100%
+[t=00:01:31.812186][f=0001561] [CommandLayer] ADAPT_RESUME: Regroup complete: shorter phases, wider role zones and revised approach lane.
+[t=00:01:33.813887][f=0001621] [CommandLayer] EXECUTING: Operation 7: LINE / 1 units
+[t=00:01:33.815549][f=0001621] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:33.818535][f=0001621] [CommandLayer] EXECUTING: Operation 8: ASSAULT / 4 units
+[t=00:01:33.841715][f=0001621] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:01:35.813598][f=0001681] [CL-STRESS] t=56 alive=5 moved32=5 queued=5 mean_forward=729
+[t=00:01:40.218028][f=0001813] [CommandLayer] COMPLETED: Operation 7 released positioning.
+[t=00:01:43.220916][f=0001903] [CommandLayer] COMPLETED: Operation 8 released positioning.
+[t=00:01:45.812873][f=0001981] [CL-STRESS] t=66 alive=5 moved32=5 queued=0 mean_forward=1059
+[t=00:01:47.812556][f=0002041] [CommandLayer] EXECUTING: Operation 9: ASSAULT / 4 units
+[t=00:01:47.814265][f=0002041] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:01:51.437629][f=0002150] [CommandLayer] COMPLETED: Operation 9 released positioning.
+[t=00:01:53.808767][f=0002221] [CommandLayer] EXECUTING: Operation 10: LINE / 1 units
+[t=00:01:53.814240][f=0002221] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:01:55.808679][f=0002281] [CommandLayer] EXECUTING: Operation 11: ASSAULT / 4 units
+[t=00:01:55.812450][f=0002281] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:01:55.829360][f=0002281] [CL-STRESS] t=76 alive=5 moved32=5 queued=3 mean_forward=1361
+[t=00:01:59.071531][f=0002379] [CommandLayer] COMPLETED: Operation 11 released positioning.
+[t=00:02:00.724229][f=0002428] [CommandLayer] COMPLETED: Operation 10 released positioning.
+[t=00:02:05.812415][f=0002581] [CL-STRESS] t=86 alive=5 moved32=5 queued=3 mean_forward=1415
+[t=00:02:13.812120][f=0002821] [CommandLayer] EXECUTING: Operation 12: LINE / 1 units
+[t=00:02:13.816195][f=0002821] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:02:15.812450][f=0002881] [CL-STRESS] t=96 alive=5 moved32=5 queued=2 mean_forward=1429
+[t=00:02:24.843098][f=0003152] [CommandLayer] COMPLETED: Operation 12 released positioning.
+[t=00:02:25.808519][f=0003181] [CL-STRESS] t=106 alive=5 moved32=5 queued=4 mean_forward=1279
+[t=00:02:35.813117][f=0003481] [CL-STRESS] t=116 alive=5 moved32=5 queued=4 mean_forward=1371
+[t=00:02:37.812955][f=0003541] [CommandLayer] EXECUTING: Operation 13: LINE / 1 units
+[t=00:02:37.835497][f=0003541] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:02:39.791154][f=0003600] [CommandLayer] DELEGATED: Autonomous control stopped. Native destination orders remain.
+[t=00:02:39.800274][f=0003600] [CL-COMBAT-CLIENT] COMPLETE

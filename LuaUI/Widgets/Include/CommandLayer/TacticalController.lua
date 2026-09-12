@@ -33,7 +33,8 @@ return function(C)
 		end
 	end
 	local function plan(f,ids,target,group,contacts)
-		local s=f.delegation.sector; local settings=C.U.copy(C.settings); settings.formation=group=='MAIN' and f.formation or 'LINE'
+		local s=f.delegation.sector; local settings=C.U.copy(C.settings); settings.formation=group=='MAIN' and (f.delegation.strategy and f.delegation.strategy.formation or f.formation) or 'LINE'
+		if f.delegation.strategy then settings.spacing=f.delegation.strategy.spacing end
 		local riots=0; for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and v.role=='RIOT' then riots=riots+1 end end
 		if riots>=2 then settings.spacing=math.min(256,settings.spacing*1.5) end
 		local half=math.min(s.half*.7,math.max(32,#ids*settings.spacing/4))
@@ -43,8 +44,78 @@ return function(C)
 		if not C.U.point(a) or not C.U.point(b) then return nil end
 		local ground=C.classify.filter(ids); if #ground==0 then ground=ids end
 		local p=C.formations.plan(ground,{a,b},settings); if not p then return nil end
+		-- Falling back must not flip artillery to the enemy-facing side of the screen.
+		if f.delegation.recovery and p.front[1]*s.ux+p.front[2]*s.uz<0 then
+			for _,slot in pairs(p.slots) do local depth=(slot[1]-p.center[1])*p.front[1]+(slot[3]-p.center[3])*p.front[2]; slot[1]=slot[1]-2*depth*p.front[1]; slot[3]=slot[3]-2*depth*p.front[2] end
+			p.front={s.ux,s.uz}
+		end
 		p.corridor=s.corridor
 		return C.formations.fitCorridor(p,s,settings)
+	end
+	local function recoveryIDs(f)
+		local ids={}; local d=f.delegation
+		for _,id in ipairs(C.officer.members(f)) do
+			if not d.blocked[id] and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 then ids[#ids+1]=id end
+		end
+		return ids
+	end
+	function T.beginRecovery(f,now,why)
+		local d=f.delegation; local center=C.U.center(C.officer.members(f)); local old=d.strategy
+		for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active then C.officer.cancel(op.id) end end
+		for id,blocked in pairs(d.blocked) do if type(blocked)=='number' then d.blocked[id]=nil end end
+		local contacts=C.observations.snapshot().contacts; local along=math.min(d.sector.length,C.rules.progress(d.sector,center)+300)
+		local side=old and -old.side or -1; local best=math.huge
+		for _,candidate in ipairs({side,-side}) do
+			local p=C.rules.point(d.sector,along,candidate*d.sector.half*.4)
+			if p then local risk=C.rules.risk(p,contacts,600); if risk<best then best=risk; side=candidate end end
+		end
+		local previousStep=old and old.step or f.objectiveMode=='SHOCK AND AWE' and 900 or f.objectiveMode=='UTTER DESTRUCTION' and 750 or C.rules.step
+		d.strategy={revision=(old and old.revision or 0)+1,formation='ASSAULT',spacing=math.min(256,(old and old.spacing or C.settings.spacing)*1.2),step=math.max(240,previousStep*.65),side=side,reason=why}
+		d.ops={}; d.failures={}; d.next={}; d.returning={}
+		d.recovery={phase='WITHDRAWING',target=C.rules.point(d.sector,math.max(0,C.rules.progress(d.sector,center)-450),0),created=now,attempts=0,next=now,reason=why}
+		d.reason=why..' Automatic fallback, role regroup, then a shorter alternate-lane advance. Unknown terrain remains uncertain.'
+		C.debug.log('ADAPT',d.reason)
+	end
+	function T.recoveryTick(f,now)
+		local d=f.delegation; local r=d.recovery; local ids=recoveryIDs(f)
+		if #ids==0 then d.state='HOLDING'; d.reason='No eligible units for recovery; native retreat/manual override retained.'; f.status='DELEGATED / HOLDING'; return end
+		local op=r.operation and C.registry.operations[r.operation]
+		if op and op.active then
+			local arrived,total=0,0
+			for _,id in ipairs(op.units) do
+				if f.members[id] and not f.suspended[id] and C.U.owned(id) and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 then
+					total=total+1; if C.U.distance(C.U.position(id),op.slots[id])<96 then arrived=arrived+1 end
+				end
+			end
+			-- A few congested stragglers must not freeze a recovered army.
+			if total>0 and arrived/total>=.8 then C.registry.finish(op,'COMPLETED') end
+		end
+		if op and op.active and now-op.created>45 then C.officer.cancel(op.id); op.state='ABORTED' end
+		if op and not op.active then
+			r.operation=nil
+			if op.state=='COMPLETED' then
+				if r.phase=='WITHDRAWING' then r.phase='REFORMING'; r.target=C.U.center(ids); r.next=now+3; d.reason='Fallback complete; assemble revised role zones before another advance.'
+				else r.phase='HOLDING'; r.ready=true; r.next=now+8; d.reason='Regroup complete; stabilize for eight seconds and recover above 50% average health.' end
+			else
+				r.attempts=r.attempts+1; d.reason=r.phase..' incomplete ('..op.state..'); recovery failure '..r.attempts..'/3. Wait 20 seconds before regroup retry.'
+				r.phase='HOLDING'; r.next=now+20; r.ready=false; C.debug.log('RECOVERY_RETRY',d.reason)
+			end
+		end
+		if r.phase=='HOLDING' and now>=r.next then
+			if r.ready and C.rules.health(ids)>=.5 then
+				d.review={time=now,progress=C.rules.progress(d.sector,C.U.center(ids)),count=#C.officer.members(f)}
+				d.recoverAfter=now+30; d.recovery=nil; d.state='ADVANCING'; d.reason='Regroup complete: shorter phases, wider role zones and revised approach lane.'
+				C.debug.log('ADAPT_RESUME',d.reason); f.status='DELEGATED / ADVANCING'; return
+			elseif not r.ready and r.attempts<3 then r.phase='REFORMING'; r.target=C.U.center(ids)
+			else r.next=now+20; d.reason=r.ready and 'Regrouped; wait for average health above 50% before another advance.' or 'Recovery route repeatedly failed; holding without order spam. A new objective can restart movement.' end
+		end
+		if r.phase~='HOLDING' and not r.operation and now>=r.next then
+			local target=r.target or C.U.center(ids); local p=plan(f,ids,target,'MAIN',C.observations.snapshot().contacts)
+			local operation=p and C.officer.executeDelegated(f,ids,p,r.phase,Spring.Utilities.CMD.RAW_MOVE)
+			if operation then C.registry.operations[operation].mode='ARRIVAL'; r.operation=operation; C.debug.log('RECOVERY',r.phase..': '..#ids..' units; native movement, strategy revision '..d.strategy.revision)
+			else r.attempts=r.attempts+1; r.phase='HOLDING'; r.next=now+20; d.reason='No valid recovery geometry; holding before retry.' end
+		end
+		d.state=r.phase; f.status='DELEGATED / '..r.phase
 	end
 	function T.tick(f,now)
 		local d=f.delegation; if not d or not d.active then return end
@@ -57,12 +128,10 @@ return function(C)
 		local progressNow=C.rules.progress(d.sector,centerNow)
 		d.review=d.review or {time=now,progress=progressNow,count=#forceIDs}
 		if progressNow>d.review.progress+128 then d.review.time=now; d.review.progress=progressNow end
-		if not f.objectiveReached and f.front~='HOLD' and (now-d.review.time>=60 or #forceIDs<d.review.count*.75) then
-			local why=#forceIDs<d.review.count*.75 and 'At least 25% of assigned units were lost or released.' or 'No substantial forward progress for 60 game seconds.'
-			C.officer.setDelegated(f.id,false); f.reviewReason=why; f.status='REVIEW_REQUIRED'
-			C.debug.log('REVIEW',why..' Delegation stopped; review a revised plan.')
-			if C.advisor then C.advisor.ask(f.id,true,true) end
-			return
+		if d.recovery then T.recoveryTick(f,now); return end
+		if not f.objectiveReached and f.front~='HOLD' and now>=(d.recoverAfter or 0) and (now-d.review.time>=60 or #forceIDs<d.review.count*.75 or C.rules.health(forceIDs)<.4) then
+			local why=#forceIDs<d.review.count*.75 and 'More than 25% of the review force was lost/released.' or C.rules.health(forceIDs)<.4 and 'Average force health below 40%.' or 'No substantial forward progress for 60 game seconds.'
+			T.beginRecovery(f,now,why); T.recoveryTick(f,now); return
 		end
 		local s=d.sector; local snapshot=C.observations.snapshot(); local contacts={}
 		for _,v in ipairs(snapshot.contacts) do if C.formations.inCorridor(s,v.position) then contacts[#contacts+1]=v end end
@@ -89,9 +158,9 @@ return function(C)
 						target=C.rules.raid(s,ids,contacts); kind='HARASS'
 						if target then reason='Visible local vulnerable unit; no observed heavy protection at destination.' else target,visit=C.rules.scout(s,ids,contacts,d.visits,now); reason='No suitable visual raid target. Patrol the assigned flank for contacts.' end
 					else
-						local progress=C.rules.progress(s,center); local nextLine=math.min(s.length,math.max(0,progress)+(f.objectiveMode=='SHOCK AND AWE' and 900 or f.objectiveMode=='UTTER DESTRUCTION' and 750 or C.rules.step))
+						local progress=C.rules.progress(s,center); local nextLine=math.min(s.length,math.max(0,progress)+(d.strategy and d.strategy.step or f.objectiveMode=='SHOCK AND AWE' and 900 or f.objectiveMode=='UTTER DESTRUCTION' and 750 or C.rules.step))
 						if f.front=='HOLD' then nextLine=math.max(0,progress) end
-						local side=f.front=='FLANK_LEFT' and -1 or f.front=='FLANK_RIGHT' and 1 or 0
+						local side=f.front=='FLANK_LEFT' and -1 or f.front=='FLANK_RIGHT' and 1 or d.strategy and d.strategy.side or 0
 						target=C.rules.point(s,nextLine,nextLine<s.length-128 and side*s.half*.4 or 0)
 						kind=nextLine>=s.length and 'PUSH' or 'ADVANCE'; reason='Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.'
 						if side==0 and f.front~='HOLD' and target and nextLine<s.length-128 then

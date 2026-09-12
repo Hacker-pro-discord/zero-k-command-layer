@@ -92,7 +92,7 @@ Production advice uses actual factory build options, friendly capability gaps an
 - New recruits silently join membership without replacing the offered brief or expanding an approved action. Under explicit delegation, reinforcements join a subsequent group movement. Adviser membership alone issues no orders. Selection changes do not change which force is active; use Previous/Next Force.
 - Large delegated/whole-army layouts use additional distinct ranks when the requested shape overflows the corridor. Role-zone order is retained; the precise geometric shape may change. Packed ranks use native movement without anchor corrections. If the army cannot fit, the Officer asks for a wider line rather than merging destinations. Terrain navigation still belongs to the engine.
 - Congestion-stalled units retry after 30 game seconds. Unknown queues and manual overrides are not treated as congestion. Partial arrival no longer counts as total group failure.
-- Delegation stops for strategic review after 60 seconds without 128 units of forward progress, or loss/release of more than 25% of its initial review membership. It offers one Assault role-zone reformation instead of repeating the failing advance. Approval is required; another push requires a new review. This is a transparent fallback rule, not a learned strategy planner. Native queued orders remain until completion or a manual Stop.
+- Under explicit delegation, 60 seconds without 128 units of forward progress, loss/release of over 25% of the review membership, or average health below 40% now triggers **automatic fallback and regroup**. No additional approval is needed for this recovery. Adviser-only/one-shot-approved control does not gain this authority. See the preview 5 recovery policy below.
 
 ## Delegated pressure: single-player only
 
@@ -126,7 +126,7 @@ The widget does not browse the web or learn strategies during a match. The separ
 | UTTER DESTRUCTION | Commit the entire assigned force together, without scout/raid detachments; 750-unit phases. |
 | SHOCK AND AWE | Assault role zones, light detachments and faster 900-unit phases. |
 
-The three autonomous choices explicitly start single-player delegation after the line is drawn and turn Auto Assign on. Choosing a policy without drawing does not change the active operation. Names describe **in-game behavior inside the drawn corridor**, not an automatic map-wide win plan. They neither identify hidden targets nor promise victory. Progress/loss review can still pause delegation for an approved regroup.
+The three autonomous choices explicitly start single-player delegation after the line is drawn and turn Auto Assign on. Choosing a policy without drawing does not change the active operation. Names describe **in-game behavior inside the drawn corridor**, not an automatic map-wide win plan. They neither identify hidden targets nor promise victory. Progress/loss/health checks can automatically withdraw and regroup inside the accepted corridor.
 
 The same chooser contains **AUTO PRODUCTION** and **STOP PRODUCTION**. Production defaults OFF and is session-only. Enabling it authorizes the current existing factories for the selected force; new factories need a fresh opt-in. The controller:
 
@@ -137,6 +137,21 @@ The same chooser contains **AUTO PRODUCTION** and **STOP PRODUCTION**. Productio
 - Routes completed units from its factories back to its assigned force even if you browse another force in the UI. Existing approval snapshots remain unchanged.
 
 The main status area shows production decisions and waiting reasons. Open Set Objective to stop or re-enable production. Ordinary production advice remains read-only; this controller has separate explicit authority.
+
+## Five-unit pressure and automatic recovery (preview 5)
+
+Five assigned mobile combat units can start immediately after you draw/delegate an objective. With suitable scouts/raiders, the balanced policy sends one scout and four main units; it does not wait for a larger force or for production. Utter Destruction keeps them together. This is military pressure/reconnaissance inside your objective corridor, not automated mex expansion or a promise of map ownership.
+
+Delegated recovery follows **WITHDRAWING > REFORMING > HOLDING > ADVANCING**:
+
+- Fall back up to 450 units toward the corridor origin using native movement. Keep artillery behind the original facing, not at the front of a reversed formation.
+- Regroup in Assault role zones. Continue when at least 80% of surviving eligible stage units reach within 96 units of their slots, so a few stragglers do not freeze the force.
+- Hold at least eight seconds after regroup and wait for average health of at least 50% before resuming.
+- Change the next attempt: reduce phase length to 65% (minimum 240), widen spacing by 20% (maximum 256), and choose an alternate lane, preferring less currently observed resistance. Unknown terrain remains uncertain. Revisions are visible in AI Details.
+- Recovery moves time out after 45 seconds; retry after 20 seconds, at most three failures, then hold under control until the player supplies a new objective. No repeated order spam or new approval popup.
+- After resuming, allow a 30-second recovery cooldown. Manual override, native retreat, transport and session restrictions still take priority. New strategic territory still requires your objective.
+
+These are transparent tactical adaptations, not learned or globally optimal strategy. The tests verify changed commands and recovery behavior; they do not prove that every revised approach wins. See [recovery test evidence](docs/ADAPTIVE_TEST.md).
 
 ## Settings, stopping and removal
 
@@ -169,7 +184,7 @@ The production scheduler now serves every controlled idle factory per pass inste
 
 ## Test evidence and limitations
 
-- Nineteen Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
+- Twenty Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
 - Preview 2 includes a separate 30-game-second headless engine smoke test. The 400-unit and new approval/recruitment cases are mocked Lua regressions, not a demonstrated 400-unit live battle. The two new buttons have not yet had visual in-game interaction testing.
 - Isolated engine tests verified native orders, actual movement, repeated scout/raid/main operations and cancellation.
 - A visible equal-army test started with 32 identical units and 3,010 metal of combat value each. The corrected two-minute run ended with **nine units and 910 value each**: a stalemate, not a victory or completed objective. The opponent was scripted native Fight, not a full Circuit AI match.

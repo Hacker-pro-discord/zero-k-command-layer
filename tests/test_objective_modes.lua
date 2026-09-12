@@ -25,3 +25,5 @@ clock=12; C.tactical.tick(f,clock)
 local op=C.registry.operations[f.delegation.ops.MAIN]
 assert(op and op.plan.shape=='ASSAULT')
 assert(C.rules.progress(f.delegation.sector,op.plan.center)>850)
+C.tactical.beginRecovery(f,clock,'Failed fast push')
+assert(f.delegation.strategy.step==585) -- Reduce the actual 900-unit policy, not a generic 600.

@@ -83,6 +83,7 @@ return function(C)
 		local text='No delegated operation for this force.'
 		if d then
 			text='Force '..f.id..' | '..(d.active and 'DELEGATED' or 'STOPPED')..' | '..d.state..'\nRules: '..d.version..' (experimental)\n\n'
+			if d.strategy then text=text..'Revision '..d.strategy.revision..': '..d.strategy.formation..', step '..math.floor(d.strategy.step)..', spacing '..math.floor(d.strategy.spacing)..', lane '..(d.strategy.side<0 and 'left' or 'right')..'\n' end
 			for _,group in ipairs({'SCOUT','RAID','MAIN'}) do local n=0; for _,id in ipairs(d.groups[group]) do if f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) then n=n+1 end end; local decision=d.decisions and d.decisions[group]; text=text..group..': '..n..' available units'..(decision and ' | '..decision.state..'\n'..decision.reason:sub(1,100) or '')..'\n' end
 			text=text..'\nObserved contacts (radar stays UNKNOWN):\n'; local keys={}; for role in pairs(d.known or {}) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..role..': '..d.known[role]..'  ' end
 			text=text..'\n\nCurrent decision: '..(d.reason or '')..'\n\nFinal line: hold under control. Manual orders release units. Recruitment follows AUTO ASSIGN.\nResearch rules: docs/TACTICAL_RESEARCH.md. No runtime web execution.'
