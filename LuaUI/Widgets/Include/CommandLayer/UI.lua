@@ -29,7 +29,7 @@ return function(C)
 			button(p,0,84,375,'LOCAL / PRIVATE TEST SESSION','Explicitly attest this is local/skirmish or private testing. Resets on reload. Autohost/public metadata stays locked.',function()
 				C.officer.setSession(not C.settings.privateSession); UI.build()
 			end)
-			button(p,0,126,185,'PREVIOUS FORCE','Select previous assigned-force record.',function() if C.officer.cycle then C.officer.cycle(-1) end end)
+			button(p,0,126,185,'CONTROL PANEL','Re-enroll factories and manage construction, air/sea and strategic weapons.',function() UI.showManagement() end)
 			button(p,190,126,185,'NEXT FORCE','Select next assigned-force record.',function() if C.officer.cycle then C.officer.cycle(1) end end)
 			button(p,0,168,185,'CANCEL ACTION','Stop further Officer maintenance for active force.',function() local f=C.registry.forces[C.registry.activeForce]; if f and f.delegation and f.delegation.active then C.officer.setDelegated(f.id,false) elseif f and f.operation then C.officer.cancel(f.operation) end end)
 			button(p,190,168,185,'RESUME','Explicitly resume suspended advice membership, never old approval.',function() if C.officer.resume then C.officer.resume(C.registry.activeForce) end end)
@@ -47,6 +47,18 @@ return function(C)
 			UI.lastDetail=nil
 			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=458,width=367,height=40,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
+	end
+	function UI.showManagement()
+		if UI.management then UI.management:Dispose() end
+		local p=UI.ch.Window:New{name='CommandLayerManagement',caption='Officer control and logistics',parent=UI.ch.Screen0,x=440,y=80,width=560,height=570,draggable=true,resizable=false,padding={12,30,12,12}}; UI.management=p
+		button(p,0,0,510,'RE-ENROLL SELECTED FACTORIES','Explicitly return selected factories to AI production. Busy queues stay intact. Other manual exclusions stay excluded.',function() C.productionControl.enroll(Spring.GetSelectedUnits()); UI.showManagement() end)
+		button(p,0,45,250,'PREVIOUS FORCE','View previous force.',function() C.officer.cycle(-1) end)
+		button(p,260,45,250,'NEXT FORCE','View next force.',function() C.officer.cycle(1) end)
+		local text=C.productionControl.status
+		if C.enemyModel then local model=C.enemyModel.snapshot(); text=text..'\n\nRolling visual intel (half-life '..model.halfLife..'s):'; local keys={}; for role in pairs(model.roles) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..'\n'..role..': '..string.format('%.1f',model.roles[role])..' weighted sightings' end; text=text..'\nUnknown radar contacts: '..model.unknown..'\nOld sightings decay; this is not a current hidden-army count.' end
+		UI.ch.TextBox:New{parent=p,x=0,y=100,width=510,height=300,text=text}
+		button(p,0,465,250,'REFRESH','Refresh current control and intel information.',function() UI.showManagement() end)
+		button(p,260,465,250,'CLOSE','Keep current controls.',function() p:Dispose(); UI.management=nil end)
 	end
 	function UI.initialize()
 		if not WG.Chili then return false end; UI.ch=WG.Chili
@@ -129,7 +141,7 @@ return function(C)
 		UI.ch.TextBox:New{parent=UI.adviceDialog,x=0,y=0,width='100%',height=350,text=f.advice}
 		button(UI.adviceDialog,0,365,200,'DISMISS','No production changes.',function() f.advice=nil; UI.adviceDialog:Dispose(); UI.adviceDialog=nil end)
 	end
-	function UI.shutdown()
+	function UI.shutdown() if UI.management then UI.management:Dispose() end;
 		if UI.objectiveDialog then UI.objectiveDialog:Dispose() end
 		if UI.tacticalDialog then UI.tacticalDialog:Dispose() end
 		if UI.adviceDialog then UI.adviceDialog:Dispose() end

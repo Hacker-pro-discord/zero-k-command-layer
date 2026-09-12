@@ -17,6 +17,14 @@ return function(C)
 		P.enabled=true; P.last=-100; C.officer.setAutoAssign(true); P.status='ON: idle existing factories; manual factory commands release control'
 		return true
 	end
+	function P.enroll(ids)
+		if not C.U.delegationAllowed(C.settings) then return false end
+		local f=C.registry.forces[P.forceID or C.registry.activeForce] or C.officer.ensureForce(); if not f then return false end
+		local count=0
+		for _,id in ipairs(ids or Spring.GetSelectedUnits()) do local def=UnitDefs[Spring.GetUnitDefID(id)]; if C.U.owned(id) and def and def.isFactory then P.excluded[id]=nil; P.factories[id]=true; count=count+1 end end
+		if count>0 then P.forceID=f.id; P.enabled=true; P.last=-100; C.officer.setAutoAssign(true,f.id); P.status='Re-enrolled '..count..' factories; existing queues preserved' end
+		return count>0
+	end
 	function P.release(id) P.excluded[id]=true; if P.factories[id] then P.factories[id]=nil; P.status='Factory '..id..' released by manual control' end end
 	function P.valid(id,unit)
 		if not P.enabled or not P.factories[id] or not C.U.delegationAllowed(C.settings) or not C.U.owned(id) then return false end
@@ -40,6 +48,8 @@ return function(C)
 		elseif (battle.composition.RIOT or 0)>=2 then desired='SKIRMISHER'
 		elseif not groups.ARTILLERY then desired='ARTILLERY'
 		elseif not groups.RIOT then desired='RIOT' end
+		local weights,model,friendly,total
+		if C.enemyModel then weights,model=C.enemyModel.weights(); friendly,total=C.enemyModel.friendly(); P.intel=model end
 		local economy=C.observations.economy(); local metal=economy and economy.metal.current or 0
 		if not economy or (economy.energy.current or 0)<100 then P.status='WAIT: retain 100 energy reserve'; return end
 		-- Fair round-robin, one addition per idle factory per pass. Reserve spending
@@ -54,14 +64,15 @@ return function(C)
 				for _,bid in ipairs(factory and factory.buildOptions or {}) do
 					local d=C.classify.definition(bid)
 					if d.mobile and not d.builder and d.cost>0 and metal>=d.cost+100 and P.valid(id,bid) then
-						local score=d.cost+(d.role==desired and 0 or 100000)
+						local score=weights and #members>=5 and -C.enemyModel.score(d,weights,friendly,total) or d.cost+(d.role==desired and 0 or 100000)
 						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost} end
 					end
 				end
 			end
 			if best and C.orders.production(id,best.unit) then
 				metal=metal-best.cost; sent=sent+1
-				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. Desired role: '..desired)
+				if friendly then friendly[best.role]=(friendly[best.role] or 0)+best.cost; total=total+best.cost end
+				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(weights and #members>=5 and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or 'Desired role: '..desired))
 			end
 		end
 		P.cursor=#factories>0 and ((P.cursor or 0)+1)%#factories or 0
