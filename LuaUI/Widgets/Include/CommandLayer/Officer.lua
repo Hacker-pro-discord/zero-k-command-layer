@@ -16,7 +16,9 @@ return function(C)
 			for _,id in ipairs(ids or {}) do if not f.members[id] or f.suspended[id] or d.blocked[id] or not C.U.owned(id) then return nil end end
 			if not intent.plan or not C.formations.inCorridor(d.sector,intent.plan.center) then return nil end
 			for _,slot in pairs(intent.plan.slots) do if not C.formations.inCorridor(d.sector,slot) then return nil end end
+			for _,route in pairs(intent.plan.routes or {}) do for _,via in ipairs(route) do if not C.U.point(via) or not C.formations.inCorridor(d.sector,via) then return nil end end end
 		end
+		for _,route in pairs(intent.plan and intent.plan.routes or {}) do for _,via in ipairs(route) do if not C.U.point(via) or not C.formations.inCorridor(intent.plan,via) then return nil end end end
 		if intent.gesture then for _,p in ipairs(intent.gesture) do if not C.U.point(p) then return nil end end end
 		ids=ids or Spring.GetSelectedUnits(); local eligible,ordinary=C.classify.filter(ids)
 		if #eligible+#ordinary==0 then return nil end
@@ -28,9 +30,14 @@ return function(C)
 		local op=C.registry.newOperation(all); op.ordinary={}; for _,id in ipairs(ordinary) do op.ordinary[id]=true end; op.plan=plan; op.command=intent.command or Spring.Utilities.CMD.RAW_MOVE; op.options=C.U.options(intent.options); op.mode=C.U.assisted(C.settings) and (intent.mode or C.settings.mode) or 'ARRIVAL'; op.state='EXECUTING'; op.forceID=intent.forceID; op.proposalID=intent.proposalID; op.grant=intent.delegated and intent.grant or nil
 		-- Packed transit ranks use native movement without conflicting anchor corrections.
 		if plan.packed then op.mode='ARRIVAL' end
+		if plan.priority then table.sort(all,function(a,b) return (plan.priority[a] or math.huge)<(plan.priority[b] or math.huge) end) end
 		for _,id in ipairs(all) do
 			local p=plan.slots[id] or plan.center; p={p[1],Spring.GetGroundHeight(p[1],p[3]),p[3]}; op.slots[id]=p
-			C.orders.issue(op,id,op.command,p,op.options)
+			local options=op.options
+			for _,via in ipairs(plan.routes and plan.routes[id] or {}) do
+				if C.U.point(via) and C.formations.inCorridor(plan,via) then C.orders.issue(op,id,op.command,via,options); options=C.U.copy(options); options.shift=true; options=C.U.options(options) end
+			end
+			C.orders.issue(op,id,op.command,p,options)
 		end
 		C.debug.log('EXECUTING','Operation '..op.id..': '..plan.shape..' / '..#eligible..' units')
 		if op.mode=='ARRIVAL' and not intent.approved and not intent.delegated then C.registry.finish(op) end; return op.id
@@ -175,7 +182,7 @@ return function(C)
 							if C.formations.inCorridor(op.plan,desired) and now-t.lastCorrection>=cooldown and error>(op.mode=='STRICT' and 96 or 240) and (op.mode=='STRICT' or not inCombat) and C.orders.budget() then
 								desired[1]=math.max(8,math.min(Game.mapSizeX-8,desired[1])); desired[3]=math.max(8,math.min(Game.mapSizeZ-8,desired[3])); desired[2]=Spring.GetGroundHeight(desired[1],desired[3])
 								local los=Spring.GetPositionLosState(desired[1],desired[2],desired[3])
-								if not los or not Spring.TestMoveOrder or Spring.TestMoveOrder(Spring.GetUnitDefID(id),desired[1],desired[2],desired[3],0,0,0,true,true,true) then
+								if not los or not Spring.TestMoveOrder or Spring.TestMoveOrder(Spring.GetUnitDefID(id),desired[1],desired[2],desired[3],0,0,0,true,false,false) then
 									C.orders.unit(op,id,CMD.INSERT,{0,Spring.Utilities.CMD.RAW_MOVE,0,desired[1],desired[2],desired[3]},C.U.options({alt=true})); t.correction=desired; t.lastCorrection=now
 								end
 							end

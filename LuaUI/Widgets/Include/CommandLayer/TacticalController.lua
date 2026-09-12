@@ -50,7 +50,13 @@ return function(C)
 			p.front={s.ux,s.uz}
 		end
 		p.corridor=s.corridor
-		return C.formations.fitCorridor(p,s,settings)
+		p=C.formations.fitCorridor(p,s,settings)
+		if p and C.routing then
+			p.priority=f.delegation.recovery and f.delegation.recovery.priority
+			p=C.routing.prepare(p,s)
+			if p.routing.adjusted+p.routing.detours+p.routing.unresolved>0 then C.debug.log('ROUTING',p.routing.adjusted..' adjusted slots; '..p.routing.detours..' detours; '..p.routing.unresolved..' unresolved terrain checks (native pathfinding remains active).') end
+		end
+		return p
 	end
 	local function recoveryIDs(f)
 		local ids={}; local d=f.delegation
@@ -73,12 +79,44 @@ return function(C)
 		d.strategy={revision=(old and old.revision or 0)+1,formation='ASSAULT',spacing=math.min(256,(old and old.spacing or C.settings.spacing)*1.2),step=math.max(240,previousStep*.65),side=side,reason=why}
 		d.ops={}; d.failures={}; d.next={}; d.returning={}
 		d.recovery={phase='WITHDRAWING',target=C.rules.point(d.sector,math.max(0,C.rules.progress(d.sector,center)-450),0),created=now,attempts=0,next=now,reason=why}
+		local selection=C.retreatPriority.select(recoveryIDs(f))
+		-- Units pushed outside the authorized corridor must return, not invalidate
+		-- the covering action for every healthy unit still inside it.
+		local cover={}
+		for _,id in ipairs(selection.cover) do
+			if C.formations.inCorridor(d.sector,C.U.position(id)) then cover[#cover+1]=id
+			else selection.evacuate[#selection.evacuate+1]=id end
+		end
+		selection.cover=cover
+		d.recovery.priority=selection.priority; d.recovery.evacuate=selection.evacuate; d.recovery.cover=selection.cover
+		d.recovery.injured=selection.injured
+		if selection.injured>0 and #selection.cover>0 and #selection.evacuate>0 then
+			d.recovery.phase='EVACUATING'; d.recovery.coverUntil=now+12
+			local coverCenter=C.U.center(selection.cover)
+			local coverPlan={slots={},units=C.U.copy(selection.cover),origin=coverCenter,center=coverCenter,front={d.sector.ux,d.sector.uz},shape='COVER',zones={},gesture={coverCenter},corridor=d.sector.corridor,width=0}
+			for _,id in ipairs(selection.cover) do coverPlan.slots[id]=C.U.position(id) end
+			local covered=C.officer.executeDelegated(f,selection.cover,coverPlan,'COVER',CMD.FIGHT)
+			if covered then
+				C.registry.operations[covered].mode='ARRIVAL'; d.recovery.coverOperation=covered
+				C.debug.log('COVER',#selection.cover..' healthy cover units; '..selection.injured..' injured first. Cover lasts at most 12 seconds.')
+			else d.recovery.phase='WITHDRAWING'; C.debug.log('COVER_UNAVAILABLE','Cover plan rejected; withdraw the force immediately.') end
+		end
 		d.reason=why..' Automatic fallback, role regroup, then a shorter alternate-lane advance. Unknown terrain remains uncertain.'
 		C.debug.log('ADAPT',d.reason)
 	end
 	function T.recoveryTick(f,now)
 		local d=f.delegation; local r=d.recovery; local ids=recoveryIDs(f)
 		if #ids==0 then d.state='HOLDING'; d.reason='No eligible units for recovery; native retreat/manual override retained.'; f.status='DELEGATED / HOLDING'; return end
+		if r.phase=='EVACUATING' then
+			local ready=0; local total=0; local exposed=false
+			for _,id in ipairs(r.evacuate) do if f.members[id] and C.U.owned(id) then total=total+1; if r.target and C.rules.progress(d.sector,C.U.position(id))<=C.rules.progress(d.sector,r.target)+150 then ready=ready+1 end end end
+			for _,id in ipairs(r.cover) do if f.members[id] and C.U.owned(id) then local h,m=Spring.GetUnitHealth(id); if h and m and h/m<.6 then exposed=true end end end
+			if exposed or now>=r.coverUntil or total==0 or r.operation and total>0 and ready/total>=.8 then
+				if r.coverOperation then C.officer.cancel(r.coverOperation); r.coverOperation=nil end
+				if r.operation then C.officer.cancel(r.operation); r.operation=nil end
+				r.phase='WITHDRAWING'; r.next=now; d.reason='Damaged units had first exit; covering units now fall back.'; C.debug.log('COVER_RELEASE',exposed and 'Cover taking damage: withdraw immediately.' or 'Evacuation head start complete; withdraw cover.')
+			end
+		end
 		local op=r.operation and C.registry.operations[r.operation]
 		if op and op.active then
 			local arrived,total=0,0
@@ -94,12 +132,16 @@ return function(C)
 		if op and not op.active then
 			r.operation=nil
 			if op.state=='COMPLETED' then
-				if r.phase=='WITHDRAWING' then r.phase='REFORMING'; r.target=C.U.center(ids); r.next=now+3; d.reason='Fallback complete; assemble revised role zones before another advance.'
+				if r.phase=='EVACUATING' then if r.coverOperation then C.officer.cancel(r.coverOperation); r.coverOperation=nil end; r.phase='WITHDRAWING'; r.next=now
+				elseif r.phase=='WITHDRAWING' then r.phase='REFORMING'; r.target=C.U.center(ids); r.next=now+3; d.reason='Fallback complete; assemble revised role zones before another advance.'
 				else r.phase='HOLDING'; r.ready=true; r.next=now+8; d.reason='Regroup complete; stabilize for eight seconds and recover above 50% average health.' end
 			else
 				r.attempts=r.attempts+1; d.reason=r.phase..' incomplete ('..op.state..'); recovery failure '..r.attempts..'/3. Wait 20 seconds before regroup retry.'
 				r.phase='HOLDING'; r.next=now+20; r.ready=false; C.debug.log('RECOVERY_RETRY',d.reason)
 			end
+		end
+		if r.phase~='EVACUATING' and r.coverOperation then
+			C.officer.cancel(r.coverOperation); r.coverOperation=nil; r.phase='WITHDRAWING'; r.next=now
 		end
 		if r.phase=='HOLDING' and now>=r.next then
 			if r.ready and C.rules.health(ids)>=.5 then
@@ -110,9 +152,11 @@ return function(C)
 			else r.next=now+20; d.reason=r.ready and 'Regrouped; wait for average health above 50% before another advance.' or 'Recovery route repeatedly failed; holding without order spam. A new objective can restart movement.' end
 		end
 		if r.phase~='HOLDING' and not r.operation and now>=r.next then
-			local target=r.target or C.U.center(ids); local p=plan(f,ids,target,'MAIN',C.observations.snapshot().contacts)
-			local operation=p and C.officer.executeDelegated(f,ids,p,r.phase,Spring.Utilities.CMD.RAW_MOVE)
-			if operation then C.registry.operations[operation].mode='ARRIVAL'; r.operation=operation; C.debug.log('RECOVERY',r.phase..': '..#ids..' units; native movement, strategy revision '..d.strategy.revision)
+			local moving=ids
+			if r.phase=='EVACUATING' then local allowed={}; for _,id in ipairs(r.evacuate) do allowed[id]=true end; moving={}; for _,id in ipairs(ids) do if allowed[id] then moving[#moving+1]=id end end end
+			local target=r.target or C.U.center(ids); local p=#moving>0 and plan(f,moving,target,'MAIN',C.observations.snapshot().contacts)
+			local operation=p and C.officer.executeDelegated(f,moving,p,r.phase,Spring.Utilities.CMD.RAW_MOVE)
+			if operation then C.registry.operations[operation].mode='ARRIVAL'; r.operation=operation; C.debug.log('RECOVERY',r.phase..': '..#moving..' units; native movement, strategy revision '..d.strategy.revision)
 			else r.attempts=r.attempts+1; r.phase='HOLDING'; r.next=now+20; d.reason='No valid recovery geometry; holding before retry.' end
 		end
 		d.state=r.phase; f.status='DELEGATED / '..r.phase

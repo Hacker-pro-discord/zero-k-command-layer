@@ -142,14 +142,18 @@ The main status area shows production decisions and waiting reasons. Open Set Ob
 
 Five assigned mobile combat units can start immediately after you draw/delegate an objective. With suitable scouts/raiders, the balanced policy sends one scout and four main units; it does not wait for a larger force or for production. Utter Destruction keeps them together. This is military pressure/reconnaissance inside your objective corridor, not automated mex expansion or a promise of map ownership.
 
-Delegated recovery follows **WITHDRAWING > REFORMING > HOLDING > ADVANCING**:
+Delegated recovery follows **EVACUATING (when injured units need cover) > WITHDRAWING > REFORMING > HOLDING > ADVANCING**:
 
+- Evacuate critical units below 30% health first, then wounded units below 60%, then healthy units. Within each health tier, prioritize cost weighted by damage. A critical Glaive withdraws before a healthier expensive unit.
+- Healthy armed raiders/riots/assault units can cover from their current positions for up to 12 seconds (at most 30% of the force). Artillery and support are not selected as cover. Cover withdraws sooner when the first wave clears or any covering unit drops below 60% health. Units displaced outside the objective corridor join evacuation. No injured unit is deliberately assigned to cover.
 - Fall back up to 450 units toward the corridor origin using native movement. Keep artillery behind the original facing, not at the front of a reversed formation.
 - Regroup in Assault role zones. Continue when at least 80% of surviving eligible stage units reach within 96 units of their slots, so a few stragglers do not freeze the force.
 - Hold at least eight seconds after regroup and wait for average health of at least 50% before resuming.
 - Change the next attempt: reduce phase length to 65% (minimum 240), widen spacing by 20% (maximum 256), and choose an alternate lane, preferring less currently observed resistance. Unknown terrain remains uncertain. Revisions are visible in AI Details.
 - Recovery moves time out after 45 seconds; retry after 20 seconds, at most three failures, then hold under control until the player supplies a new objective. No repeated order spam or new approval popup.
 - After resuming, allow a 30-second recovery cooldown. Manual override, native retreat, transport and session restrictions still take priority. New strategic territory still requires your objective.
+
+Delegated plans now check visible terrain for blocked slots and short corridor-bounded detours. Unknown terrain remains native pathfinding territory. Probes ignore object occupancy, are cached, and have a 2,048-call per-plan ceiling. Intermediate waypoints preserve the Move/Fight command and append the final destination. This is a local route helper, not a complete terrain or congestion planner. See [covered withdrawal and routing tests](docs/COVER_ROUTING_TEST.md).
 
 These are transparent tactical adaptations, not learned or globally optimal strategy. The tests verify changed commands and recovery behavior; they do not prove that every revised approach wins. See [recovery test evidence](docs/ADAPTIVE_TEST.md).
 
@@ -184,7 +188,7 @@ The production scheduler now serves every controlled idle factory per pass inste
 
 ## Test evidence and limitations
 
-- Twenty Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
+- Twenty-one Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
 - Preview 2 includes a separate 30-game-second headless engine smoke test. The 400-unit and new approval/recruitment cases are mocked Lua regressions, not a demonstrated 400-unit live battle. The two new buttons have not yet had visual in-game interaction testing.
 - Isolated engine tests verified native orders, actual movement, repeated scout/raid/main operations and cancellation.
 - A visible equal-army test started with 32 identical units and 3,010 metal of combat value each. The corrected two-minute run ended with **nine units and 910 value each**: a stalemate, not a victory or completed objective. The opponent was scripted native Fight, not a full Circuit AI match.
@@ -201,7 +205,7 @@ The [separate-session launcher](tools/run_combat_test.py) uses test-only LuaRule
 
 ## Architecture, contributions and license
 
-UI/input > Officer > observation/classification/formation services > ownership-validated Orders > native Zero-K unit AI. Logistics uses native handlers independently. TacticalRules and TacticalController extend the same Officer and do not issue raw combat orders directly.
+UI/input > Officer > observation/classification/formation services > ownership-validated Orders > native Zero-K unit AI. Logistics uses native handlers independently. RetreatPriority selects evacuation/cover groups; Routing prepares destinations and waypoints without issuing orders. TacticalRules and TacticalController extend the same Officer and do not issue raw combat orders directly.
 
 Read the [API](docs/API.md), [architecture](docs/ARCHITECTURE.md), [tactical rules/research](docs/TACTICAL_RESEARCH.md), [future design](docs/FUTURE_TACTICAL_ARMY_AI.md) and [attribution](docs/ATTRIBUTION.md). Bug reports should include game/engine versions, exact steps, whether delegation was enabled and relevant `[CommandLayer]` log lines. Review logs for private information before sharing.
 

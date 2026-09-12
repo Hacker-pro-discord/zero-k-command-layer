@@ -7,6 +7,8 @@ local stress=Spring.GetModOptions().cl_test_stress=='1'
 if stress then roster={{'cloakraid',240},{'cloakriot',40},{'cloakskirm',40},{'cloakarty',40},{'cloakaa',40}} end
 local early=Spring.GetModOptions().cl_test_early=='1'
 if early then roster={{'cloakraid',5}} end
+local cover=Spring.GetModOptions().cl_test_cover=='1'
+if cover then roster={{'cloakraid',4},{'cloakassault',2},{'cloakarty',2},{'cloakriot',2}} end
 local function report(s) Spring.Echo('[CL-COMBAT] '..s) end
 local function metric()
 	local totals={}
@@ -31,7 +33,7 @@ function gadget:GameFrame(frame)
 		end
 		-- Keep both starting commanders: Zero-K defeat/storage logic depends on them.
 		active=true
-		report('SETUP equal_value='..tostring(value[0]==value[1])..' own_value='..value[0]..' enemy_value='..value[1]..' resource_grant_raw=15000 visible_storage=10000 each; units_per_side='..(early and 5 or stress and 400 or 32))
+		report('SETUP equal_value='..tostring(value[0]==value[1])..' own_value='..value[0]..' enemy_value='..value[1]..' resource_grant_raw=15000 visible_storage=10000 each; units_per_side='..(cover and 10 or early and 5 or stress and 400 or 32))
 	elseif frame==90 and Spring.GetModOptions().cl_test_production=='1' then
 		for i,name in ipairs(stress and {'factorycloak','factoryveh','factoryshield','factoryhover'} or {'factorycloak'}) do
 			local x=800+i*600; local z=stress and 500 or 1400
@@ -42,8 +44,14 @@ function gadget:GameFrame(frame)
 		for id,p in pairs(armies[1]) do if early then Spring.GiveOrderToUnit(id,CMD.FIRE_STATE,{0},0) else Spring.GiveOrderToUnit(id,CMD.FIGHT,{p.x,Spring.GetGroundHeight(p.x,2400),2400},0) end end
 		report(early and 'PASSIVE_ENEMY hold fire for controlled recovery test' or 'ENEMY_ADVANCE native Fight issued')
 	elseif early and (frame==900 or frame==1500) then
-		for id in pairs(armies[0]) do if Spring.ValidUnitID(id) and not Spring.GetUnitIsDead(id) then local _,max=Spring.GetUnitHealth(id); Spring.SetUnitHealth(id,max*(frame==900 and .3 or 1)) end end
-		report(frame==900 and 'CONTROLLED_DAMAGE health=30%' or 'CONTROLLED_HEAL health=100%')
+		local raiders=0
+		for id in pairs(armies[0]) do if Spring.ValidUnitID(id) and not Spring.GetUnitIsDead(id) then
+			local def=UnitDefs[Spring.GetUnitDefID(id)]; local fraction=frame==900 and .3 or 1
+			if cover and frame==900 then if def.name=='cloakraid' then raiders=raiders+1 end; fraction=(def.name=='cloakassault' or def.name=='cloakarty' or def.name=='cloakraid' and raiders<=2) and .05 or .9 end
+			local _,max=Spring.GetUnitHealth(id); Spring.SetUnitHealth(id,max*fraction)
+			if cover then report('INJURY unit='..id..' type='..def.name..' health_fraction='..fraction) end
+		end end
+		report(frame==900 and (cover and 'CONTROLLED_DAMAGE six=5% four=90%' or 'CONTROLLED_DAMAGE health=30%') or 'CONTROLLED_HEAL health=100%')
 	elseif active and frame%300==0 then
 		metric()
 		if frame==30*(tonumber(Spring.GetModOptions().cl_test_duration) or 120) then report('END combat benchmark') end
