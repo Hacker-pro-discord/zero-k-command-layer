@@ -1,0 +1,354 @@
+[
+  {
+    "id": "red_comet_remake_1_7",
+    "map": "Red Comet Remake 1.7",
+    "archive": "red_comet_remake_1.7.sd7",
+    "category": "open/small",
+    "split": "train",
+    "factories": [
+      "factorycloak",
+      "factoryveh"
+    ],
+    "starts": [
+      [
+        1048.0,
+        3536.0
+      ],
+      [
+        5064.0,
+        479.0
+      ]
+    ],
+    "startSource": "mapinfo teams",
+    "size": [
+      6144,
+      4096
+    ],
+    "waterFraction": 0.0,
+    "heightStd": 18.886013399663522,
+    "heightRange": [
+      100.0,
+      400.0
+    ]
+  },
+  {
+    "id": "comet_catcher_redux_v3_1",
+    "map": "Comet Catcher Redux v3.1",
+    "archive": "comet_catcher_redux_v3.1.sd7",
+    "category": "open/large",
+    "split": "train",
+    "factories": [
+      "factoryveh",
+      "factorytank"
+    ],
+    "starts": [
+      [
+        557.0,
+        737.0
+      ],
+      [
+        5603.0,
+        7487.0
+      ]
+    ],
+    "startSource": "map SMD teams",
+    "size": [
+      6144,
+      8192
+    ],
+    "waterFraction": 0.0,
+    "heightStd": 12.705264101373709,
+    "heightRange": [
+      54.0,
+      526.0
+    ]
+  },
+  {
+    "id": "adamantine_mountain_2",
+    "map": "Adamantine Mountain 2",
+    "archive": "adamantine_mountain_2.sd7",
+    "category": "rough/hilly",
+    "split": "train",
+    "factories": [
+      "factoryspider",
+      "factoryjump"
+    ],
+    "starts": [
+      [
+        799,
+        512
+      ],
+      [
+        2847,
+        3789
+      ]
+    ],
+    "startSource": "map startboxes",
+    "size": [
+      4096,
+      4096
+    ],
+    "waterFraction": 0.0,
+    "heightStd": 64.9403099295683,
+    "heightRange": [
+      0.0,
+      200.0
+    ]
+  },
+  {
+    "id": "folsomdamdeluxev4",
+    "map": "FolsomDamDeluxeV4",
+    "archive": "folsomdamdeluxev4.sd7",
+    "category": "chokepoint/large",
+    "split": "train",
+    "factories": [
+      "factoryshield",
+      "factorycloak"
+    ],
+    "starts": [
+      [
+        1024,
+        3584
+      ],
+      [
+        9216,
+        3584
+      ]
+    ],
+    "startSource": "luarules__configs__startboxes__folsomdamdeluxev4.lua",
+    "size": [
+      10240,
+      7168
+    ],
+    "waterFraction": 0.15909567584549766,
+    "heightStd": 215.7773627244543,
+    "heightRange": [
+      -140.0,
+      1200.0
+    ]
+  },
+  {
+    "id": "altair_crossing_v4",
+    "map": "Altair_Crossing_V4",
+    "archive": "altair_crossing_v4.sd7",
+    "category": "small/chokepoint",
+    "split": "train",
+    "factories": [
+      "factorycloak",
+      "factoryveh"
+    ],
+    "starts": [
+      [
+        456.0,
+        893.0
+      ],
+      [
+        3640.0,
+        3188.0
+      ]
+    ],
+    "startSource": "mapinfo teams",
+    "size": [
+      4096,
+      4096
+    ],
+    "waterFraction": 0.0,
+    "heightStd": 37.62413226692767,
+    "heightRange": [
+      -125.0,
+      875.0
+    ]
+  },
+  {
+    "id": "aquatic_divide_revised_v02",
+    "map": "Aquatic Divide Revised v02",
+    "archive": "aquatic_divide_revised_v02.sd7",
+    "category": "amphibious/coastal",
+    "split": "train",
+    "factories": [
+      "factoryamph",
+      "factoryhover"
+    ],
+    "starts": [
+      [
+        307,
+        307
+      ],
+      [
+        3789,
+        3789
+      ]
+    ],
+    "startSource": "luarules__configs__startboxes__aquatic divide revised v02.lua",
+    "size": [
+      4096,
+      4096
+    ],
+    "waterFraction": 0.14922730260782996,
+    "heightStd": 77.62293063070156,
+    "heightRange": [
+      -100.0,
+      300.0
+    ]
+  },
+  {
+    "id": "porky_islands",
+    "map": "Porky_Islands",
+    "archive": "Porky_Islands.sd7",
+    "category": "coastal/naval",
+    "split": "train",
+    "factories": [
+      "factoryship",
+      "factoryamph"
+    ],
+    "starts": [
+      [
+        819,
+        4096
+      ],
+      [
+        7373,
+        4096
+      ]
+    ],
+    "startSource": "luarules__configs__startboxes__porky_islands.lua",
+    "size": [
+      8192,
+      8192
+    ],
+    "waterFraction": 0.6014734086853064,
+    "heightStd": 66.1286243405696,
+    "heightRange": [
+      -100.0,
+      300.0
+    ]
+  },
+  {
+    "id": "sailaway2",
+    "map": "SailAway 2",
+    "archive": "SailAway2.sd7",
+    "category": "naval/large",
+    "split": "train",
+    "factories": [
+      "factoryship",
+      "factoryhover"
+    ],
+    "starts": [
+      [
+        5120,
+        8782.69727
+      ],
+      [
+        5120,
+        1457.30322
+      ]
+    ],
+    "startSource": "map startboxes",
+    "size": [
+      10240,
+      10240
+    ],
+    "waterFraction": 0.6958190962490882,
+    "heightStd": 70.62338203466001,
+    "heightRange": [
+      -75.0,
+      202.0
+    ]
+  },
+  {
+    "id": "agalta_v1_0",
+    "map": "Agalta v1.0",
+    "archive": "Agalta_v1.0.sd7",
+    "category": "open/land",
+    "split": "holdout",
+    "factories": [
+      "factorycloak",
+      "factorytank"
+    ],
+    "starts": [
+      [
+        400,
+        2560
+      ],
+      [
+        5744,
+        2560
+      ]
+    ],
+    "startSource": "map startboxes",
+    "size": [
+      6144,
+      5120
+    ],
+    "waterFraction": 0.0014160254316544574,
+    "heightStd": 14.42146548592076,
+    "heightRange": [
+      -22.0,
+      978.0
+    ]
+  },
+  {
+    "id": "trojan_hills_v05",
+    "map": "Trojan Hills v05",
+    "archive": "trojan_hills_v05.sd7",
+    "category": "rough/hilly",
+    "split": "holdout",
+    "factories": [
+      "factoryspider",
+      "factoryjump"
+    ],
+    "starts": [
+      [
+        2572,
+        614
+      ],
+      [
+        3572,
+        5530
+      ]
+    ],
+    "startSource": "map startboxes",
+    "size": [
+      6144,
+      6144
+    ],
+    "waterFraction": 0.0,
+    "heightStd": 156.04606039152162,
+    "heightRange": [
+      10.0,
+      725.0
+    ]
+  },
+  {
+    "id": "bellicoseislands_zk-v01",
+    "map": "BellicoseIslands_ZK-v01",
+    "archive": "bellicoseislands_zk-v01.sd7",
+    "category": "naval/coastal",
+    "split": "holdout",
+    "factories": [
+      "factoryship",
+      "factoryamph"
+    ],
+    "starts": [
+      [
+        819,
+        2048
+      ],
+      [
+        7373,
+        2048
+      ]
+    ],
+    "startSource": "luarules__configs__startboxes__bellicoseislands_zk-v01.lua",
+    "size": [
+      8192,
+      4096
+    ],
+    "waterFraction": 0.8295079161317929,
+    "heightStd": 32.06970242508111,
+    "heightRange": [
+      -86.0,
+      94.0
+    ]
+  }
+]

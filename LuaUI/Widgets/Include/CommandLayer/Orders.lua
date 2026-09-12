@@ -48,7 +48,7 @@ return function(C)
 		return fromSynced==true -- Native gadget orders are not player override.
 	end
 	function O.service(name,id,cmd,params)
-		if name~='recovery' and name~='arsenal' then return false end
+		if name~='recovery' and name~='arsenal' and name~='economy' then return false end
 		local service=C[name]; if not service or not service.valid(id,cmd,params) then return false end
 		local opts=C.U.options({}); O.sending=true
 		local handled=widgetHandler:UnitCommandNotify(id,cmd,params,opts); local ok=false

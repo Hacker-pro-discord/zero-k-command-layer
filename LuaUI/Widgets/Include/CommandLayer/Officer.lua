@@ -1,7 +1,7 @@
 return function(C)
 	local A={}
 	function A.releaseUnits(ids,reason)
-		for _,id in ipairs(ids or {}) do for _,name in ipairs({'arsenal','recovery','productionControl'}) do if C[name] then C[name].release(id) end end end
+		for _,id in ipairs(ids or {}) do for _,name in ipairs({'arsenal','recovery','economy','productionControl'}) do if C[name] then C[name].release(id) end end end
 		C.registry.release(ids or {},reason or 'PLAYER_OVERRIDE')
 	end
 	function A.nativeCommand(command,position,options)

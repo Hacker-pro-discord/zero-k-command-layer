@@ -56,6 +56,7 @@ return function(C)
 		-- locally because Spring resource values can lag several orders in a frame.
 		local factories={}; for id in pairs(P.factories) do factories[#factories+1]=id end; table.sort(factories)
 		local workerNeed=C.recovery and C.recovery.workerNeed() or 0
+		local economicNeed=C.economy and C.economy.workerNeed() or 0
 		local recoveryReserve=C.recovery and C.recovery.reserveMetal() or 0
 		local sent=0
 		for offset=1,#factories do
@@ -65,15 +66,16 @@ return function(C)
 				local factory=UnitDefs[Spring.GetUnitDefID(id)]
 				for _,bid in ipairs(factory and factory.buildOptions or {}) do
 					local d=C.classify.definition(bid)
+					local economic=economicNeed>0 and d.mobile and d.builder
 					local recovery=workerNeed>0 and UnitDefs[bid].name=='cloakcon'
-					if d.mobile and (not d.builder or recovery) and d.cost>0 and metal>=d.cost+100+(recovery and 0 or recoveryReserve) and P.valid(id,bid) then
-						local score=recovery and -1000000 or weights and #members>=5 and -C.enemyModel.score(d,weights,friendly,total) or d.cost+(d.role==desired and 0 or 100000)
-						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost,recovery=recovery} end
+					if d.mobile and (not d.builder or recovery or economic) and d.cost>0 and metal>=d.cost+100+((recovery or economic) and 0 or recoveryReserve) and P.valid(id,bid) then
+						local score=recovery and -1000000 or economic and -500000+d.cost or weights and #members>=5 and -C.enemyModel.score(d,weights,friendly,total) or d.cost+(d.role==desired and 0 or 100000)
+						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost,recovery=recovery,economic=economic} end
 					end
 				end
 			end
 			if best and C.orders.production(id,best.unit) then
-				metal=metal-best.cost; sent=sent+1; if best.recovery then workerNeed=workerNeed-1 end
+				metal=metal-best.cost; sent=sent+1; if best.recovery then workerNeed=workerNeed-1 end; if best.economic then economicNeed=economicNeed-1 end
 				if friendly then friendly[best.role]=(friendly[best.role] or 0)+best.cost; total=total+best.cost end
 				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(weights and #members>=5 and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or 'Desired role: '..desired))
 			end

@@ -64,7 +64,11 @@ return function(C)
 			button(p,0,180,250,'ARM SELECTED LAUNCHERS','Authorize automatic native ammunition production and visual-target fire for selected launchers. Mobile launchers leave army movement control. Manual orders release them.',function() C.arsenal.enroll(Spring.GetSelectedUnits()); UI.showManagement() end)
 			button(p,260,180,250,'STOP STRATEGIC FIRE','Remove only AI attack orders; retain native ammunition queues.',function() C.arsenal.stop(); UI.showManagement() end)
 		end
-		local text=(C.arsenal and C.arsenal.status..'\n' or '')..C.productionControl.status..(C.recovery and ('\n'..C.recovery.status) or '')
+		if C.economy then
+			button(p,0,540,250,C.economy.enabled and 'ECONOMY: ON' or 'ECONOMY: OFF','Toggle ongoing automatic expansion in this local session. Manual builder orders always win.',function() C.settings.autoEconomy=not C.economy.enabled; if C.settings.autoEconomy then C.economy.start() else C.economy.stop() end; UI.showManagement() end)
+			button(p,260,540,250,'ADD ECONOMY BUILDERS','Return selected constructors to expansion control.',function() C.economy.enroll(Spring.GetSelectedUnits()); UI.showManagement() end)
+		end
+		local text=(C.economy and ('Economy: '..C.economy.status..'\n') or '')..(C.arsenal and C.arsenal.status..'\n' or '')..C.productionControl.status..(C.recovery and ('\n'..C.recovery.status) or '')
 		if C.enemyModel then local model=C.enemyModel.snapshot(); text=text..'\n\nRolling visual intel (half-life '..model.halfLife..'s):'; local keys={}; for role in pairs(model.roles) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..'\n'..role..': '..string.format('%.1f',model.roles[role])..' weighted sightings' end; text=text..'\nUnknown radar contacts: '..model.unknown..'\nOld sightings decay; this is not a current hidden-army count.' end
 		UI.ch.TextBox:New{parent=p,x=0,y=232,width=510,height=300,text=text}
 		button(p,0,590,250,'REFRESH','Refresh current control and intel information.',function() UI.showManagement() end)

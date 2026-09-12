@@ -8,7 +8,7 @@ return function(C)
 		if C.settings.autoPlay and C.U.delegationAllowed(gate) then C.officer.setSession(true); S.start() end
 	end
 	function S.stop(forceID)
-		if not forceID or S.forceID==forceID then S.enabled=false; if C.recovery then C.recovery.stop() end; if C.arsenal then C.arsenal.stop() end; S.booted=S.booted or C.U.live() end
+		if not forceID or S.forceID==forceID then S.enabled=false; if C.economy then C.economy.stop() end; if C.recovery then C.recovery.stop() end; if C.arsenal then C.arsenal.stop() end; S.booted=S.booted or C.U.live() end
 	end
 	function S.start()
 		if not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Enable LOCAL / PRIVATE TEST SESSION first; autonomous startup is single-player only.'); return false end
@@ -16,7 +16,7 @@ return function(C)
 		if f.delegation and f.delegation.active then C.officer.setDelegated(f.id,false) end
 		f.objective=nil; f.mapControl=true; if C.mapControl then C.mapControl.initialize(f) end
 		C.officer.setAutoAssign(true); S.forceID=f.id; S.enabled=true; S.last=-100
-		C.productionControl.set(true); if C.recovery then C.recovery.start() end
+		C.productionControl.set(true); if C.economy and C.settings.autoEconomy then C.economy.start() end; if C.recovery then C.recovery.start() end
 		S.update(); return true
 	end
 	function S.update()
