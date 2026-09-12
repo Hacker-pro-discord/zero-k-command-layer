@@ -46,3 +46,10 @@ These have **not** been established by the automated tests:
 - Public/ranked permission for new assisted functionality; it remains restricted to explicitly identified local/private tests.
 
 Use a local skirmish to judge formation quality before relying on it in a serious match. Strict mode intentionally can interfere with native kiting; Loose avoids corrections near observed combat, but preserving native AI callouts is not proof of identical combat performance.
+
+
+## Officer feedback revision — 2026-09-12
+
+Added all-military assignment, per-force front directives, bounded left/right approach proposals, persistent stale briefs and configurable 60-second approval / 10-second suggestion defaults. Eight Lua 5.1 test suites pass, including new mixed ground/air ownership, builder/structure/allied exclusion, persistent expiry, explicit refresh, flank direction, single approval, intermediate-versus-final completion and manual override cases.
+
+These changes have not yet been verified in a live match. Earlier Beginner skirmish verified Mex + 2 Energy construction, but computer control was stopped before formation/Officer playtesting. No live-match success is claimed for this revision. Original game files remain untouched; restart the match or reload LuaUI to load the installed update (runtime assignments reset).

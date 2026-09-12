@@ -34,13 +34,15 @@ return function(C)
 			button(p,190,168,185,'RESUME','Explicitly resume suspended advice membership, never old approval.',function() if C.officer.resume then C.officer.resume(C.registry.activeForce) end end)
 			button(p,0,210,185,'SHOW DETAILS','Read production advice and its limitations; no build commands.',function() UI.showAdvice() end)
 			button(p,190,210,185,'DISMISS ADVICE','Dismiss the current production recommendation.',function() local f=C.registry.forces[C.registry.activeForce]; if f then f.advice=nil end end)
+			button(p,0,252,375,'ASSIGN ALL MILITARY','Assign all your completed mobile military units now, including air/naval. Excludes builders and structures. No automatic recruitment; no orders.',function() C.officer.assignAll() end)
+			for i,front in ipairs({'ADVANCE','HOLD','FLANK_LEFT','FLANK_RIGHT'}) do local directive=front; button(p,(i-1)*95,294,91,front:gsub('_',' '),'Set this force front approach. Cancels maintenance; next action still needs approval. Set an objective line for this front.',function() C.officer.setFront(C.registry.activeForce,directive) end) end
 			UI.lastDetail=nil
-			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=258,width=367,height=105,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
+			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=338,width=367,height=90,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
 	end
 	function UI.initialize()
 		if not WG.Chili then return false end; UI.ch=WG.Chili
-		UI.window=UI.ch.Window:New{name='CommandLayerWindow',caption='ZERO-K COMMAND LAYER',parent=UI.ch.Screen0,x=C.settings.x,y=C.settings.y,width=410,height=610,draggable=true,resizable=false,padding={12,30,12,12}}
+		UI.window=UI.ch.Window:New{name='CommandLayerWindow',caption='ZERO-K COMMAND LAYER',parent=UI.ch.Screen0,x=C.settings.x,y=C.settings.y,width=410,height=680,draggable=true,resizable=false,padding={12,30,12,12}}
 		for i,tab in ipairs({'LOGISTICS','FORMATIONS','OFFICER'}) do button(UI.window,(i-1)*127,0,122,tab,'Open '..tab:lower(),function() UI.tab=tab; UI.build() end) end
 		UI.status=UI.ch.TextBox:New{parent=UI.window,x=0,bottom=0,width='100%',height=118,text='Officer ready.'}
 		UI.build(); C.debug.log('LOAD','Officer / Chili controls loaded'); return true
@@ -53,21 +55,21 @@ return function(C)
 		end
 		if UI.tab=='OFFICER' and UI.detail then
 			local f=C.registry.forces[C.registry.activeForce]; local text='No adviser force selected.'
-			if f then local n=0; for _ in pairs(f.members) do n=n+1 end; text='Force '..f.id..' | '..n..' units | '..f.status..'\n'..(f.advice and 'Production recommendation available. SHOW DETAILS to read evidence, cost and alternatives.' or 'Set an objective or ask for a reform proposal.') end
+			if f then local n=0; for _ in pairs(f.members) do n=n+1 end; text='Force '..f.id..' | '..n..' units | '..f.status..' | '..(f.front or 'ADVANCE')..'\n'..(f.advice and 'Production recommendation available. SHOW DETAILS to read evidence, cost and alternatives.' or 'Set an objective or ask for a reform proposal.') end
 			if text~=UI.lastDetail then UI.detail:SetText(text); UI.lastDetail=text end
 		end
 		if C.proposals then UI.showProposal(C.proposals.firstOffered()) end
 	end
 	function UI.showProposal(p)
-		local id=p and p.id
+		local id=p and (p.id..':'..p.state)
 		if id==UI.proposalID then return end
 		if UI.dialog then UI.dialog:Dispose(); UI.dialog=nil end; UI.proposalID=id
 		if not p then return end
-		UI.dialog=UI.ch.Window:New{name='CommandLayerProposal',caption='Officer - Force '..p.forceID,parent=UI.ch.Screen0,x=450,y=160,width=440,height=440,draggable=true,resizable=false,padding={12,30,12,12}}
-		UI.ch.TextBox:New{parent=UI.dialog,x=0,y=0,width='100%',height=315,text=p.summary}
-		button(UI.dialog,0,350,130,'APPROVE '..p.kind,'Execute exactly this one displayed action.',function() C.proposals.approve(p.id,p.revision) end)
-		button(UI.dialog,138,350,120,'DECLINE','No orders. Suppress this suggestion temporarily.',function() C.proposals.decline(p.id) end)
-		button(UI.dialog,266,350,140,'SHOW PLAN','Preview destinations; no orders.',function() C.input.preview=p.plan end)
+		UI.dialog=UI.ch.Window:New{name='CommandLayerProposal',caption='Officer - Force '..p.forceID,parent=UI.ch.Screen0,x=450,y=160,width=500,height=540,draggable=true,resizable=false,padding={12,30,12,12}}
+		UI.ch.TextBox:New{parent=UI.dialog,x=0,y=0,width='100%',height=415,text=(p.state=='OFFERED' and '' or p.state..' - this brief is no longer executable. Refresh to review a new plan.\n\n')..p.summary}
+		button(UI.dialog,0,450,130,p.state=='OFFERED' and 'APPROVE' or 'REFRESH','Approve one displayed action; outdated briefs require a fresh review.',function() if p.state=='OFFERED' then C.proposals.approve(p.id,p.revision) else C.advisor.ask(p.forceID,true) end end)
+		button(UI.dialog,138,450,120,'DISMISS','No orders. Decline and suppress this suggestion temporarily.',function() C.proposals.decline(p.id); C.proposals.dismiss(p.id) end)
+		button(UI.dialog,266,450,140,'SHOW PLAN','Preview destinations; no orders.',function() C.input.preview=p.plan end)
 	end
 	function UI.showAdvice()
 		local f=C.registry.forces[C.registry.activeForce]; if not f or not f.advice then return end

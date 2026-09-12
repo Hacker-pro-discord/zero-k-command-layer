@@ -4,7 +4,7 @@ return function(C)
 		local f=C.registry.forces[forceID]
 		if not f or not C.U.assisted(C.settings) or not C.U.live() then C.debug.log('LOCKED','Assign an adviser force in local/private testing.'); return nil end
 		local op=f.operation and C.registry.operations[f.operation]; if op and op.active then return nil end
-		if not explicit and C.U.now()-f.lastSuggestion<30 then return nil end
+		if not explicit and C.U.now()-f.lastSuggestion<C.settings.suggestionInterval then return nil end
 		local ids=C.officer.members(f); if #ids==0 then return nil end
 		if C.production then f.advice=C.production.recommend(f) end
 		local center=C.U.center(ids); local settings=C.U.copy(C.settings); settings.formation=f.formation
@@ -13,12 +13,26 @@ return function(C)
 		local kind='REFORM'; local reason='Restore role zones around the current force position.'
 		local maxDistance=0; local health=0
 		for _,id in ipairs(ids) do maxDistance=math.max(maxDistance,C.U.distance(center,C.U.position(id))); local h,m=Spring.GetUnitHealth(id); health=health+(h and m and h/math.max(1,m) or 0) end
-		if f.objective and not f.objectiveReached and maxDistance<math.max(500,width) and health/#ids>.5 then
+		if f.front~='HOLD' and f.objective and not f.objectiveReached and maxDistance<math.max(500,width) and health/#ids>.5 then
 			kind='PUSH'; points=f.objective; reason='Force is assembled enough for one player-defined advance. Native Fight handles combat.'
 		end
+		-- A flank approval covers one approach line, never an automatic second attack.
+		if kind=='PUSH' and (f.front=='FLANK_LEFT' or f.front=='FLANK_RIGHT') then
+			local a,b=points[1],points[#points]; local mx,mz=(a[1]+b[1])/2,(a[3]+b[3])/2
+			local dx,dz=mx-center[1],mz-center[3]; local distance=math.sqrt(dx*dx+dz*dz)
+			if distance>256 then
+				local side=f.front=='FLANK_LEFT' and -1 or 1
+				local offset=math.min(256,distance*.25); local cx,cz=center[1]+dx*.55-dz/distance*offset*side,center[3]+dz*.55+dx/distance*offset*side
+				local half=math.min(width/2,384); local tx,tz=-dz/distance,dx/distance
+				local function point(sign) return {math.max(8,math.min(Game.mapSizeX-8,cx+tx*half*sign)),0,math.max(8,math.min(Game.mapSizeZ-8,cz+tz*half*sign))} end
+				points={point(-1),point(1)}; kind=f.front
+				reason='One '..f.front:gsub('_',' '):lower()..' approach toward your objective. Review the yellow corridor. This does not claim a weak enemy flank or clear terrain. Another approval is required to attack the objective.'
+			end
+		end
 		if not explicit and f.declined[kind] and f.declined[kind]>C.U.now() then return nil end
-		local plan=C.formations.plan(ids,points,settings); if not plan then return nil end
-		local error=0; for _,id in ipairs(ids) do error=error+C.U.distance(C.U.position(id),plan.slots[id]) end
+		local ground=C.classify.filter(ids); if #ground==0 then ground=ids end
+		local plan=C.formations.plan(ground,points,settings); if not plan then return nil end
+		local error=0; for _,id in ipairs(ids) do error=error+C.U.distance(C.U.position(id),(plan.slots[id] or plan.center)) end
 		if not explicit and kind=='REFORM' and error/#ids<settings.spacing*2 then f.lastSuggestion=C.U.now(); return nil end
 		local observed=C.observations.snapshot(plan.center,math.max(1000,plan.width))
 		if #observed.contacts>0 then reason=reason..' '..#observed.contacts..' visual/radar contacts nearby; this is not a safety assessment.' else reason=reason..' No contact currently observed near the destination; fog remains unknown.' end
@@ -33,8 +47,8 @@ return function(C)
 	function T.update()
 		if not C.U.assisted(C.settings) or C.U.now()-T.last<.5 then return end; T.last=C.U.now()
 		for id,f in pairs(C.registry.forces) do
-			local has=false; for _,p in pairs(C.proposals.items) do if p.forceID==id and p.state=='OFFERED' then has=true; break end end
-			if not has and C.U.now()-f.lastSuggestion>=30 then T.ask(id,false) end
+			local has=false; for _,p in pairs(C.proposals.items) do if p.forceID==id and not p.dismissed and (p.state=='OFFERED' or p.state=='EXPIRED' or p.state=='INVALIDATED') then has=true; break end end
+			if not has and C.U.now()-f.lastSuggestion>=C.settings.suggestionInterval then T.ask(id,false) end
 		end
 	end
 	return T

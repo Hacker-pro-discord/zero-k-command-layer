@@ -5,7 +5,7 @@ C.settings.privateSession=true
 local fid=C.officer.assign({1,2,3,4}); assert(fid and #calls==0)
 C.officer.objective(fid,{{1200,0,2000},{1800,0,2000}}); assert(#calls==0)
 local pid=C.advisor.ask(fid,true); assert(pid and #calls==0)
-clock=26; C.proposals.update(); assert(C.proposals.items[pid].state=='EXPIRED' and #calls==0)
+clock=71; C.proposals.update(); assert(C.proposals.items[pid].state=='EXPIRED' and #calls==0)
 pid=C.advisor.ask(fid,true); C.registry.release({1},'PLAYER_OVERRIDE'); assert(not C.proposals.approve(pid,1) and #calls==0)
 pid=C.advisor.ask(fid,true); local op=C.proposals.approve(pid,1); assert(op and #calls==3)
 assert(not C.proposals.approve(pid,1) and #calls==3)

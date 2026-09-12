@@ -9,6 +9,8 @@
 - `ClassifyForce(unitIDs)`: grouped roles.
 - `SetPrivateTestingSession(true)`: explicitly attest authorized local/private testing. Fails with autohost metadata, replay or spectator state. False revokes assisted control.
 - `AssignAdvisedForce(unitIDs)`: explicit eligible membership, no orders; returns force ID.
+- `AssignAllMilitary()`: snapshot completed owned mobile non-builders into a new adviser force, no orders. Does not auto-recruit future units.
+- `SetFront(forceID, front)`: `ADVANCE`, `HOLD`, `FLANK_LEFT`, `FLANK_RIGHT`. Invalidates pending proposals and cancels maintenance; no new orders.
 - `SetObjective(forceID, points)`: new line invalidates old approval and cancels prior active maintenance. No orders.
 - `AskOfficer(forceID)`: advice request; returns proposal ID when available. No orders.
 - `GetForce(forceID)`, `GetOfficerStatus(forceID)`, `GetProposals(forceID)`: copied inspection data. Proposals include retained terminal history and current offers.

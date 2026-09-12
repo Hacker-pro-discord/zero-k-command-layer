@@ -21,8 +21,16 @@ The window is movable. The formation preset remains selected across orders and s
 - **FORMATION OFF / CANCEL ACTION:** revoke further control. Native destination orders remain. Known tagged temporary correction orders are removed where still owned.
 - Manual commands release affected units. The optional suspension setting requires **RESUME**, which restores advice only, never an old approval.
 - **PREVIOUS FORCE / NEXT FORCE** choose assigned-force records. Selection changes do not change membership. The adviser formation is captured on assignment; reassign after choosing a different preset to change it.
-- One proposal dialog is visible at a time; other offers appear in order. Offers expire after 15 game seconds. Membership, objective, ownership, position, health or observed-threat changes invalidate them. Ask again for a fresh review. Declining suppresses that suggestion for 60 seconds; automatic offers are limited to one per force per 30 seconds.
+- One proposal dialog is visible at a time; other offers appear in order. Approval expires after 60 game seconds by default; the brief stays visible until dismissed or refreshed. Membership, objective, ownership, position, health or observed-threat changes invalidate them. Use REFRESH for a fresh review; stale approval never executes. Declining suppresses that suggestion for 60 seconds; automatic offers are limited to one per force per 10 seconds.
 - Rank/depth sliders and bindable command actions are under **Settings â†’ Interface â†’ Command Layer**. Bind preferred hotkeys through Zero-K's normal UI. Existing keys are not overwritten. Window sizing follows the game's global Chili UI scale; the reserved module scale field is not separately exposed.
+
+## Officer front controls
+
+- **ASSIGN ALL MILITARY** snapshots all your completed mobile military units, including air/naval and mobile support. Builders (including builder commanders), structures, unfinished units and allied units are excluded. It merges the captured units into one new force; existing assignments lose those members. It does not recruit later production automatically.
+- **ADVANCE / HOLD / FLANK LEFT / FLANK RIGHT** set the active force's front approach. Use separate selected-unit assignments and objective lines for separate fronts, switching with PREVIOUS/NEXT FORCE. Changing approach revokes maintenance and invalidates pending approval; native destination orders remain.
+- **HOLD** offers reformation around the current position, not sustained autonomous sector defense. **ADVANCE** offers the objective line. A **FLANK** offers one intermediate side approach toward that line (up to 256 units lateral offset); arrival requires another approval for further movement. Near the objective it offers the final push. The yellow preview shows the approved corridor. This is a player-chosen geometric approach, not terrain-aware routing or detection of an exposed enemy flank.
+- Assignment and front changes issue no orders. Aircraft/ships receive ordinary Fight destinations with completion tracking, without ground formation corrections. All-domain path suitability still needs player review.
+- Brief lifetime (30–180 seconds) and suggestion interval (5–60 seconds) are adjustable in Command Layer settings. Defaults are 60 and 10. Unread expired/invalid briefs are not silently replaced. REFRESH creates a new plan requiring a separate approval click.
 
 ## Installation and removal
 

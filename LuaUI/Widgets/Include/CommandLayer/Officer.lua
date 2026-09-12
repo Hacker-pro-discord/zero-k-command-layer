@@ -12,8 +12,8 @@ return function(C)
 		if intent.approved and not (C.proposals and C.proposals.items[intent.proposalID] and C.proposals.items[intent.proposalID].state=='EXECUTING' and C.proposals.items[intent.proposalID].dispatching) then return nil end
 		if intent.gesture then for _,p in ipairs(intent.gesture) do if not C.U.point(p) then return nil end end end
 		ids=ids or Spring.GetSelectedUnits(); local eligible,ordinary=C.classify.filter(ids)
-		if #eligible==0 then return nil end
-		local plan=intent.plan or C.formations.plan(eligible,intent.gesture,intent.settings)
+		if #eligible+#ordinary==0 then return nil end
+		local plan=intent.plan or C.formations.plan(#eligible>0 and eligible or ordinary,intent.gesture,intent.settings)
 		if not plan or not C.U.point(plan.center) then return nil end
 		for _,id in ipairs(eligible) do if not C.U.point(plan.slots[id]) then return nil end end
 		if not intent.approved then C.registry.release(eligible,'PLAYER_OVERRIDE') end
@@ -47,16 +47,33 @@ return function(C)
 	end
 	function A.assign(ids)
 		if not C.U.assisted(C.settings) or not C.U.live() then C.debug.log('LOCKED','Enable local/private testing before assigning an adviser.'); return nil end
-		local eligible=C.classify.filter(ids); if #eligible==0 then C.debug.log('UNAVAILABLE','Select eligible ground units.'); return nil end
+		local eligible,ordinary=C.classify.filter(ids); for _,id in ipairs(ordinary) do eligible[#eligible+1]=id end; if #eligible==0 then C.debug.log('UNAVAILABLE','Select mobile military units.'); return nil end
 		C.registry.release(eligible,'REASSIGNED'); C.registry.nextForce=C.registry.nextForce+1
-		local f={id=C.registry.nextForce,members={},suspended={},revision=1,status='ADVISER',formation=C.settings.formation=='OFF' and 'DOUBLE LINE' or C.settings.formation,lastSuggestion=-100,declined={}}
+		local f={id=C.registry.nextForce,members={},suspended={},revision=1,status='ADVISER',front='ADVANCE',formation=C.settings.formation=='OFF' and 'DOUBLE LINE' or C.settings.formation,lastSuggestion=-100,declined={}}
 		for _,id in ipairs(eligible) do f.members[id]=true end
 		C.registry.forces[f.id]=f; C.registry.activeForce=f.id; C.debug.log('ASSIGNED','Force '..f.id..' observes only; no orders issued.'); return f.id
+	end
+	function A.assignAll()
+		if not C.U.live() then return nil end
+		local ids={}
+		for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}) do
+			local d=C.classify.definition(Spring.GetUnitDefID(id))
+			local _,_,_,_,built=Spring.GetUnitHealth(id)
+			if C.U.owned(id) and d.mobile and not d.builder and (not built or built>=1) then ids[#ids+1]=id end
+		end
+		return A.assign(ids) -- Snapshot only: newly produced units require another explicit assignment.
+	end
+	function A.setFront(forceID,front)
+		local f=C.registry.forces[forceID]
+		if not f or not ({ADVANCE=true,HOLD=true,FLANK_LEFT=true,FLANK_RIGHT=true})[front] then return false end
+		if f.operation then A.cancel(f.operation) end
+		f.front=front; f.revision=f.revision+1; f.lastSuggestion=-100
+		C.debug.log('FRONT',front..': ask Officer to review the next bounded action.'); return true
 	end
 	function A.objective(forceID,points)
 		local f=C.registry.forces[forceID]; if not f or not points or #points<2 then return false end
 		for _,p in ipairs(points) do if not C.U.point(p) then return false end end
-		if f.operation then A.cancel(f.operation) end; f.objectiveReached=false; f.objective=C.U.copy(points); f.revision=f.revision+1; C.debug.log('OBJECTIVE','Force '..f.id..' objective set. Await approval; no orders issued.'); return true
+		if f.operation then A.cancel(f.operation) end; f.lastSuggestion=-100; f.objectiveReached=false; f.objective=C.U.copy(points); f.revision=f.revision+1; C.debug.log('OBJECTIVE','Force '..f.id..' objective set. Await approval; no orders issued.'); return true
 	end
 	function A.cycle(step)
 		local n=C.registry.nextForce; if n>0 then C.registry.activeForce=((C.registry.activeForce or 1)-1+step)%n+1 end
@@ -77,7 +94,7 @@ return function(C)
 		local now=C.U.now(); if A.lastUpdate and now-A.lastUpdate<.1 then return end; A.lastUpdate=now
 		for _,op in pairs(C.registry.operations) do
 			if op.active then
-				local live={}; for _,id in ipairs(op.units) do if C.registry.valid(op,id) and not (op.ordinary and op.ordinary[id]) then live[#live+1]=id end end
+				local live={}; for _,id in ipairs(op.units) do if C.registry.valid(op,id) then live[#live+1]=id end end
 				local anchor=C.U.center(live); local remaining=0
 				for _,id in ipairs(live) do
 					local pos=C.U.position(id); local target=op.slots[id]; local t=op.tracking[id] or {progress=now,lastPos=pos,lastCorrection=0}; op.tracking[id]=t
@@ -104,7 +121,7 @@ return function(C)
 								end
 							end
 							if baseIndex==1 then t.correction=nil end
-						elseif baseIndex==1 and anchor and op.mode~='ARRIVAL' then
+						elseif baseIndex==1 and anchor and op.mode~='ARRIVAL' and not op.ordinary[id] then
 							local cooldown=op.mode=='STRICT' and 2 or 5
 							local desired={anchor[1]+target[1]-op.plan.center[1],0,anchor[3]+target[3]-op.plan.center[3]}
 							local error=C.U.distance(pos,desired)
