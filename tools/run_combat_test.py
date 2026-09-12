@@ -13,6 +13,7 @@ p.add_argument('--game', type=Path, required=True)
 p.add_argument('--headless', action='store_true')
 p.add_argument('--seconds', type=int, default=120)
 p.add_argument('--production', action='store_true', help='Production smoke variant; adds an own factory, not an equal-army benchmark')
+p.add_argument('--stress', action='store_true', help='400 units per side and four production factories; not an equal-army benchmark')
 a = p.parse_args()
 assert 30 <= a.seconds <= 600
 root = Path(__file__).resolve().parents[1]
@@ -43,7 +44,7 @@ IsHost=1; MyPlayerName=CommandLayerCombatTest; StartPosType=0; HostIP=127.0.0.1;
 [TEAM1] {{TeamLeader=0; AllyTeam=1; RGBColor=1 0.3 0.2; Side=Random;}}
 [ALLYTEAM0] {{NumAllies=0;}} [ALLYTEAM1] {{NumAllies=0;}}
 [AI0] {{Name=ScriptedFightOpponent; ShortName=NullAI; Version=0.1; Team=1; Host=0;}}
-[MODOPTIONS] {{startmetal=5000; startenergy=5000; cl_test_duration={a.seconds}; cl_test_exit={int(a.headless)}; cl_test_production={int(a.production)};}}
+[MODOPTIONS] {{startmetal=5000; startenergy=5000; cl_test_duration={a.seconds}; cl_test_exit={int(a.headless)}; cl_test_production={int(a.production or a.stress)}; cl_test_stress={int(a.stress)};}}
 }}'''
 (target/'test.txt').write_text(script, encoding='utf-8')
 engine = a.game/'engine/win64/2025.06.21'/('spring-headless.exe' if a.headless else 'spring.exe')

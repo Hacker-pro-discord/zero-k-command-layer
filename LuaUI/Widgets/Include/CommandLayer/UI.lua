@@ -110,7 +110,7 @@ return function(C)
 			if mode~='ADVICE ONLY' and not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Autonomous objectives require single-player testing.'); return end
 			UI.objectiveDialog:Dispose(); UI.objectiveDialog=nil; C.input.armObjective(f.id,mode~='ADVICE ONLY' and mode or nil)
 		end) end
-		button(w,0,275,490,'AUTO PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Opt in to existing idle factories for this force. One affordable unit per five seconds; manual factory commands release it. No factory construction.',function() C.productionControl.set(not C.productionControl.enabled); UI.showObjectives() end)
+		button(w,0,275,490,'AUTO PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Opt in to existing idle factories for this force. One affordable unit per idle factory per five seconds; manual factory commands release it. No factory construction.',function() C.productionControl.set(not C.productionControl.enabled); UI.showObjectives() end)
 		button(w,0,315,240,'STOP PRODUCTION','Stop future queue additions; existing queues remain.',function() C.productionControl.set(false); UI.showObjectives() end)
 		button(w,250,315,240,'CLOSE','Keep current settings and close.',function() UI.objectiveDialog:Dispose(); UI.objectiveDialog=nil end)
 		UI.ch.TextBox:New{parent=w,x=0,y=360,width=490,height=60,text=C.productionControl.status}

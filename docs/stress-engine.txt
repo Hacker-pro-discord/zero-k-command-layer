@@ -1,0 +1,70 @@
+[t=00:00:22.928027][f=-000001] [CommandLayer] LOAD: Officer / Chili controls loaded
+[t=00:00:24.418296][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:24.721697][f=-000001] [CommandLayer] SESSION: Assisted testing disabled.
+[t=00:00:30.707950][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=31929 type=factorycloak; not an equal-army comparison
+[t=00:00:30.715797][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=10140 type=factoryveh; not an equal-army comparison
+[t=00:00:30.721909][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=17654 type=factoryshield; not an equal-army comparison
+[t=00:00:30.728253][f=0000090] [CL-COMBAT] PRODUCTION_FIXTURE factory=11098 type=factoryhover; not an equal-army comparison
+[t=00:00:33.744131][f=0000180] [CommandLayer] SESSION: Local/private testing enabled for this session.
+[t=00:00:33.749915][f=0000180] [CommandLayer] ASSIGNED: Force 1 observes only; no orders issued.
+[t=00:00:33.753709][f=0000180] [CommandLayer] OBJECTIVE: Force 1 objective set. Await approval; no orders issued.
+[t=00:00:33.760137][f=0000180] [CommandLayer] DELEGATED: Scout + Raid + Push enabled. Assigned units only; manual orders release units.
+[t=00:00:33.770524][f=0000180] [CL-STRESS] t=6 alive=400 moved32=0 queued=0 mean_forward=0
+[t=00:00:33.814193][f=0000181] [CommandLayer] PRODUCTION: Factory 10140: queued Ravager (ASSAULT), 250 metal. Desired role: ASSAULT
+[t=00:00:33.822534][f=0000181] [CommandLayer] PRODUCTION: Factory 11098: queued Halberd (ASSAULT), 210 metal. Desired role: ASSAULT
+[t=00:00:33.830297][f=0000181] [CommandLayer] PRODUCTION: Factory 17654: queued Thug (ASSAULT), 175 metal. Desired role: ASSAULT
+[t=00:00:33.838395][f=0000181] [CommandLayer] PRODUCTION: Factory 31929: queued Knight (ASSAULT), 350 metal. Desired role: ASSAULT
+[t=00:00:35.763080][f=0000241] [CommandLayer] EXECUTING: Operation 1: LINE / 2 units
+[t=00:00:35.770758][f=0000241] [CommandLayer] TACTICAL: SCOUT: Revisit least recently checked corridor flank; prefer unobserved points. Unknown is not safe.
+[t=00:00:35.787702][f=0000241] [CommandLayer] EXECUTING: Operation 2: LINE / 4 units
+[t=00:00:35.797569][f=0000241] [CommandLayer] TACTICAL: RAID: No suitable visual raid target. Patrol the assigned flank for contacts.
+[t=00:00:35.822803][f=0000241] [CommandLayer] EXECUTING: Operation 3: ASSAULT / 394 units
+[t=00:00:35.829324][f=0000241] [CommandLayer] TACTICAL: MAIN: Advance the selected objective policy phase; native Fight handles combat. Packed ranks may extend within the corridor.
+[t=00:00:43.726864][f=0000480] [CL-STRESS] t=16 alive=400 moved32=398 queued=341 mean_forward=223
+[t=00:00:51.312126][f=0000708] [CommandLayer] REINFORCEMENT: Completed military unit 12416 assigned to Force 1; joins its next authorized movement.
+[t=00:00:52.958508][f=0000757] [CommandLayer] COMPLETED: Operation 1 released positioning.
+[t=00:00:53.730746][f=0000780] [CL-STRESS] t=26 alive=400 moved32=398 queued=234 mean_forward=355
+[t=00:00:54.808854][f=0000813] [CommandLayer] REINFORCEMENT: Completed military unit 17021 assigned to Force 1; joins its next authorized movement.
+[t=00:00:58.809282][f=0000933] [CommandLayer] REINFORCEMENT: Completed military unit 28661 assigned to Force 1; joins its next authorized movement.
+[t=00:01:01.261112][f=0001006] [CommandLayer] UNIT_LOST: Operation 2 released positioning.
+[t=00:01:03.770580][f=0001081] [CL-STRESS] t=36 alive=394 moved32=392 queued=300 mean_forward=362
+[t=00:01:05.766095][f=0001141] [CommandLayer] EXECUTING: Operation 4: LINE / 2 units
+[t=00:01:05.771997][f=0001141] [CommandLayer] TACTICAL: SCOUT: Damaged/exposed light detachment returns inside its assigned corridor.
+[t=00:01:08.845697][f=0001234] [CommandLayer] REINFORCEMENT: Completed military unit 21430 assigned to Force 1; joins its next authorized movement.
+[t=00:01:09.141651][f=0001243] [CommandLayer] REINFORCEMENT: Completed military unit 14982 assigned to Force 1; joins its next authorized movement.
+[t=00:01:13.771293][f=0001381] [CL-STRESS] t=46 alive=308 moved32=306 queued=264 mean_forward=323
+[t=00:01:15.763286][f=0001441] [CommandLayer] DELEGATED: Autonomous control stopped. Native destination orders remain.
+[t=00:01:15.766048][f=0001441] [CommandLayer] REVIEW: At least 25% of assigned units were lost or released. Delegation stopped; review a revised plan.
+[t=00:01:15.779101][f=0001441] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:16.147009][f=0001453] [CommandLayer] REINFORCEMENT: Completed military unit 11879 assigned to Force 1; joins its next authorized movement.
+[t=00:01:20.766376][f=0001591] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:23.762690][f=0001681] [CL-STRESS] t=56 alive=249 moved32=247 queued=162 mean_forward=423
+[t=00:01:24.140971][f=0001693] [CommandLayer] REINFORCEMENT: Completed military unit 4079 assigned to Force 1; joins its next authorized movement.
+[t=00:01:25.767213][f=0001741] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:30.771246][f=0001891] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:33.767572][f=0001981] [CL-STRESS] t=66 alive=235 moved32=233 queued=120 mean_forward=464
+[t=00:01:35.770406][f=0002041] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:37.143122][f=0002083] [CommandLayer] REINFORCEMENT: Completed military unit 10654 assigned to Force 1; joins its next authorized movement.
+[t=00:01:40.766668][f=0002191] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:43.762298][f=0002281] [CL-STRESS] t=76 alive=221 moved32=219 queued=103 mean_forward=491
+[t=00:01:44.174921][f=0002294] [CommandLayer] REINFORCEMENT: Completed military unit 27664 assigned to Force 1; joins its next authorized movement.
+[t=00:01:45.770089][f=0002341] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:50.767153][f=0002491] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:53.764508][f=0002581] [CL-STRESS] t=86 alive=199 moved32=197 queued=88 mean_forward=495
+[t=00:01:55.772071][f=0002641] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:01:58.140496][f=0002713] [CommandLayer] REINFORCEMENT: Completed military unit 19598 assigned to Force 1; joins its next authorized movement.
+[t=00:02:00.767194][f=0002791] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:02:03.765037][f=0002881] [CL-STRESS] t=96 alive=155 moved32=153 queued=111 mean_forward=545
+[t=00:02:05.763558][f=0002941] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:02:10.769813][f=0003091] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:02:13.762162][f=0003181] [CL-STRESS] t=106 alive=137 moved32=135 queued=89 mean_forward=518
+[t=00:02:15.761924][f=0003241] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:02:19.143129][f=0003343] [CommandLayer] REINFORCEMENT: Completed military unit 14339 assigned to Force 1; joins its next authorized movement.
+[t=00:02:19.672481][f=0003359] [CommandLayer] REINFORCEMENT: Completed military unit 10473 assigned to Force 1; joins its next authorized movement.
+[t=00:02:20.764066][f=0003391] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:02:23.763124][f=0003481] [CommandLayer] PRODUCTION: Factory 11098: queued Scalpel (SKIRMISHER), 220 metal. Desired role: SKIRMISHER
+[t=00:02:23.771347][f=0003481] [CL-STRESS] t=116 alive=121 moved32=119 queued=71 mean_forward=487
+[t=00:02:25.765892][f=0003541] [CommandLayer] PROPOSAL: Force 1: REFORM awaiting approval.
+[t=00:02:27.720005][f=0003600] [CL-COMBAT] METRIC frame=3600 own_count=119 enemy_count=126 own_value=14880 enemy_value=14325 own_lost=21520 enemy_lost=22075 own_damage_taken=107812 enemy_damage_taken=95014
+[t=00:02:27.740642][f=0003600] [CommandLayer] DELEGATED: Autonomous control stopped. Native destination orders remain.
+[t=00:02:27.745468][f=0003600] [CL-COMBAT-CLIENT] COMPLETE

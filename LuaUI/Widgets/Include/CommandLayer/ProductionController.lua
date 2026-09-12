@@ -40,23 +40,30 @@ return function(C)
 		elseif not groups.RIOT then desired='RIOT' end
 		local economy=C.observations.economy(); local metal=economy and economy.metal.current or 0
 		if not economy or (economy.energy.current or 0)<100 then P.status='WAIT: retain 100 energy reserve'; return end
-		local best
-		for id in pairs(P.factories) do
+		-- Fair round-robin, one addition per idle factory per pass. Reserve spending
+		-- locally because Spring resource values can lag several orders in a frame.
+		local factories={}; for id in pairs(P.factories) do factories[#factories+1]=id end; table.sort(factories)
+		local sent=0
+		for offset=1,#factories do
+			local index=((P.cursor or 0)+offset-1)%#factories+1; local id=factories[index]
+			local best
 			if C.U.owned(id) then
 				local factory=UnitDefs[Spring.GetUnitDefID(id)]
 				for _,bid in ipairs(factory and factory.buildOptions or {}) do
 					local d=C.classify.definition(bid)
 					if d.mobile and not d.builder and d.cost>0 and metal>=d.cost+100 and P.valid(id,bid) then
 						local score=d.cost+(d.role==desired and 0 or 100000)
-						if not best or score<best.score then best={factory=id,unit=bid,score=score,role=d.role,cost=d.cost} end
+						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost} end
 					end
 				end
 			end
+			if best and C.orders.production(id,best.unit) then
+				metal=metal-best.cost; sent=sent+1
+				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. Desired role: '..desired)
+			end
 		end
-		if best and C.orders.production(best.factory,best.unit) then
-			P.status='Queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. Desired role: '..desired
-			C.debug.log('PRODUCTION',P.status)
-		else P.status='WAIT: busy/released factories or insufficient stored resources (100 metal reserve)' end
+		P.cursor=#factories>0 and ((P.cursor or 0)+1)%#factories or 0
+		P.status=sent>0 and ('Queued '..sent..' factories; reserved metal remaining '..math.floor(metal)) or 'WAIT: busy/released factories or insufficient stored resources (100 metal reserve)'
 	end
 	return P
 end

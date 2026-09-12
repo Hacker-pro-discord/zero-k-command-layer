@@ -131,7 +131,7 @@ The three autonomous choices explicitly start single-player delegation after the
 The same chooser contains **AUTO PRODUCTION** and **STOP PRODUCTION**. Production defaults OFF and is session-only. Enabling it authorizes the current existing factories for the selected force; new factories need a fresh opt-in. The controller:
 
 - Uses actual factory build options and friendly gaps/visible riot contacts to choose a mobile military unit. It prefers the requested role, with an affordable military fallback.
-- Queues at most one unit across all controlled factories every five game seconds, only into an empty native factory queue. It preserves busy queues and never constructs a factory or changes rally points.
+- Queues at most one unit per controlled idle factory every five game seconds, reserving their combined metal cost and rotating priority when funds are limited, only into an empty native factory queue. It preserves busy queues and never constructs a factory or changes rally points.
 - Requires the full unit metal cost plus 100 metal in storage and at least 100 stored energy. These are simple reserves, not a complete economic forecast.
 - Releases a factory when you issue a manual command to it. Turning production off preserves already queued units. It disables on leaving the single-player/private-test context or losing the assigned force.
 - Routes completed units from its factories back to its assigned force even if you browse another force in the UI. Existing approval snapshots remain unchanged.
@@ -163,9 +163,13 @@ Developer approval for public/ranked use of the new Officer features has **not**
 
 There are no orders or observation collection while spectating/replaying. Enemy identity is read only with visual contact; radar-only contacts stay UNKNOWN. The suite does not expose fog-of-war data, conceal control or bypass local-widget restrictions.
 
+## Multi-factory / scale validation (preview 4)
+
+The production scheduler now serves every controlled idle factory per pass instead of one global winner. An edge-of-map formation rejection found with 1,000 units is fixed. A live 400-vs-400 test queued all four factory types and moved 398 original units by game second 16. Heavy losses triggered the expected approval pause at second 48; this was not a victorious autonomous match. See [detailed results](docs/SCALE_TEST.md).
+
 ## Test evidence and limitations
 
-- Seventeen Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
+- Nineteen Lua 5.1 regression suites cover ownership, stale/duplicate approvals, radar anonymity, logistics modifiers, geometry, delegation, withdrawal, status, 400-unit plans, reinforcement membership and stall recovery.
 - Preview 2 includes a separate 30-game-second headless engine smoke test. The 400-unit and new approval/recruitment cases are mocked Lua regressions, not a demonstrated 400-unit live battle. The two new buttons have not yet had visual in-game interaction testing.
 - Isolated engine tests verified native orders, actual movement, repeated scout/raid/main operations and cancellation.
 - A visible equal-army test started with 32 identical units and 3,010 metal of combat value each. The corrected two-minute run ended with **nine units and 910 value each**: a stalemate, not a victory or completed objective. The opponent was scripted native Fight, not a full Circuit AI match.

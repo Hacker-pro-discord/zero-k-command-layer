@@ -38,6 +38,8 @@ return function(C)
 		if riots>=2 then settings.spacing=math.min(256,settings.spacing*1.5) end
 		local half=math.min(s.half*.7,math.max(32,#ids*settings.spacing/4))
 		local a={target[1]-s.px*half,0,target[3]-s.pz*half}; local b={target[1]+s.px*half,0,target[3]+s.pz*half}
+		-- A broad corridor near an edge must still reach the packing planner.
+		for _,point in ipairs({a,b}) do point[1]=math.max(8,math.min(Game.mapSizeX-8,point[1])); point[3]=math.max(8,math.min(Game.mapSizeZ-8,point[3])) end
 		if not C.U.point(a) or not C.U.point(b) then return nil end
 		local ground=C.classify.filter(ids); if #ground==0 then ground=ids end
 		local p=C.formations.plan(ground,{a,b},settings); if not p then return nil end
