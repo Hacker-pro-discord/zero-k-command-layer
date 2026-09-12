@@ -11,3 +11,4 @@ Each entry records checks actually run; automated checks are not a claim of visu
 6. Persistent preset and operation tracking implemented. Cooldowns, shared budget and tagged correction insertion preserve destination queues. Lua tests pass; live reload requested through isolated-session driver.
 7. Geometric layouts and sampled curved ranks pass slot-count/finite-position/bounds tests; Double Line has two distinct ranks. Engine reload logs checked. SCREEN/ASSAULT await role bands in milestone 9.
 8. Role-icon classification, description fallback and constructor inclusion tests pass; no unit-name list. Installed and triggered live reload.
+9. SCREEN and ASSAULT role bands implemented; test verifies artillery remains over 300 units behind raiders. Engine reload requested. No autonomous target selection.

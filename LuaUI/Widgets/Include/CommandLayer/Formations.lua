@@ -27,11 +27,23 @@ return function(C)
 		end
 		local ordered=C.U.copy(ids)
 		table.sort(ordered,function(x,y) local p,q=C.U.position(x),C.U.position(y); local px=p and p[1]*tx+p[3]*tz or 0; local py=q and q[1]*tx+q[3]*tz or 0; return px==py and x<y or px<py end)
-		local bands={}; for i,id in ipairs(ordered) do local band=(i-1)%ranks; bands[band]=bands[band] or {}; table.insert(bands[band],id) end
+		local bands={}; local roleBands={SCOUT=0,RAIDER=0,ASSAULT=1,RIOT=1,OTHER=1,ANTI_AIR=2,SUPPORT=2,CONSTRUCTOR=2,SKIRMISHER=3,ARTILLERY=4}
+		local roleAware=shape=='ASSAULT' or shape=='SCREEN'
+		for i,id in ipairs(ordered) do
+			local band=(i-1)%ranks
+			if roleAware then band=roleBands[C.classify.definition(Spring.GetUnitDefID(id)).role] or 1; if shape=='SCREEN' and band>0 then band=1 end end
+			bands[band]=bands[band] or {}; table.insert(bands[band],id)
+		end
+		if roleAware then
+			width=length
+			for _,g in pairs(bands) do width=math.max(width,(#g-1)*gap) end
+			plan.width=width
+		end
 		for band,group in pairs(bands) do
 			for i,id in ipairs(group) do
 				local fraction=#group==1 and .5 or (i-1)/(#group-1)
 				local along=(fraction-.5)*width; local depth=band*s.rankGap
+				if shape=='ASSAULT' then depth=({[0]=0,[1]=s.rankGap,[2]=s.supportDepth,[3]=s.skirmDepth,[4]=s.artilleryDepth})[band] end
 				local x,z,fx,fz=sample(fraction)
 				if shape=='COLUMN' then along=0; depth=(i-1)*gap
 				elseif shape=='WEDGE' then local step=math.ceil((i-1)/2); along=(i%2==0 and -1 or 1)*step*gap; depth=step*gap
