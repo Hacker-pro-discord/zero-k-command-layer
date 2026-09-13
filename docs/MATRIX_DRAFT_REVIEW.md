@@ -6,7 +6,11 @@ The inspected file contains data tables, not a complete widget: 160 candidate ro
 
 155 row names match installed unit source names. Five are commander chassis aliases (`dynstrike`, `dynassault`, `dynknight`, `dynrecon`, `dynsupport`) requiring an explicit verified mapping for actual commander definitions/upgrades. The file says it was flattened from older layered data; its referenced provenance archive and consuming proposer widget were not supplied.
 
-## Decision
+## Current decision after explicit user direction
+
+The user subsequently requested live use of this draft with unit-by-unit scoring. It is now bundled unchanged as `CounterMatrixData.lua` and enabled through the bounded adapter described in [Unit matchups](UNIT_MATCHUPS.md). Exact supplied pairs are accepted as provisional preferences without inventing review metadata. Unknown/unlisted pairs retain the legacy model. This supersedes the original decision below; the original 64 training matches still did not use the matrix.
+
+## Original decision (historical)
 
 Preserve the current role/capability counter logic and the frozen benchmark baseline. Retain this exact draft locally for comparison; do not install it as a widget or silently replace production decisions. Its values are author-supplied matchup preferences, not demonstrated win probabilities, damage ratios or terrain-independent combat guarantees.
 

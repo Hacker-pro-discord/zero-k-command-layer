@@ -11,3 +11,7 @@ Inspected a local Windows Zero-K installation. Archive `games/zk-stable.sdz`, v1
 Official research references: [Widget Configuration](https://zero-k.info/mediawiki/Widget_Configuration), [Unit commands](https://zero-k.info/mediawiki/Unit_commands), [Area Mex](https://zero-k.info/mediawiki/Area_Mex_Command), [Unit AI](https://zero-k.info/mediawiki/Unit_AI), [Unit classes](https://zero-k.info/mediawiki/Unit_classes), [Unit states](https://zero-k.info/mediawiki/Unit_states), [Hotkeys](https://zero-k.info/mediawiki/Hotkeys), [Repair](https://zero-k.info/mediawiki/Repair_Command), [Developing](https://zero-k.info/mediawiki/Zero-K:Developing), [Code of Conduct](https://zero-k.info/mediawiki/Zero-K:Code_of_Conduct).
 
 Installed native code resolves conflicting wiki modifier descriptions. New assisted/autonomous functionality is restricted to local/private tests; developer permission for public/ranked use has not been obtained. No runtime network research, external model calls or concealed control is included.
+
+## User-supplied matrix data
+
+`CounterMatrixData.lua` is an unchanged copy of the user-supplied `gui_build_proposer_matrix.lua`, SHA-256 `1723ca15bdaa1065ce4780174848ad32e0b2305df9077b290905d7946cc424a2`. Its original editor/date/source comments are preserved. The upstream author's name and separate license were not supplied; no authorship or relicensing claim is made for this data. It is included at the user's explicit direction. The adapter is separate Command Layer code; the supplied `counteredBy` table and generic fallback columns are not used.

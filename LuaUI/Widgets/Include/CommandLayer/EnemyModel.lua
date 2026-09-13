@@ -8,14 +8,18 @@ return function(C)
 			if v.visibility=='VISUAL' and v.defID then
 				local def=UnitDefs[v.defID]; local role=def and def.canFly and 'AIR' or v.role
 				if def and (def.isBuilding or def.isFactory) and C.classify.definition(v.defID).range>0 then role='DEFENSE' end
-				E.seen[v.id]={role=role,cost=def and def.metalCost or 0,time=v.time or live.time or now}
+				E.seen[v.id]={name=def and def.name,defID=v.defID,role=role,cost=def and def.metalCost or 0,time=v.time or live.time or now}
 			elseif v.visibility=='RADAR' then unknown=unknown+1 end
 		end
-		local out={roles={},value={},rawValue={},total=0,unknown=unknown,time=now,halfLife=C.settings.intelHalfLife or 90}
+		local out={units={},roles={},value={},rawValue={},total=0,unknown=unknown,time=now,halfLife=C.settings.intelHalfLife or 90}
 		for id,v in pairs(E.seen) do
 			local age=math.max(0,now-v.time)
 			if age>out.halfLife*6 then E.seen[id]=nil else
 				local weight=2^(-age/out.halfLife)
+				if v.name then
+					local u=out.units[v.name] or {defID=v.defID,value=0,rawValue=0}; out.units[v.name]=u
+					u.value=u.value+math.max(50,v.cost)*weight; u.rawValue=u.rawValue+math.max(50,v.cost)
+				end
 				out.roles[v.role]=(out.roles[v.role] or 0)+weight
 				out.rawValue[v.role]=(out.rawValue[v.role] or 0)+math.max(50,v.cost)
 				out.value[v.role]=(out.value[v.role] or 0)+math.max(50,v.cost)*weight
@@ -46,11 +50,13 @@ return function(C)
 		end end
 		return roles,total
 	end
-	function E.score(unit,weights,friendly,total)
+	function E.score(unit,weights,friendly,total,model)
 		local sum=0; for _,w in pairs(weights) do sum=sum+w end
 		local fraction=(weights[unit.role] or .5)/sum
 		-- Shared unmet value demand; cheap units cannot monopolize every factory.
-		return (fraction*(total+math.max(500,total*.25))-(friendly[unit.role] or 0))/math.max(100,unit.cost)^.5
+		local base=(fraction*(total+math.max(500,total*.25))-(friendly[unit.role] or 0))/math.max(100,unit.cost)^.5
+		if C.matchups and model then return C.matchups.adjust(base,unit,model,total) end
+		return base
 	end
 	return E
 end

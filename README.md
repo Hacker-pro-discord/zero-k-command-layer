@@ -44,7 +44,15 @@ In local single-player, automatic map control also starts economic expansion by 
 
 Open **OFFICER > CONTROL PANEL** for **ECONOMY: ON/OFF** and **ADD ECONOMY BUILDERS**. The latter explicitly returns selected constructors to expansion control. Recovery builders and expansion builders have separate duties. Disabling economy preserves native orders already issued. Disable **Automatic economic expansion in local single-player** in widget settings to keep the preference off in later matches. **STOP AI** ends the current automatic session.
 
-This is experimental. The [Circuit Brutal campaign](docs/BENCHMARK_RESULTS.md) uses normal commander starts and lets the Officer run its economy without scripted help. The 32-match baseline recorded zero wins, 25 losses and seven time limits; the full corrected rerun recorded zero wins, 20 losses and 12 time limits. **It is not a reliable Brutal-beating AI.** Time limits are not wins. The three holdout maps remain unused pending a stronger training candidate. Results, curves, production checks and remaining failure priorities are published in the report. The [unfinished counter-matrix draft](docs/MATRIX_DRAFT_REVIEW.md) remains outside live decisions, preserving the existing fallback logic.
+This is experimental. The [Circuit Brutal campaign](docs/BENCHMARK_RESULTS.md) uses normal commander starts and lets the Officer run its economy without scripted help. The 32-match baseline recorded zero wins, 25 losses and seven time limits; the full corrected rerun recorded zero wins, 20 losses and 12 time limits. **It is not a reliable Brutal-beating AI.** Time limits are not wins. The three holdout maps remain unused pending a stronger training candidate. Results, curves, production checks and remaining failure priorities are published in the report. The newly enabled [unit-by-unit matrix](docs/UNIT_MATCHUPS.md) is a later experimental change; it was not used in those benchmark results.
+
+## Unit-by-unit counter production (experimental)
+
+The supplied unit matchup matrix is now **enabled by default** alongside the corrected economy/production logic. It biases candidate units against individually identified enemy types, using decaying visual sightings. Missing rows/pairs, unsupported targets and invalid values retain the existing role logic. The matrix's generic class fallback columns are not used. Exact values of 1.00 are neutral; other values are provisional preferences, not measured combat probabilities.
+
+All controlled factories share army/queue deficits; builders, resource limits, actual build options and manual overrides retain priority. The first five military units retain the early opening rules. Later production choices and read-only recommendations include the unit-pair bias. Factory decisions log the strongest contributing pair, effective coverage and bias.
+
+Disable **Unit-by-unit counter matrix (unfinished draft)** in Command Layer settings to restore legacy scoring. This setting persists; control authority does not. No new autonomous targeting or visibility access is added. See [implementation and testing](docs/UNIT_MATCHUPS.md). **The previous benchmark improvements did not evaluate this matrix.**
 
 ## Adaptive production and expanded control (preview 10)
 

@@ -71,7 +71,7 @@ return function(C)
 					local funding=d.cost
 					if C.economy and C.economy.enabled then funding=math.min(d.cost,math.max(65,(economy.metal.income or 0)*6)) end
 					if d.mobile and (not d.builder or recovery or economic) and d.cost>0 and metal>=funding+100+((recovery or economic) and 0 or recoveryReserve) and P.valid(id,bid) then
-						local score=recovery and -1000000 or economic and -500000+d.cost or weights and #members>=5 and -C.enemyModel.score(d,weights,friendly,total) or d.cost+(d.role==desired and 0 or 100000)
+						local score=recovery and -1000000 or economic and -500000+d.cost or weights and #members>=5 and -C.enemyModel.score(d,weights,friendly,total,model) or d.cost+(d.role==desired and 0 or 100000)
 						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost,recovery=recovery,economic=economic,funding=funding} end
 					end
 				end
@@ -79,7 +79,9 @@ return function(C)
 			if best and C.orders.production(id,best.unit) then
 				metal=metal-best.funding; sent=sent+1; if best.recovery then workerNeed=workerNeed-1 end; if best.economic then economicNeed=economicNeed-1 end
 				if friendly then friendly[best.role]=(friendly[best.role] or 0)+best.cost; total=total+best.cost end
-				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(weights and #members>=5 and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or 'Desired role: '..desired))
+				local matchup=''
+				if C.matchups and model and #members>=5 and not best.economic and not best.recovery then local bias,coverage,why=C.matchups.bias(C.classify.definition(best.unit),model); matchup=string.format(' Unit matrix: bias %.3f, effective coverage %.0f%%; %s.',bias,coverage*100,why) end
+				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(weights and #members>=5 and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or 'Desired role: '..desired)..matchup)
 			end
 		end
 		P.cursor=#factories>0 and ((P.cursor or 0)+1)%#factories or 0
