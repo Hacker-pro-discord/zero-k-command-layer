@@ -1,0 +1,124 @@
+[
+  {
+    "id": "red_comet_remake_1_7-AUTO-s0",
+    "map": "Red Comet Remake 1.7",
+    "archive": "red_comet_remake_1.7.sd7",
+    "category": "open/small",
+    "split": "train",
+    "factories": [
+      "factorycloak",
+      "factoryveh"
+    ],
+    "starts": [
+      [
+        1048.0,
+        3536.0
+      ],
+      [
+        5064.0,
+        479.0
+      ]
+    ],
+    "startSource": "mapinfo teams",
+    "size": [
+      6144,
+      4096
+    ],
+    "waterFraction": 0.0,
+    "heightStd": 18.886013399663522,
+    "heightRange": [
+      100.0,
+      400.0
+    ],
+    "side": 0,
+    "factory": "AUTO",
+    "seed": 1729,
+    "outcome": "CENSORED",
+    "wallSeconds": 105.87895280006342,
+    "gameSeconds": 600.000061,
+    "final": {
+      "0": {
+        "kind": "METRIC",
+        "composition": {
+          "turretlaser": 2,
+          "staticradar": 2,
+          "dyntrainer_strike_base": 1,
+          "staticmex": 7,
+          "energysolar": 11,
+          "factorygunship": 2,
+          "vehcon": 1,
+          "vehassault": 1,
+          "gunshipheavyskirm": 1,
+          "vehraid": 1,
+          "vehriot": 1,
+          "gunshipassault": 1,
+          "turretmissile": 2,
+          "energyfusion": 1,
+          "factoryveh": 1
+        },
+        "factories": 3,
+        "time": 600.000061,
+        "metalExpense": 30.0000191,
+        "team": 0,
+        "energyExpense": 36.6000023,
+        "combatLost": 4870,
+        "armyValue": 1860.33276,
+        "mexes": 7,
+        "army": 5,
+        "metalIncome": 28.0870209,
+        "killed": 2125,
+        "lost": 5420,
+        "builders": 2,
+        "energyIncome": 36.9097977,
+        "economyValue": 5666.33398,
+        "energy": 496.315216,
+        "metal": 490.449799
+      },
+      "1": {
+        "kind": "METRIC",
+        "composition": {
+          "factoryshield": 1,
+          "energysolar": 17,
+          "shieldskirm": 8,
+          "turretmissile": 5,
+          "turretgauss": 1,
+          "shieldriot": 1,
+          "shieldshield": 1,
+          "dyntrainer_recon_base": 1,
+          "staticradar": 6,
+          "turretheavylaser": 1,
+          "shieldaa": 6,
+          "staticmex": 27,
+          "shieldassault": 9,
+          "shieldfelon": 2,
+          "energyfusion": 1,
+          "shieldcon": 18,
+          "shieldraid": 7,
+          "staticstorage": 2,
+          "turretriot": 3,
+          "turretlaser": 20,
+          "energywind": 14,
+          "staticcon": 7
+        },
+        "factories": 1,
+        "time": 600.000061,
+        "metalExpense": 95.5000534,
+        "team": 1,
+        "energyExpense": 112.300117,
+        "combatLost": 2125,
+        "armyValue": 5830,
+        "mexes": 27,
+        "army": 34,
+        "metalIncome": 77.2473831,
+        "killed": 4870,
+        "lost": 3015,
+        "builders": 19,
+        "energyIncome": 92.4241562,
+        "economyValue": 13950.167,
+        "energy": 383.548187,
+        "metal": 329.745544
+      }
+    },
+    "errors": []
+  }
+]

@@ -20,7 +20,8 @@ return function(C)
 	end
 	local function rebalance(f)
 		local d=f.delegation; if f.objectiveMode=='UTTER DESTRUCTION' then return end; local live=#C.officer.members(f)
-		local wave=f.tactic=='WAVE TACTICS'; local wanted={SCOUT=live>=(wave and 3 or 5) and math.min(wave and 4 or 2,math.max(1,math.floor(live*.1))) or 0,RAID=live>=8 and math.min(wave and 8 or 4,math.floor(live*.2)) or 0}
+		local wave=f.tactic=='WAVE TACTICS'; local wanted={SCOUT=live>=(wave and 3 or 5) and math.min(wave and 4 or 2,math.max(1,math.floor(live*.1))) or 0,RAID=not d.massAttack and live>=8 and math.min(wave and 8 or 4,math.floor(live*.2)) or 0}
+		if C.openingPlan and live>=1 then for _,id in ipairs(d.groups.MAIN) do local raw=UnitDefs[Spring.GetUnitDefID(id)]; local role=C.classify.definition(Spring.GetUnitDefID(id)).role; if role=='SCOUT' or role=='RAIDER' and (raw.speed or 0)>=70 then wanted.SCOUT=math.max(1,wanted.SCOUT); break end end end
 		for _,group in ipairs({'SCOUT','RAID'}) do
 			local count=0; for _,id in ipairs(d.groups[group]) do if f.members[id] and C.U.owned(id) and not f.suspended[id] then count=count+1 end end -- Retry-blocked detachments still occupy their subgroup slots.
 			if count<wanted[group] then
@@ -187,6 +188,19 @@ return function(C)
 		if not fieldRecovering and not f.objectiveReached and f.front~='HOLD' and now>=(d.recoverAfter or 0) and (not f.mapControl and now-d.review.time>=60 or #forceIDs<d.review.count*.75 or C.rules.health(forceIDs)<.4) then
 			local why=#forceIDs<d.review.count*.75 and 'More than 25% of the review force was lost/released.' or C.rules.health(forceIDs)<.4 and 'Average force health below 40%.' or 'No substantial forward progress for 60 game seconds.'
 			T.beginRecovery(f,now,why); T.recoveryTick(f,now); return
+		end
+		-- Commit a combined field army at 25, then 50 eligible troops; keep reserves/scouts.
+		if C.openingPlan and f.mapControl and f.front~='HOLD' and not fieldRecovering and now>=(d.massNext or 0) then
+			local field={}; for _,group in ipairs({'MAIN','RAID'}) do for _,id in ipairs(members(f,group)) do local h,m=Spring.GetUnitHealth(id); if h and m and h/m>=.55 then field[#field+1]=id end end end
+			local readyCount=#field; for _,group in ipairs({'SCOUT','RESERVE'}) do for _,id in ipairs(members(f,group)) do local h,m=Spring.GetUnitHealth(id); if h and m and h/m>=.55 then readyCount=readyCount+1 end end end
+			local threshold=d.massAttack and 50 or 25
+			if readyCount>=threshold and #field>=math.max(5,readyCount*.5) and (not d.massAttack or (d.massSize or 0)<50) then
+				for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active and (op.id==d.ops.MAIN or op.id==d.ops.RAID or op.kind=='REINFORCE') then C.officer.cancel(op.id) end end
+				for _,id in ipairs(d.groups.RAID) do d.groups.MAIN[#d.groups.MAIN+1]=id end; d.groups.RAID={}
+				d.massAttack=true; d.massSize=readyCount; d.massNext=now+45; d.next.MAIN=now; d.ops.MAIN=nil; d.ops.RAID=nil
+				f.mapState=f.mapState or C.mapControl.initialize(f); f.mapState.attackPhase=true
+				C.debug.log('ARMY COMMIT',#field..' healthy field troops: combined map-control attack; no enemy-composition prerequisite. Reserve and scouts retain duties.')
+			end
 		end
 		-- Catch new recruits up without restarting the army's active movement.
 		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]

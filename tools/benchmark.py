@@ -84,6 +84,7 @@ StartPosType=3; FixedRNGSeed={case['seed']}; RecordDemo=1; HostIP=127.0.0.1; Hos
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--game',type=Path,required=True); p.add_argument('--directory',type=Path,required=True)
+    p.add_argument('--auto-factory',action='store_true',help='Let Officer choose the opening from public terrain; records AUTO in the manifest')
     p.add_argument('--split',choices=['train','holdout'],default='train'); p.add_argument('--map-id'); p.add_argument('--case-limit',type=int)
     p.add_argument('--seconds',type=int,default=1200); p.add_argument('--speed',type=int,default=20); p.add_argument('--jobs',type=int,default=3)
     p.add_argument('--wall-timeout',type=int,default=1800); p.add_argument('--ai',default=AI); p.add_argument('--rerun',action='store_true')
@@ -94,8 +95,9 @@ def main():
     cases=[]
     for m in maps:
         if m['split']!=args.split or args.map_id and m['id']!=args.map_id: continue
-        for factory in m['factories']:
-            for side in [0,1]: cases.append(dict(m,id=f"{m['id']}-{factory}-s{side}",side=side,factory=factory,seed=1729+side+97*m['factories'].index(factory)))
+        opening_factories=['AUTO'] if args.auto_factory else m['factories']
+        for factory in opening_factories:
+            for side in [0,1]: cases.append(dict(m,id=f"{m['id']}-{factory}-s{side}",side=side,factory=factory,seed=1729+side+97*opening_factories.index(factory)))
     if args.case_limit: cases=cases[:args.case_limit]
     args.directory.mkdir(parents=True,exist_ok=True)
     snapshot=args.directory/'source'

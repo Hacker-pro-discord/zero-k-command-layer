@@ -38,7 +38,7 @@ return function(C)
 		local n=0; for id in pairs(E.workers) do if C.U.owned(id) then n=n+1 end end
 		for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID())) do local d=UnitDefs[Spring.GetUnitDefID(id)]; if d and d.isFactory then for _,q in ipairs(Spring.GetFactoryCommands(id,-1) or {}) do if q.id and q.id<0 then local b=C.classify.definition(-q.id); if b.mobile and b.builder then n=n+1 end end end end end
 		local economy=C.observations.economy(); local income=economy and economy.metal.income or 0
-		local goal=military<5 and 1 or math.min(8,2+math.floor(income/20))
+		local goal=C.openingPlan and (military<3 and 1 or math.min(10,2+math.floor(income/15))) or (military<5 and 1 or math.min(8,2+math.floor(income/20)))
 		return math.max(0,goal-n)
 	end
 	local function site(id,def,origin,anchor,bridge)
@@ -115,7 +115,9 @@ return function(C)
 			end
 			if not job and #factories==0 then
 				local factory=E.opening~='AUTO' and E.opening or Spring.GetGroundHeight(p[1],p[3])<-10 and 'factoryship' or 'factorycloak'
-				job=build(factory,'initial factory '..factory)
+				if E.opening=='AUTO' and C.openingPlan then
+					for _,candidate in ipairs(C.openingPlan.factories(id)) do job=build(candidate.name,'initial factory '..candidate.name); if job then job.reason=candidate.reason; break end end
+				else job=build(factory,'initial factory '..factory) end
 			end
 			local function power(urgent)
 				local anchor=state and C.economyPlan.energyAnchor(state,p); local origin=anchor and anchor.p or p
@@ -145,7 +147,7 @@ return function(C)
 				return upgrade
 			end
 			local force=C.startup and C.registry.forces[C.startup.forceID]; local expansionFirst=force and force.objectiveMode=='WIN THE GAME'
-			if not job and ((expansionFirst and E.jobCount%4==3 or not expansionFirst and E.jobCount%3==2) or catchup and budget.capacityNeeded) then job=invest() end
+			if not job and ((expansionFirst and E.jobCount%(C.openingPlan and 6 or 4)==(C.openingPlan and 5 or 3) or not expansionFirst and E.jobCount%3==2) or catchup and budget.capacityNeeded) then job=invest() end
 			if not job and #factories>0 and metal>(catchup and math.max(65,mi*6)+125 or 40) then
 				local def=named('staticmex'); local best,score
 				if def and can(id,def) then for i,spot in ipairs(WG.metalSpots or {}) do local pos={spot.x,spot.y,spot.z}; local key='mex:'..i; local used=false

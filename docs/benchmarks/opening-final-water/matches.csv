@@ -1,0 +1,2 @@
+case,map,side,factory,outcome,seconds,killed,lost,ownIncome,enemyIncome,ownMex,enemyMex,ownArmyValue,enemyArmyValue,firstFiveCreatedSeconds,firstFiveReadySeconds,explored,scoutVisited,enemyOpening
+sailaway2-AUTO-s0,SailAway 2,0,AUTO,CENSORED,600.0,1535,3535,30.2,65.7,7,21,1877,5748,90.0000076,110.300003,0.1484375,0.0078125,factoryship

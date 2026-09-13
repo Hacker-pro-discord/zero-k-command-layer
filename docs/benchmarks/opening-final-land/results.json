@@ -1,0 +1,118 @@
+[
+  {
+    "id": "red_comet_remake_1_7-AUTO-s0",
+    "map": "Red Comet Remake 1.7",
+    "archive": "red_comet_remake_1.7.sd7",
+    "category": "open/small",
+    "split": "train",
+    "factories": [
+      "factorycloak",
+      "factoryveh"
+    ],
+    "starts": [
+      [
+        1048.0,
+        3536.0
+      ],
+      [
+        5064.0,
+        479.0
+      ]
+    ],
+    "startSource": "mapinfo teams",
+    "size": [
+      6144,
+      4096
+    ],
+    "waterFraction": 0.0,
+    "heightStd": 18.886013399663522,
+    "heightRange": [
+      100.0,
+      400.0
+    ],
+    "side": 0,
+    "factory": "AUTO",
+    "seed": 1729,
+    "outcome": "CENSORED",
+    "wallSeconds": 108.81104039994534,
+    "gameSeconds": 600.000061,
+    "final": {
+      "0": {
+        "kind": "METRIC",
+        "composition": {
+          "wolverine_mine": 1,
+          "veharty": 2,
+          "staticradar": 1,
+          "dyntrainer_strike_base": 1,
+          "staticmex": 3,
+          "energysolar": 7,
+          "factorygunship": 1,
+          "vehcon": 2,
+          "gunshipheavyskirm": 1,
+          "factoryveh": 1
+        },
+        "factories": 2,
+        "time": 600.000061,
+        "metalExpense": 15,
+        "team": 0,
+        "energyExpense": 15.8000002,
+        "combatLost": 4530,
+        "armyValue": 1120.65747,
+        "mexes": 3,
+        "army": 3,
+        "metalIncome": 14.47054,
+        "killed": 2885,
+        "lost": 6495,
+        "builders": 3,
+        "energyIncome": 17.4544144,
+        "economyValue": 3472.33374,
+        "energy": 306.059723,
+        "metal": 2.81736827
+      },
+      "1": {
+        "kind": "METRIC",
+        "composition": {
+          "cloakriot": 3,
+          "cloakraid": 6,
+          "energysolar": 27,
+          "staticcon": 5,
+          "cloakassault": 2,
+          "cloakarty": 4,
+          "turretaalaser": 1,
+          "turretmissile": 6,
+          "cloakjammer": 1,
+          "cloakskirm": 5,
+          "dyntrainer_recon_base": 1,
+          "staticradar": 5,
+          "staticmex": 20,
+          "cloakaa": 4,
+          "energyfusion": 1,
+          "factorycloak": 1,
+          "staticstorage": 1,
+          "cloakcon": 12,
+          "turretlaser": 19,
+          "energywind": 19,
+          "turretheavylaser": 3
+        },
+        "factories": 1,
+        "time": 600.000061,
+        "metalExpense": 48.9666824,
+        "team": 1,
+        "energyExpense": 68.666687,
+        "combatLost": 2885,
+        "armyValue": 3650,
+        "mexes": 20,
+        "army": 25,
+        "metalIncome": 51.9024277,
+        "killed": 4530,
+        "lost": 3415,
+        "builders": 13,
+        "energyIncome": 68.5463562,
+        "economyValue": 12124.1719,
+        "energy": 0.01964632,
+        "metal": 521.8349
+      }
+    },
+    "errors": []
+  }
+]

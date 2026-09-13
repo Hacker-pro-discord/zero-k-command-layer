@@ -38,7 +38,7 @@ return function(C)
 	function P.update()
 		if not P.enabled then return end
 		if not C.U.delegationAllowed(C.settings) then P.set(false); return end
-		local now=C.U.now(); if now-P.last<5 then return end; P.last=now
+		local now=C.U.now(); if now-P.last<(C.openingPlan and 1 or 5) then return end; P.last=now
 		local f=C.registry.forces[P.forceID]; if not f then P.set(false); return end
 		for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}) do local def=UnitDefs[Spring.GetUnitDefID(id)]; if def and def.isFactory and C.U.owned(id) and not P.excluded[id] then P.factories[id]=true end end
 		local members=C.officer.members(f); local groups=C.classify.force(members); local desired='ASSAULT'
@@ -51,7 +51,8 @@ return function(C)
 		local weights,model,friendly,total
 		if C.enemyModel then weights,model=C.enemyModel.weights(); friendly,total=C.enemyModel.friendly(); P.intel=model end
 		local economy=C.observations.economy(); local metal=economy and economy.metal.current or 0
-		if not economy or (economy.energy.current or 0)<100 then P.status='WAIT: retain 100 energy reserve'; return end
+		local energyFloor=C.openingPlan and 30 or 100
+		if not economy or (economy.energy.current or 0)<energyFloor then P.status='WAIT: retain '..energyFloor..' energy reserve'; return end
 		-- Fair round-robin, one addition per idle factory per pass. Reserve spending
 		-- locally because Spring resource values can lag several orders in a frame.
 		local factories={}; for id in pairs(P.factories) do factories[#factories+1]=id end; table.sort(factories)
@@ -64,38 +65,45 @@ return function(C)
 				if counterMode then break end
 			end
 		end
+		local opening=C.openingPlan and C.openingPlan.forceState()
+		local noIntel=opening and (not model or (model.militaryValue or 0)<1 and ((model.value or {}).DEFENSE or 0)<1)
+		if noIntel then counterMode=false end
 		local workerNeed=C.recovery and C.recovery.workerNeed() or 0
 		local economicNeed=C.economy and C.economy.workerNeed() or 0
 		local recoveryReserve=C.recovery and C.recovery.reserveMetal() or 0
 		local budget=C.militaryBudget and C.militaryBudget.update()
 		local catchup=budget and budget.active
 		if catchup and budget.builders>0 then workerNeed=0; economicNeed=0 end
-		local buffer=catchup and 40 or 100
+		if opening and opening.builders>0 and (opening.combat<3 or opening.builders>=math.max(2,math.floor(opening.combat/4))) then workerNeed=0; economicNeed=0 end
+		if opening then recoveryReserve=math.min(recoveryReserve,math.max(50,(economy.metal.income or 0)*3)) end
+		local buffer=(catchup or opening) and 40 or 100
 		local sent=0
 		for offset=1,#factories do
 			local index=((P.cursor or 0)+offset-1)%#factories+1; local id=factories[index]
 			local best
 			if C.U.owned(id) then
 				local factory=UnitDefs[Spring.GetUnitDefID(id)]
+				local scout=opening and C.openingPlan.scout(factory,opening)
 				for _,bid in ipairs(factory and factory.buildOptions or {}) do
 					local d=C.classify.definition(bid)
 					local economic=economicNeed>0 and d.mobile and d.builder
 					local recovery=workerNeed>0 and (C.recovery.workerDefinition and C.recovery.workerDefinition(bid) or UnitDefs[bid].name=='cloakcon')
 					local funding=d.cost
 					local sustainable=not (C.economy and C.economy.enabled) or d.cost<=math.max(400,(economy.metal.income or 0)*60) or metal>=d.cost+100
-					if C.economy and C.economy.enabled then funding=math.min(d.cost,math.max(65,(economy.metal.income or 0)*6)) end
+					if C.economy and C.economy.enabled then funding=math.min(d.cost,math.max(opening and 40 or 65,(economy.metal.income or 0)*(opening and 3 or 6))) end
 					if sustainable and d.mobile and (not d.builder or recovery or economic) and d.cost>0 and metal>=funding+buffer+((recovery or economic) and 0 or recoveryReserve) and P.valid(id,bid) then
-						local score=recovery and -1000000 or economic and -500000+d.cost or counterMode and -C.enemyModel.score(d,weights,friendly,total,model) or d.cost+(d.role==desired and 0 or 100000)
+						local score=scout==bid and -2000000 or recovery and -1000000 or economic and -500000+d.cost or counterMode and -C.enemyModel.score(d,weights,friendly,total,model) or noIntel and -C.openingPlan.score(d,opening) or d.cost+(d.role==desired and 0 or 100000)
 						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost,recovery=recovery,economic=economic,funding=funding} end
 					end
 				end
 			end
 			if best and C.orders.production(id,best.unit) then
 				metal=metal-best.funding; sent=sent+1; if best.recovery then workerNeed=workerNeed-1 end; if best.economic then economicNeed=economicNeed-1 end
+				if opening then if best.economic or best.recovery then opening.builders=opening.builders+1 else opening.combat=opening.combat+1; opening.roles[best.role]=(opening.roles[best.role] or 0)+1; if (best.role=='SCOUT' or best.role=='RAIDER') and (UnitDefs[best.unit].speed or 0)>=70 then opening.scouts=opening.scouts+1 end end end
 				if friendly then friendly[best.role]=(friendly[best.role] or 0)+best.cost; total=total+best.cost end
 				local matchup=''
 				if C.matchups and model and counterMode and not best.economic and not best.recovery then local bias,coverage,why=C.matchups.bias(C.classify.definition(best.unit),model); matchup=string.format(' Unit matrix: bias %.3f, effective coverage %.0f%%; %s.',bias,coverage*100,why) end
-				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(counterMode and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or 'Desired role: '..desired)..matchup)
+				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(counterMode and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or (noIntel and 'Opening army mix: no identified enemy required.' or 'Desired role: '..desired))..matchup)
 			end
 		end
 		P.cursor=#factories>0 and ((P.cursor or 0)+1)%#factories or 0

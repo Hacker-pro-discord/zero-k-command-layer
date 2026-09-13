@@ -20,7 +20,7 @@ return function(C)
 			half=math.max(Game.mapSizeX,Game.mapSizeZ)*.6,corridor={{0,0,0},{Game.mapSizeX,0,0},{Game.mapSizeX,0,Game.mapSizeZ},{0,0,Game.mapSizeZ}}}
 	end
 	function M.choose(f,group,ids,contacts,now)
-		local m=f.mapState or M.initialize(f); local center=C.U.center(ids)
+		local m=f.mapState or M.initialize(f); local center=C.U.center(ids); m.home=m.home or C.U.copy(center)
 		for i,p in ipairs(m.cells) do
 			if C.U.distance(center,p)<350 or Spring.GetPositionLosState(p[1],p[2],p[3]) then m.visits[i]=now end
 		end
@@ -55,7 +55,8 @@ return function(C)
 				local age=now-(m.resourceAttempts[i] or -600); local reserved=false
 				for other,mission in pairs(m.missions) do if other~=group and mission.resource==i and now-mission.time<60 then reserved=true end end
 				if not held and not reserved and age>=45 and distance>250 and risk<math.max(150,value*1.2) and setback(p)==0 then
-					local s=distance+ risk*2-math.min(300,age)
+					local forward=group=='MAIN' and m.attackPhase and math.min(2400,C.U.distance(m.home,p)) or 0
+					local s=distance+ risk*2-math.min(300,age)-forward*.8
 					if not score or s<score then best=p; score=s; kind='SECURE RESOURCE'; key='mex:'..i; reason='Advance to public metal node '..i..' and contest access; unseen defenders and occupancy remain unknown.' end
 				end
 			end

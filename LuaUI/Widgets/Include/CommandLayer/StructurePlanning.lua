@@ -35,7 +35,7 @@ return function(C)
    if P.categories[def] then investment=investment+(raw.metalCost or 0) end
    if pos and (raw.isFactory or tonumber((raw.customParams or {}).metal_extractor_mult)) then local dist=C.U.distance(origin,pos); if dist<1400 and (not nearest or dist<nearest) then anchor=pos; nearest=dist end end
   end end
-  if not anchor then return end
+  if not anchor or C.openingPlan and army<1200 then return end
   local contacts=C.observations.snapshot().contacts; local air,ground,sea=0,0,0
   for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and v.defID and C.U.distance(anchor,v.position)<1800 then
    local d=UnitDefs[v.defID]; if d then if d.canFly then air=air+1 elseif (d.minWaterDepth or 0)>0 then sea=sea+1 else ground=ground+1 end end

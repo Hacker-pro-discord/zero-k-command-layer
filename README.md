@@ -38,6 +38,16 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
+## Faster opening, scouting and field attacks
+
+The Officer now chooses an **AUTO starting factory from public terrain**: mobility for open land, rough terrain or water, filtered through the builder's actual options and native placement. A manually selected opening or existing factory is preserved.
+
+Factories check idle queues every second, keep smaller funding buffers, and prioritize an affordable fast scout/raider. Before identified enemy combat/defense intel, they build an initial raider/riot/skirmisher/assault mix. A mex sighting alone does not end that opening. Once combat intel exists, the existing unit counter matrix resumes its role. Construction and production still require resources; this does not grant extra income.
+
+Expansion gets five of six discretionary job turns before optional upgrades, earlier additional builders, and fewer early static-defense diversions. Urgent energy still wins. At **25 and 50 healthy ground troops**, the map-control Officer combines main troops and raiders into a field attack; reserve/scout duties remain separate. Smaller groups continue their existing actions rather than waiting for 25. Terrain, manual override, native retreat and observed threats still apply.
+
+See [opening rules and native tests](docs/AGGRESSIVE_OPENING.md).
+
 ## Multiplayer, including ranked
 
 The project owner reported permission for the full suite, including ranked, on September 13, 2026. The single-player-only lock has been replaced with a per-match opt-in. No public approval link has been supplied; this records the reported scope rather than claiming official endorsement.
