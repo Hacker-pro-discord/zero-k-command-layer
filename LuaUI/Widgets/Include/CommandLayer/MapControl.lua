@@ -27,7 +27,10 @@ return function(C)
 		local best,score,kind,reason,key
 		local value=0; for _,id in ipairs(ids) do local h,maxh=Spring.GetUnitHealth(id); value=value+C.classify.definition(Spring.GetUnitDefID(id)).cost*(h and maxh and h/math.max(1,maxh) or 1) end
 		local function setback(p) local penalty=0; for _,v in ipairs(m.failures or {}) do if now-v.time<120 and C.U.distance(p,v.point)<900 then penalty=penalty+(120-(now-v.time))*100 end end; return penalty end
-		if group~='SCOUT' then
+		if group~='SCOUT' and C.targeting then
+			local v,why=C.targeting.choose(ids,contacts,group,f.delegation and f.delegation.sector,nil,function(contact) return setback(contact.position)==0 end)
+			if v then best=v.position; kind='ATTACK CONTACT'; reason=why..'; native Fight approach'; key='visual:'..v.id end
+		elseif group~='SCOUT' then
 			for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and v.defID then
 				local def=C.classify.definition(v.defID); local vulnerable=def.builder or def.range==0 or def.role=='ARTILLERY'
 				local risk=C.rules.risk(v.position,contacts,450)
@@ -67,7 +70,7 @@ return function(C)
 			end
 		end
 		if best then
-			m.missions[group]={point=C.U.copy(best),cell=type(key)=='number' and key or nil,time=now,kind=kind}
+			m.missions[group]={point=C.U.copy(best),cell=type(key)=='number' and key or nil,time=now,kind=kind,target=type(key)=='string' and tonumber(key:match('^visual:(%d+)$')) or nil}
 			local resource=type(key)=='string' and tonumber(key:match('^mex:(%d+)$'))
 			if resource then m.resourceAttempts[resource]=now; m.missions[group].resource=resource end
 			if type(key)=='number' then m.attempts[key]=now end
@@ -83,6 +86,12 @@ return function(C)
 		local arrived,total=0,0
 		for _,id in ipairs(op.units) do if f.members[id] and C.U.owned(id) then total=total+1; if C.U.distance(C.U.position(id),op.slots[id])<180 then arrived=arrived+1 end end end
 		local contactInterrupt=false
+		if C.targeting and group~='SCOUT' and now-op.created>=12 and mission and mission.target then
+			local best,why,score=C.targeting.choose(ids,contacts,group,f.delegation.sector,900)
+			local previous
+			for _,v in ipairs(contacts) do if v.id==mission.target then previous=C.targeting.score(v,center,group); if previous then previous=previous-C.rules.risk(v.position,contacts,450)*.3 end; break end end
+			if best and best.id~=mission.target and (not previous or score>previous+250) then contactInterrupt=true; C.debug.log('TARGET REVIEW',why) end
+		end
 		if group=='MAIN' and now-op.created>=12 and mission and mission.kind~='ATTACK CONTACT' then
 			-- A remote contact must not restart the same march every 12 seconds.
 			for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and C.U.distance(center,v.position)<900 then contactInterrupt=true; break end end

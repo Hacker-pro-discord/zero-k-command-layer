@@ -268,7 +268,8 @@ return function(C)
 	end
 	function T.update()
 		local now=C.U.now(); if now-T.last<2 then return end; T.last=now
-		for _,f in pairs(C.registry.forces) do T.tick(f,now) end
+		if C.orders.updateFocus then C.orders.updateFocus() end
+		for _,f in pairs(C.registry.forces) do T.tick(f,now); if C.targeting then C.targeting.focus(f,now) end end
 	end
 	return T
 end

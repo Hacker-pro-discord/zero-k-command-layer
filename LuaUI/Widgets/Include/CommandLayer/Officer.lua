@@ -1,5 +1,9 @@
 return function(C)
 	local A={}
+	function A.focusTarget(op,id,contact)
+		if not op.grant or not C.registry.valid(op,id) then return false end
+		return C.orders.setFocus(op,id,contact)
+	end
 	function A.factoryControl(action,ids)
 		if action=='OFF' then return C.productionControl.set(false) end
 		if not C.U.delegationAllowed(C.settings) then return false end

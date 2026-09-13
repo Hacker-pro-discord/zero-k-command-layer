@@ -38,6 +38,12 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
+## Basic target priorities
+
+The delegated Officer now prioritizes **visible repair/support units, threatening turrets and exposed mexes**, with distance and observed defenses considered. It can give nearby units native priority targets without replacing their movement queues. Confirmed visible repair work and recent damage to our units strengthen priority. Radar contacts stay unidentified; manual targets and manual orders win. **AI DETAILS** shows the last targeting reason.
+
+See [target selection, limits and tests](docs/TARGET_PRIORITIES.md).
+
 ## Defence and Special construction
 
 Open **OFFICER > FACTORY / ECONOMY > DEFENCE / SPECIAL BUILDS** with constructors selected. The menu lists their actual native build options. Pick a building and place its native ghost to add an Officer construction request. This includes expensive strategic structures when the selected builders support them. Terraform commands remain in the native interface. Launcher construction and launcher firing are separate controls.

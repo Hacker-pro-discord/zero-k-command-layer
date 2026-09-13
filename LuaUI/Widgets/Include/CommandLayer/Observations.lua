@@ -1,7 +1,12 @@
 return function(C)
-	local B={contacts={},last=-100,signature=''}
+	local B={contacts={},last=-100,signature='',attacks={}}
+	function B.damaged(victim,attacker)
+		if not C.U.live() or not C.U.owned(victim) or not attacker then return end
+		local los=Spring.GetUnitLosState(attacker,Spring.GetMyAllyTeamID(),false)
+		if los and los.los then B.attacks[attacker]=C.U.now() end
+	end
 	function B.update(force)
-		if not C.U.live() then B.contacts={}; B.signature=''; return end
+		if not C.U.live() then B.contacts={}; B.signature=''; B.attacks={}; return end
 		if not force and C.U.now()-B.last<.5 then return end; B.last=C.U.now()
 		local contacts={}; local digest={}
 		for _,id in ipairs(Spring.GetAllUnits()) do
@@ -19,6 +24,16 @@ return function(C)
 				end
 			end
 		end
+		-- Only query a visible builder's work, and inspect its target only if also visual.
+		local visible={}; for _,v in ipairs(contacts) do if v.visibility=='VISUAL' then visible[v.id]=true end end
+		for _,v in ipairs(contacts) do if v.visibility=='VISUAL' then
+			v.recentAttacker=B.attacks[v.id] and B.last-B.attacks[v.id]<=12 or false
+			if C.classify.definition(v.defID).builder and Spring.GetUnitIsBuilding then
+				local target=Spring.GetUnitIsBuilding(v.id)
+				if target and visible[target] then local h,m,_,_,built=Spring.GetUnitHealth(target); v.repairing=built==1 and h and m and h<m end
+			end
+		end end
+		for id,time in pairs(B.attacks) do if B.last-time>12 then B.attacks[id]=nil end end
 		table.sort(digest); B.signature=table.concat(digest,'|'); B.contacts=contacts
 	end
 	function B.nearCombat(p,r)

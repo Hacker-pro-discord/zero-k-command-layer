@@ -61,6 +61,7 @@ return function(C)
 		return best,key
 	end
 	function R.raid(s,ids,contacts)
+		if C.targeting then local v=C.targeting.choose(ids,contacts,'RAID',s); return v and v.position end
 		local center=C.U.center(ids); local value=0; for _,id in ipairs(ids) do value=value+C.classify.definition(Spring.GetUnitDefID(id)).cost end
 		local target,score
 		for _,v in ipairs(contacts) do

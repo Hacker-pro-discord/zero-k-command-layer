@@ -63,7 +63,8 @@ return function(C)
 					end
 					if d.defense and d.defense.threat then target=reachable(d.defense.threat.point,C.classify.definition(Spring.GetUnitDefID(ids[1])).range); reason='Respond to the current rear-area threat from a compatible position.' end
 					if not target and d.recovery then target=reachable(d.recovery.target or d.sector.origin); reason='Support field recovery using this movement domain.' end
-					if not target then for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and v.defID then
+					if not target and C.targeting then local v,why=C.targeting.choose(ids,contacts,group,d.sector,nil,function(v) return reachable(v.position,group=='SEA' and C.classify.definition(Spring.GetUnitDefID(ids[1])).range or nil)~=nil end); if v then target=reachable(v.position,group=='SEA' and C.classify.definition(Spring.GetUnitDefID(ids[1])).range or nil); reason=why end end
+					if not target and not C.targeting then for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and v.defID then
 						local point=reachable(v.position,group=='SEA' and C.classify.definition(Spring.GetUnitDefID(ids[1])).range or nil)
 						if point then local score=C.U.distance(center,point); if not best or score<best then best=score; target=point; reason='Native Fight toward an observed contact; terrain-compatible destination.' end end
 					end end end

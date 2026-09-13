@@ -1,6 +1,52 @@
 return function(C)
-	local O={sending=false,pending={},tokens=60,last=C.U.now()}
+	local O={sending=false,pending={},focus={},tokens=60,last=C.U.now()}
 	local function same(a,b) if not a or not b or #a~=#b then return false end; for i=1,#a do if math.abs(a[i]-b[i])>.1 then return false end end; return true end
+	local function currentFocus(id,t)
+		return t and C.U.owned(id) and C.registry.generation[id]==t.generation and Spring.GetUnitRulesParam(id,'target_type')==2 and Spring.GetUnitRulesParam(id,'target_id')==t.target
+	end
+	function O.clearFocus(id)
+		local t=O.focus[id]; O.focus[id]=nil
+		local cmd=Spring.Utilities.CMD.UNIT_CANCEL_TARGET
+		if not cmd or not C.U.live() or not currentFocus(id,t) then return end
+		local opts=C.U.options({}); O.sending=true
+		local used=widgetHandler:UnitCommandNotify(id,cmd,{},opts)
+		if not used and currentFocus(id,t) then
+			O.pending[id]=O.pending[id] or {}; table.insert(O.pending[id],{cmd=cmd,params={},untilTime=C.U.now()+5})
+			Spring.GiveOrderToUnit(id,cmd,{},opts.coded)
+		end
+		O.sending=false
+	end
+	function O.setFocus(op,id,v)
+		local cmd=Spring.Utilities.CMD.UNIT_SET_TARGET
+		if not cmd or not Spring.FindUnitCmdDesc or not Spring.FindUnitCmdDesc(id,cmd) or not op.grant or not C.registry.valid(op,id) then return false end
+		local old=O.focus[id]; local kind=Spring.GetUnitRulesParam(id,'target_type') or 0
+		if kind~=0 and not currentFocus(id,old) then return false end -- Preserve existing manual priority targets.
+		local function valid()
+			if not C.registry.valid(op,id) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 or v.visibility~='VISUAL' or not v.time or C.U.now()-v.time>1 then return false end
+			local los=Spring.GetUnitLosState(v.id,Spring.GetMyAllyTeamID(),false)
+			if not los or not los.los or Spring.GetUnitDefID(v.id)~=v.defID then return false end
+			local team=Spring.GetUnitTeam(v.id); if not team or Spring.AreTeamsAllied(team,Spring.GetMyTeamID()) then return false end
+			local p=C.U.position(v.id); local f=C.registry.forces[op.forceID]
+			return p and f and C.formations.inCorridor(f.delegation.sector,p) and C.U.distance(C.U.position(id),p)<=C.classify.definition(Spring.GetUnitDefID(id)).range
+		end
+		if not valid() then return false end
+		local opts=C.U.options({}); O.sending=true
+		local used=widgetHandler:UnitCommandNotify(id,cmd,{v.id},opts); local ok=false
+		if not used and valid() then
+			O.pending[id]=O.pending[id] or {}; table.insert(O.pending[id],{cmd=cmd,params={v.id},untilTime=C.U.now()+5})
+			ok=Spring.GiveOrderToUnit(id,cmd,{v.id},opts.coded)
+			if ok then O.focus[id]={target=v.id,generation=C.registry.generation[id],operation=op.id,time=C.U.now()} end
+		end
+		O.sending=false; return ok
+	end
+	function O.updateFocus()
+		for id,t in pairs(O.focus) do
+			local op=C.registry.operations[t.operation]
+			local los=C.U.live() and Spring.GetUnitLosState(t.target,Spring.GetMyAllyTeamID(),false)
+			local p=los and los.los and C.U.position(t.target)
+			if not op or not C.registry.valid(op,id) or not p or not C.formations.inCorridor(C.registry.forces[op.forceID].delegation.sector,p) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 or C.U.distance(C.U.position(id),p)>C.classify.definition(Spring.GetUnitDefID(id)).range or C.U.now()-t.time>=12 then O.clearFocus(id) end
+		end
+	end
 	function O.native(id,params,opts)
 		if not C.U.live() then return false end
 		C.officer.releaseUnits(Spring.GetSelectedUnits(),'PLAYER_OVERRIDE')
