@@ -1,5 +1,7 @@
 # Circuit Brutal training campaign: results and limits
 
+Historical frozen results: these runs predate the live matrix and [economy-growth revision](ECONOMY_GROWTH.md). Current functional checks are documented there; the full training/holdout campaign has not been rerun for that later runtime.
+
 The corrected Officer is **not consistently competitive with Circuit Brutal**. Two complete 32-case training passes recorded no wins. The campaign has useful failure evidence and verified implementation fixes; it has not achieved the requested playing-strength goal. Independent holdout validation is deferred.
 
 | Frozen phase | Wins | Losses | 20-minute caps | Invalid |

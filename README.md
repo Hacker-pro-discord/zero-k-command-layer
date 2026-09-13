@@ -38,9 +38,13 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
-## Ongoing economic expansion (development)
+## Expanding economy, overdrive and counter factories
 
-In local single-player, automatic map control also starts economic expansion by default. The Officer uses idle, eligible owned builders to start a factory, add mexes at public metal spots, build energy and expand construction capacity. It surveys unseen spots before checking occupancy or placing buildings. Observed threats cause builders to withdraw. Existing busy queues and manual builder orders remain protected.
+In local single-player, automatic map control also starts economic expansion by default. The Officer keeps considering unclaimed public mex spots across the map, checks the approach against observed threats and surveys unseen approaches in steps. A stalled tracked order can be removed and retried elsewhere without permanently abandoning the builder. Manual release remains permanent until explicit re-enrollment.
+
+It adds storage when income outgrows a nearly full buffer, develops solar/tidal generation into fusion, and links useful grids with pylons using the game's actual grid IDs and connection radii. Pending generation is counted, and a severe energy shortage can redirect one authorized builder to basic power. Expansion and discretionary upgrades alternate rather than letting upgrades consume every available builder.
+
+When income exceeds existing factory capacity, new factory choices use their affordable unit-by-unit counters. A new factory type must materially improve on available production; otherwise capacity is added to a suitable existing type. Covered unit matchups no longer receive a cheap-unit discount. Shared role/queue demand, affordability, native build options and manual overrides remain in force. See [economy growth behavior and tests](docs/ECONOMY_GROWTH.md).
 
 Open **OFFICER > CONTROL PANEL** for **ECONOMY: ON/OFF** and **ADD ECONOMY BUILDERS**. The latter explicitly returns selected constructors to expansion control. Recovery builders and expansion builders have separate duties. Disabling economy preserves native orders already issued. Disable **Automatic economic expansion in local single-player** in widget settings to keep the preference off in later matches. **STOP AI** ends the current automatic session.
 
@@ -50,7 +54,7 @@ This is experimental. The [Circuit Brutal campaign](docs/BENCHMARK_RESULTS.md) u
 
 The supplied unit matchup matrix is now **enabled by default** alongside the corrected economy/production logic. It biases candidate units against individually identified enemy types, using decaying visual sightings. Missing rows/pairs, unsupported targets and invalid values retain the existing role logic. The matrix's generic class fallback columns are not used. Exact values of 1.00 are neutral; other values are provisional preferences, not measured combat probabilities.
 
-All controlled factories share army/queue deficits; builders, resource limits, actual build options and manual overrides retain priority. The first five military units retain the early opening rules. Later production choices and read-only recommendations include the unit-pair bias. Factory decisions log the strongest contributing pair, effective coverage and bias.
+All controlled factories share army/queue deficits; builders, resource limits, actual build options and manual overrides retain priority. The cheap early opening remains only until five units exist or a covered visual matchup is known. Production choices and read-only recommendations include the unit-pair bias. Factory decisions log the strongest contributing pair, effective coverage and bias. For the matrix-covered share, role demand is compared without a unit-price discount; missing coverage retains the old score. Expensive units are limited by sustainable income or sufficient stored metal, not automatically rejected for being dearer.
 
 Disable **Unit-by-unit counter matrix (unfinished draft)** in Command Layer settings to restore legacy scoring. This setting persists; control authority does not. No new autonomous targeting or visibility access is added. See [implementation and testing](docs/UNIT_MATCHUPS.md). **The previous benchmark improvements did not evaluate this matrix.**
 
