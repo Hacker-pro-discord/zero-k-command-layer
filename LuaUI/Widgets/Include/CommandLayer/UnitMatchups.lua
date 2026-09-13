@@ -23,8 +23,10 @@ return function(C,data)
 	end
 	function M.adjust(base,unit,model,total)
 		local bias,coverage,why=M.bias(unit,model)
-		local scale=(total+math.max(500,total*.25))/math.max(100,unit.cost)^.5
-		return base+.5*scale*bias, {bias=bias,coverage=coverage,reason=why,revision=M.revision}
+		-- Keep score units comparable with the legacy 100-metal reference unit.
+		local scale=(total+math.max(500,total*.25))/10
+		local unpriced=base*math.max(100,unit.cost)^.5/10
+		return base*(1-coverage)+unpriced*coverage+1.5*scale*bias, {bias=bias,coverage=coverage,reason=why,revision=M.revision}
 	end
 	return M
 end

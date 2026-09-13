@@ -55,6 +55,15 @@ return function(C)
 		-- Fair round-robin, one addition per idle factory per pass. Reserve spending
 		-- locally because Spring resource values can lag several orders in a frame.
 		local factories={}; for id in pairs(P.factories) do factories[#factories+1]=id end; table.sort(factories)
+		local counterMode=weights and #members>=5
+		if weights and not counterMode and C.matchups then
+			for _,id in ipairs(factories) do local def=UnitDefs[Spring.GetUnitDefID(id)]
+				for _,bid in ipairs(def and def.buildOptions or {}) do local unit=C.classify.definition(bid)
+					if unit.mobile and not unit.builder then local _,coverage=C.matchups.bias(unit,model); if coverage>0 then counterMode=true; break end end
+				end
+				if counterMode then break end
+			end
+		end
 		local workerNeed=C.recovery and C.recovery.workerNeed() or 0
 		local economicNeed=C.economy and C.economy.workerNeed() or 0
 		local recoveryReserve=C.recovery and C.recovery.reserveMetal() or 0
@@ -69,9 +78,10 @@ return function(C)
 					local economic=economicNeed>0 and d.mobile and d.builder
 					local recovery=workerNeed>0 and UnitDefs[bid].name=='cloakcon'
 					local funding=d.cost
+					local sustainable=not (C.economy and C.economy.enabled) or d.cost<=math.max(400,(economy.metal.income or 0)*60) or metal>=d.cost+100
 					if C.economy and C.economy.enabled then funding=math.min(d.cost,math.max(65,(economy.metal.income or 0)*6)) end
-					if d.mobile and (not d.builder or recovery or economic) and d.cost>0 and metal>=funding+100+((recovery or economic) and 0 or recoveryReserve) and P.valid(id,bid) then
-						local score=recovery and -1000000 or economic and -500000+d.cost or weights and #members>=5 and -C.enemyModel.score(d,weights,friendly,total,model) or d.cost+(d.role==desired and 0 or 100000)
+					if sustainable and d.mobile and (not d.builder or recovery or economic) and d.cost>0 and metal>=funding+100+((recovery or economic) and 0 or recoveryReserve) and P.valid(id,bid) then
+						local score=recovery and -1000000 or economic and -500000+d.cost or counterMode and -C.enemyModel.score(d,weights,friendly,total,model) or d.cost+(d.role==desired and 0 or 100000)
 						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost,recovery=recovery,economic=economic,funding=funding} end
 					end
 				end
@@ -80,8 +90,8 @@ return function(C)
 				metal=metal-best.funding; sent=sent+1; if best.recovery then workerNeed=workerNeed-1 end; if best.economic then economicNeed=economicNeed-1 end
 				if friendly then friendly[best.role]=(friendly[best.role] or 0)+best.cost; total=total+best.cost end
 				local matchup=''
-				if C.matchups and model and #members>=5 and not best.economic and not best.recovery then local bias,coverage,why=C.matchups.bias(C.classify.definition(best.unit),model); matchup=string.format(' Unit matrix: bias %.3f, effective coverage %.0f%%; %s.',bias,coverage*100,why) end
-				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(weights and #members>=5 and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or 'Desired role: '..desired)..matchup)
+				if C.matchups and model and counterMode and not best.economic and not best.recovery then local bias,coverage,why=C.matchups.bias(C.classify.definition(best.unit),model); matchup=string.format(' Unit matrix: bias %.3f, effective coverage %.0f%%; %s.',bias,coverage*100,why) end
+				C.debug.log('PRODUCTION','Factory '..id..': queued '..(UnitDefs[best.unit].humanName or UnitDefs[best.unit].name)..' ('..best.role..'), '..best.cost..' metal. '..(counterMode and ('Shared counter deficits; intel half-life '..model.halfLife..'s; '..model.unknown..' unknown radar contacts.') or 'Desired role: '..desired)..matchup)
 			end
 		end
 		P.cursor=#factories>0 and ((P.cursor or 0)+1)%#factories or 0

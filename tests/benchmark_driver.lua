@@ -21,13 +21,16 @@ function widget:Update()
 		for _,id in ipairs(scouts) do local ux,_,uz=Spring.GetUnitPosition(id); if ux and (ux-px)^2+(uz-pz)^2<512^2 then scoutSeen[key]=true; break end end
 	end end
 	local explored,scouted=0,0; for _ in pairs(seen) do explored=explored+1 end; for _ in pairs(scoutSeen) do scouted=scouted+1 end
-	local factoryQueues={}; local readyArmy=0
+	local factoryQueues={}; local readyArmy=0; local grid={}; local completedStructures={}
 	for _,id in ipairs(own) do local def=UnitDefs[Spring.GetUnitDefID(id)]; local _,_,_,_,built=Spring.GetUnitHealth(id)
+		if built and built>=1 and (def.isBuilding or def.isFactory or (def.speed or 0)==0) then completedStructures[def.name]=(completedStructures[def.name] or 0)+1 end
+		local gid=Spring.GetUnitRulesParam(id,'gridNumber')
+		if gid and gid>0 and built and built>=1 then local g=grid[tostring(gid)] or {power=0,mexes=0,drain=0}; grid[tostring(gid)]=g; g.power=g.power+(Spring.GetUnitRulesParam(id,'current_energyIncome') or 0); g.drain=g.drain+(Spring.GetUnitRulesParam(id,'overdrive_energyDrain') or 0); if tonumber((def.customParams or {}).metal_extractor_mult) then g.mexes=g.mexes+1 end end
 		if def.isFactory then local q=Spring.GetFactoryCommands(id,-1) or {}; local states=Spring.GetUnitStates(id) or {}; local item={id=id,queued=#q,repeatState=states['repeat'],types={}}; for _,cmd in ipairs(q) do if cmd.id and cmd.id<0 and UnitDefs[-cmd.id] then local name=UnitDefs[-cmd.id].name; item.types[name]=(item.types[name] or 0)+1 end end; factoryQueues[#factoryQueues+1]=item end
 		if not def.isBuilder and (def.speed or 0)>0 and built and built>=1 then readyArmy=readyArmy+1 end
 	end
 	local f=A.GetForce(1); local d=f and f.delegation; local snapshot=A.GetVisibleBattleState(); local known={}; for _,c in ipairs(snapshot.contacts or {}) do known[c.role]=(known[c.role] or 0)+1 end
-	local r={time=now,readyArmy=readyArmy,factoryQueues=factoryQueues,los=current/256,explored=explored/256,scoutVisited=scouted/256,known=known,economy=A.GetEconomyAutomationStatus(),production=A.GetProductionStatus()}
+	local r={grid=grid,completedStructures=completedStructures,overdriveMetal=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_metalOverdrive'),overdriveEnergy=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_energyOverdrive'),time=now,readyArmy=readyArmy,factoryQueues=factoryQueues,los=current/256,explored=explored/256,scoutVisited=scouted/256,known=known,economy=A.GetEconomyAutomationStatus(),production=A.GetProductionStatus()}
 	if d then r.state=d.state; r.reason=d.reason; r.defense=d.defense and d.defense.state; r.recovery=d.recovery and d.recovery.phase; r.strategy=d.strategy; r.groups={}; for name,ids in pairs(d.groups) do r.groups[name]=#ids end
 		local key=(r.state or '')..'|'..(r.defense or '')..'|'..(r.recovery or '')..'|'..(r.reason or '')
 		if key~=states[1] then states[1]=key; report('DECISION',r) end

@@ -13,7 +13,7 @@ return function(C)
 		for _,f in pairs(R.forces) do if f.members[id] then f.members[id]=nil; f.revision=f.revision+1 end; if f.suspended then f.suspended[id]=nil end end
 		if C.orders then C.orders.pending[id]=nil end
 		for _,name in ipairs({'economy','recovery','arsenal','productionControl'}) do local service=C[name]; if service then
-			for _,field in ipairs({'excluded','workers','tasks','factories','created','assets','ignored','enrolled','shots'}) do if service[field] then service[field][id]=nil end end
+			for _,field in ipairs({'cooldown','excluded','workers','tasks','factories','created','assets','ignored','enrolled','shots'}) do if service[field] then service[field][id]=nil end end
 		end end
 	end
 	function R.claim(ids,op)
