@@ -37,6 +37,26 @@ return function(C)
 				end
 			end end
 		end
+		-- Public resource locations are useful objectives even before their occupancy is known.
+		-- Only our own mexes and current visual enemy contacts establish occupancy.
+		if not best and group~='SCOUT' then
+			local owned={}; for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}) do
+				local def=UnitDefs[Spring.GetUnitDefID(id)]
+				if C.U.owned(id) and def and tonumber((def.customParams or {}).metal_extractor_mult) then owned[#owned+1]=C.U.position(id) end
+			end
+			m.resourceAttempts=m.resourceAttempts or {}
+			for i,spot in ipairs(WG.metalSpots or {}) do
+				local p={spot.x,spot.y or Spring.GetGroundHeight(spot.x,spot.z),spot.z}; local held=false
+				for _,q in ipairs(owned) do if C.U.distance(p,q)<100 then held=true; break end end
+				local risk=C.rules.risk(p,contacts,650); local distance=C.U.distance(center,p)
+				local age=now-(m.resourceAttempts[i] or -600); local reserved=false
+				for other,mission in pairs(m.missions) do if other~=group and mission.resource==i and now-mission.time<60 then reserved=true end end
+				if not held and not reserved and age>=45 and distance>250 and risk<math.max(150,value*1.2) and setback(p)==0 then
+					local s=distance+ risk*2-math.min(300,age)
+					if not score or s<score then best=p; score=s; kind='SECURE RESOURCE'; key='mex:'..i; reason='Advance to public metal node '..i..' and contest access; unseen defenders and occupancy remain unknown.' end
+				end
+			end
+		end
 		if not best then
 			for i,p in ipairs(m.cells) do
 				local age=math.min(600,now-(m.visits[i] or -600)); local tried=now-(m.attempts[i] or -600)
@@ -48,6 +68,8 @@ return function(C)
 		end
 		if best then
 			m.missions[group]={point=C.U.copy(best),cell=type(key)=='number' and key or nil,time=now,kind=kind}
+			local resource=type(key)=='string' and tonumber(key:match('^mex:(%d+)$'))
+			if resource then m.resourceAttempts[resource]=now; m.missions[group].resource=resource end
 			if type(key)=='number' then m.attempts[key]=now end
 			C.debug.log('MAP_CONTROL',group..': '..reason)
 		end
@@ -62,7 +84,8 @@ return function(C)
 		for _,id in ipairs(op.units) do if f.members[id] and C.U.owned(id) then total=total+1; if C.U.distance(C.U.position(id),op.slots[id])<180 then arrived=arrived+1 end end end
 		local contactInterrupt=false
 		if group=='MAIN' and now-op.created>=12 and mission and mission.kind~='ATTACK CONTACT' then
-			for _,v in ipairs(contacts) do if v.visibility=='VISUAL' then contactInterrupt=true; break end end
+			-- A remote contact must not restart the same march every 12 seconds.
+			for _,v in ipairs(contacts) do if v.visibility=='VISUAL' and C.U.distance(center,v.position)<900 then contactInterrupt=true; break end end
 		end
 		if not nearCombat and (total>0 and arrived/total>=.7 or now-op.created>=60) or contactInterrupt then
 			C.officer.cancel(op.id); op.accounted=true

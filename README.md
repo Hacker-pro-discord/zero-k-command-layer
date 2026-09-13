@@ -38,6 +38,12 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
+## Resource pressure, defense and rebuilding
+
+In delegated map control, the main army and raiders contest public metal nodes while scouts keep exploring. Main-army regrouping leaves those detachments active. Reserves respond to observed infrastructure incidents and, with twenty or more assigned units, rotate among owned sites. Quiet recovery escorts shrink and expire so they do not indefinitely tie up the field army.
+
+Recovery uses available mobile constructors from actual factory build options, retries stalled tracked jobs without dropping its workers, and starts rebuilding when its reserved initial funding is available. Manual orders still override it. See [behavior and native test results](docs/PRESSURE_RECOVERY.md).
+
 ## Expanding economy, overdrive and counter factories
 
 In local single-player, automatic map control also starts economic expansion by default. The Officer keeps considering unclaimed public mex spots across the map, checks the approach against observed threats and surveys unseen approaches in steps. A stalled tracked order can be removed and retried elsewhere without permanently abandoning the builder. Manual release remains permanent until explicit re-enrollment.

@@ -62,6 +62,7 @@ return function(C)
 	local function recoveryIDs(f)
 		local ids={}; local d=f.delegation; local protected={}
 		for _,group in ipairs({'RESERVE','DEFENSE','AIR','SEA'}) do for _,id in ipairs(d.groups[group] or {}) do protected[id]=true end end
+		if f.mapControl then for _,group in ipairs({'SCOUT','RAID'}) do for _,id in ipairs(d.groups[group] or {}) do protected[id]=true end end end
 		for _,id in ipairs(C.officer.members(f)) do
 			if not protected[id] and not d.blocked[id] and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 then ids[#ids+1]=id end
 		end
@@ -70,7 +71,7 @@ return function(C)
 	function T.beginRecovery(f,now,why)
 		local d=f.delegation; local center=C.U.center(C.officer.members(f)); local old=d.strategy
 		if f.mapControl and C.mapControl.failed then C.mapControl.failed(f,now,center) end
-		for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active and op.kind~='RESERVE' and op.kind~='DEFENSE' and op.kind~='AIR' and op.kind~='SEA' then C.officer.cancel(op.id) end end
+		for _,op in pairs(C.registry.operations) do if op.forceID==f.id and op.active and op.kind~='RESERVE' and op.kind~='DEFENSE' and op.kind~='AIR' and op.kind~='SEA' and not (f.mapControl and (op.id==d.ops.SCOUT or op.id==d.ops.RAID)) then C.officer.cancel(op.id) end end
 		for id,blocked in pairs(d.blocked) do if type(blocked)=='number' then d.blocked[id]=nil end end
 		local contacts=C.observations.snapshot().contacts; local along=math.min(d.sector.length,C.rules.progress(d.sector,center)+300)
 		local side=old and -old.side or -1; local best=math.huge
@@ -80,7 +81,7 @@ return function(C)
 		end
 		local previousStep=old and old.step or f.objectiveMode=='SHOCK AND AWE' and 900 or f.objectiveMode=='UTTER DESTRUCTION' and 750 or C.rules.step
 		d.strategy={revision=(old and old.revision or 0)+1,formation='ASSAULT',spacing=math.min(256,(old and old.spacing or C.settings.spacing)*1.2),step=math.max(240,previousStep*.65),side=side,reason=why}
-		d.ops={RESERVE=d.ops.RESERVE,DEFENSE=d.ops.DEFENSE,AIR=d.ops.AIR,SEA=d.ops.SEA}; d.failures={}; d.next={}; d.returning={}
+		d.ops={RESERVE=d.ops.RESERVE,DEFENSE=d.ops.DEFENSE,AIR=d.ops.AIR,SEA=d.ops.SEA,SCOUT=f.mapControl and d.ops.SCOUT or nil,RAID=f.mapControl and d.ops.RAID or nil}; d.failures={}; d.next={}; d.returning={}
 		d.recovery={phase='WITHDRAWING',target=C.rules.point(d.sector,math.max(0,C.rules.progress(d.sector,center)-450),0),created=now,attempts=0,next=now,reason=why}
 		local selection=C.retreatPriority.select(recoveryIDs(f))
 		-- Units pushed outside the authorized corridor must return, not invalidate
@@ -180,14 +181,15 @@ return function(C)
 		local progressNow=C.rules.progress(d.sector,centerNow)
 		d.review=d.review or {time=now,progress=progressNow,count=#forceIDs}
 		if progressNow>d.review.progress+128 then d.review.time=now; d.review.progress=progressNow end
-		if d.recovery then if #recoveryIDs(f)==0 and C.rules.health(forceIDs)>=.5 then d.recovery=nil; d.recoverAfter=now+30 else T.recoveryTick(f,now); return end end
-		if not f.objectiveReached and f.front~='HOLD' and now>=(d.recoverAfter or 0) and (not f.mapControl and now-d.review.time>=60 or #forceIDs<d.review.count*.75 or C.rules.health(forceIDs)<.4) then
+		if d.recovery then if #recoveryIDs(f)==0 and C.rules.health(forceIDs)>=.5 then d.recovery=nil; d.recoverAfter=now+30 else T.recoveryTick(f,now); if not f.mapControl then return end end end
+		local fieldRecovering=d.recovery~=nil
+		if not fieldRecovering and not f.objectiveReached and f.front~='HOLD' and now>=(d.recoverAfter or 0) and (not f.mapControl and now-d.review.time>=60 or #forceIDs<d.review.count*.75 or C.rules.health(forceIDs)<.4) then
 			local why=#forceIDs<d.review.count*.75 and 'More than 25% of the review force was lost/released.' or C.rules.health(forceIDs)<.4 and 'Average force health below 40%.' or 'No substantial forward progress for 60 game seconds.'
 			T.beginRecovery(f,now,why); T.recoveryTick(f,now); return
 		end
 		-- Catch new recruits up without restarting the army's active movement.
 		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]
-		if d.recruits and main and main.active then
+		if not fieldRecovering and d.recruits and main and main.active then
 			local recruits={}; local inMain={}; for _,id in ipairs(d.groups.MAIN) do inMain[id]=true end
 			for id in pairs(d.recruits) do if inMain[id] and f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) and not C.registry.owner[id] then recruits[#recruits+1]=id end end
 			table.sort(recruits)
@@ -200,7 +202,7 @@ return function(C)
 		for _,v in ipairs(snapshot.contacts) do if C.formations.inCorridor(s,v.position) then contacts[#contacts+1]=v end end
 		d.observed=snapshot.time; d.known={}; for _,v in ipairs(contacts) do d.known[v.role]=(d.known[v.role] or 0)+1 end
 		for _,group in ipairs({'SCOUT','RAID','MAIN'}) do
-			local ids=members(f,group); local op=d.ops[group] and C.registry.operations[d.ops[group]]
+			local ids=fieldRecovering and group=='MAIN' and {} or members(f,group); local op=d.ops[group] and C.registry.operations[d.ops[group]]
 			if f.mapControl and C.mapControl and #ids>0 then C.mapControl.review(f,group,ids,op,contacts,now); if (d.failures[group] or 0)>=3 then d.failures[group]=0; d.next[group]=now+15 end end
 			if #ids==0 then d.decisions[group]={state='UNAVAILABLE',reason='No eligible surviving units in this detachment.',time=now} elseif op and op.active and d.decisions[group] then d.decisions[group].state=op.state end
 			if op and not op.active and not op.accounted then
@@ -248,6 +250,7 @@ return function(C)
 		end
 		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]
 		if main and main.active then d.state=main.state; d.reason=main.state=='ENGAGING' and 'Main force is exchanging fire under native unit AI; combat movement is not being overwritten.' or f.mapControl and (d.decisions.MAIN and d.decisions.MAIN.reason or 'Map-wide search and attack.') or 'Main force advancing toward its current phase line.' end
+		if d.recovery then d.state=d.recovery.phase; d.reason='Main force '..d.recovery.phase..'; independent scouts and raiders continue their missions.' end
 		if d.defense and d.defense.threat then d.state='DEFENDING'; d.reason=d.defense.reason end
 		f.status='DELEGATED / '..d.state
 	end

@@ -76,7 +76,7 @@ return function(C)
 				for _,bid in ipairs(factory and factory.buildOptions or {}) do
 					local d=C.classify.definition(bid)
 					local economic=economicNeed>0 and d.mobile and d.builder
-					local recovery=workerNeed>0 and UnitDefs[bid].name=='cloakcon'
+					local recovery=workerNeed>0 and (C.recovery.workerDefinition and C.recovery.workerDefinition(bid) or UnitDefs[bid].name=='cloakcon')
 					local funding=d.cost
 					local sustainable=not (C.economy and C.economy.enabled) or d.cost<=math.max(400,(economy.metal.income or 0)*60) or metal>=d.cost+100
 					if C.economy and C.economy.enabled then funding=math.min(d.cost,math.max(65,(economy.metal.income or 0)*6)) end

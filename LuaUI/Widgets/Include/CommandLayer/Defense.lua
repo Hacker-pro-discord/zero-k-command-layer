@@ -7,7 +7,7 @@ return function(C)
 	end
 	local function suitable(id)
 		local v=C.classify.definition(Spring.GetUnitDefID(id)); local h,m=Spring.GetUnitHealth(id)
-		return v.ground and not v.builder and v.range>0 and (v.role=='RAIDER' or v.role=='RIOT' or v.role=='ASSAULT' or v.role=='OTHER') and h and m and h/math.max(1,m)>=.5
+		return v.ground and not v.builder and v.range>0 and (v.role=='RAIDER' or v.role=='RIOT' or v.role=='ASSAULT' or v.role=='SKIRMISHER' or v.role=='OTHER') and h and m and h/math.max(1,m)>=.5
 	end
 	local function cost(id) return math.max(1,C.classify.definition(Spring.GetUnitDefID(id)).cost) end
 	local function transfer(d,id,to)
@@ -57,10 +57,19 @@ return function(C)
 		if r.damage and now<r.damage.untilTime and C.formations.inCorridor(d.sector,r.damage.point) then
 			if not threat then threat={point=r.damage.point,risk=195,asset=r.damage.id,critical=r.damage.critical,reason='Owned asset lost health; attacker identity and position are not inferred.'} end
 		end
-		if threat and C.recovery then C.recovery.threat(threat.point) end
+		-- An asset killed between health samples is still a legitimate incident.
+		if not threat and C.recovery then for _,site in ipairs(C.recovery.sites or {}) do
+			if now-site.lastThreat<12 and C.formations.inCorridor(d.sector,site.point) then threat={point=C.U.copy(site.point),risk=195,critical=false,incident=true,reason='Recent owned-infrastructure incident; attacker identity is unknown.'}; break end
+		end end
+		if threat and not threat.incident and C.recovery then C.recovery.threat(threat.point) end
 		local recoveryHold=not threat and r.threat and C.recovery and C.recovery.hold(r.threat.point,now)
 		if recoveryHold then r.reason="Reserve escort: waiting for repairs, reconstruction and wreck clearance." end
-		if threat then if not r.threat then r.next=now end; r.threat=threat; r.lastThreat=now end
+		if threat then
+			if not r.threat or r.threat.asset~=threat.asset or C.U.distance(r.threat.point,threat.point)>200 then r.next=now end
+			-- Retryable path/empty-queue cooldowns must not prevent emergency defense.
+			for id,blocked in pairs(d.blocked) do if type(blocked)=='number' then d.blocked[id]=nil end end
+			r.threat=threat; r.lastThreat=now
+		end
 		if not threat and r.threat and not recoveryHold and now-r.lastThreat>=20 then
 			if d.ops.DEFENSE then C.officer.cancel(d.ops.DEFENSE); d.ops.DEFENSE=nil end
 			local returning=C.U.copy(d.groups.DEFENSE)
@@ -84,6 +93,7 @@ return function(C)
 		else
 			local committed=0; for _,id in ipairs(ids(f,'DEFENSE')) do committed=committed+cost(id) end
 			local desired=math.min(total*(r.threat.critical and .7 or .35),math.max(r.targetValue,r.threat.risk*1.3))
+			if recoveryHold then desired=math.min(desired,total*.1) end
 			local reserve=C.U.copy(d.groups.RESERVE)
 			for _,id in ipairs(reserve) do if eligible(f,id) and suitable(id) then transfer(d,id,'DEFENSE'); committed=committed+cost(id) end end
 			local candidates={}
@@ -97,7 +107,21 @@ return function(C)
 		end
 		local group=r.threat and 'DEFENSE' or 'RESERVE'; local selected=ids(f,group); table.sort(selected)
 		local target=r.threat and r.threat.point or home
-		if recoveryHold then local dx,dz=target[1]-home[1],target[3]-home[3]; local length=math.max(1,math.sqrt(dx*dx+dz*dz)); if length<=1 then dx=1; dz=0 end; local offset=400+math.min(600,#selected*8); local x=math.max(16,math.min(Game.mapSizeX-16,target[1]+dx/length*offset)); local z=math.max(16,math.min(Game.mapSizeZ-16,target[3]+dz/length*offset)); target={x,Spring.GetGroundHeight(x,z),z} end
+		if not r.threat and f.mapControl and #all>=20 then
+			-- A quiet reserve rotates among owned infrastructure rather than camping the opening factory.
+			r.patrolVisits=r.patrolVisits or {}
+			if not r.patrol or now>=(r.patrolUntil or 0) then
+				local bestScore; for _,asset in ipairs(assets) do local def=UnitDefs[Spring.GetUnitDefID(asset.id)]
+					if def and (def.isFactory or def.isBuilding) then
+						local score=(now-(r.patrolVisits[asset.id] or -60))*10-C.U.distance(home,asset.point)*.1
+						if not bestScore or score>bestScore then bestScore=score; r.patrol=asset end
+					end
+				end
+				if r.patrol then r.patrolVisits[r.patrol.id]=now; r.patrolUntil=now+30 end
+			end
+			if r.patrol and C.U.owned(r.patrol.id) then target=r.patrol.point end
+		end
+		if recoveryHold then local dx,dz=target[1]-home[1],target[3]-home[3]; local length=math.max(1,math.sqrt(dx*dx+dz*dz)); if length<=1 then dx=1; dz=0 end; local offset=180; local x=math.max(16,math.min(Game.mapSizeX-16,target[1]+dx/length*offset)); local z=math.max(16,math.min(Game.mapSizeZ-16,target[3]+dz/length*offset)); target={x,Spring.GetGroundHeight(x,z),z} end
 		local signature=table.concat(selected,',')
 		local op=d.ops[group] and C.registry.operations[d.ops[group]]
 		local changed=signature~=r.signature or r.target and C.U.distance(target,r.target)>200
@@ -109,7 +133,7 @@ return function(C)
 				if op and op.active then C.officer.cancel(op.id) end
 				d.ops[group]=operation; C.registry.operations[operation].mode='ARRIVAL'
 				r.signature=signature; r.target=C.U.copy(target)
-				C.debug.log(group,#selected..' units; '..(r.threat and r.threat.reason or 'Hold near home assets; reserved from map-wide pushes.'))
+				C.debug.log(group,#selected..' units; '..(r.threat and r.threat.reason or 'Guard owned infrastructure; respond immediately to incidents.'))
 			end
 			r.next=now+10
 		end
