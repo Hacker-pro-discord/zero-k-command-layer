@@ -38,6 +38,14 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
+## Defence and Special construction
+
+Open **OFFICER > FACTORY / ECONOMY > DEFENCE / SPECIAL BUILDS** with constructors selected. The menu lists their actual native build options. Pick a building and place its native ghost to add an Officer construction request. This includes expensive strategic structures when the selected builders support them. Terraform commands remain in the native interface. Launcher construction and launcher firing are separate controls.
+
+**AUTO STRUCTURES**, enabled by default during automatic economy control, adds affordable local ground/AA/naval defenses, radar, and conditional jammer/shield support. It respects observed threats, coverage, army investment, energy and military catch-up priorities. It does not automatically choose nukes, superweapons or long-range artillery yet. Existing Defence/Special buildings are also eligible for tracked repair/rebuilding after loss. Manual overrides remain authoritative.
+
+See [scope, budgets and tests](docs/STRUCTURE_CONSTRUCTION.md).
+
 ## Default objective and wave tactics
 
 Local automatic startup now uses **WIN THE GAME** with **WAVE TACTICS**. This means map-wide scouting, resource contests, expansion and attacks on legitimately observed enemies until stopped or the match ends. It is an objective, not a promise of victory. Drawn objectives still restrict operations to their corridor.

@@ -35,3 +35,11 @@ C.economy={enabled=false,status='Economy test',start=function() C.economy.enable
 C.ui.showManagement(); find('ECONOMY: OFF').OnClick[1](); assert(C.economy.enabled and C.settings.autoEconomy)
 find('ADD ECONOMY BUILDERS').OnClick[1](); assert(C.economyBuilders[1]==1)
 find('ECONOMY: ON').OnClick[1](); assert(not C.economy.enabled and not C.settings.autoEconomy)
+
+C.structurePlanning={status='Ready',catalog=function(ids,category) C.requestedCategory=category; return {1} end,arm=function(def) C.armedDefinition=def; return true end}
+C.ui.showManagement(); find('DEFENCE / SPECIAL BUILDS').OnClick[1]()
+assert(C.requestedCategory=='DEFENCE')
+find('SPECIAL').OnClick[1](); assert(C.requestedCategory=='SPECIAL')
+local caption=(UnitDefs[1].humanName or UnitDefs[1].name)..' | '..UnitDefs[1].metalCost..' metal'
+find(caption).OnClick[1](); assert(C.armedDefinition==1 and not C.ui.structures)
+C.ui.showManagement(); find('AUTO STRUCTURES: ON').OnClick[1](); assert(not C.settings.autoStructures)

@@ -10,9 +10,9 @@ return function(C)
 		local v=C.classify.definition(def); local raw=UnitDefs[def]
 		return raw and v.mobile and v.builder and #(raw.buildOptions or {})>0 and v.cost<800
 	end
-	local function infrastructure(def)
+	local function infrastructure(def,defID)
 		local cp=def.customParams or {}; local icon=(def.iconType or ''):lower()
-		return def.isFactory or tonumber(cp.metal_extractor_mult) or (def.energyMake or 0)>0 or icon:find('^energy')
+		return C.structurePlanning and C.structurePlanning.categories[defID] or def.isFactory or tonumber(cp.metal_extractor_mult) or (def.energyMake or 0)>0 or icon:find('^energy')
 	end
 	local function key(def,p) return def..':'..math.floor(p[1])..':'..math.floor(p[3]) end
 	local function delay(job,untilTime)
@@ -132,7 +132,7 @@ return function(C)
 		local own=Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}; local military=0; for _,u in ipairs(own) do local v=C.classify.definition(Spring.GetUnitDefID(u)); if v.mobile and not v.builder then military=military+1 end end; local autoGoal=C.economy and C.economy.enabled and (military>=20 and 2 or military>=5 and 1 or 0) or 2; local present={}; local damaged={}; local workerCount=0; for id in pairs(R.workers) do if C.U.owned(id) then workerCount=workerCount+1 end end
 		for _,id in ipairs(own) do if C.U.owned(id) then
 			local defID=Spring.GetUnitDefID(id); local def=UnitDefs[defID]; local p=C.U.position(id); local h,m,_,_,built=Spring.GetUnitHealth(id)
-			if p and infrastructure(def) and not R.ignored[id] then
+			if p and infrastructure(def,defID) and not R.ignored[id] then
 				local record={def=defID,point=p,facing=Spring.GetUnitBuildFacing and Spring.GetUnitBuildFacing(id) or 0}
 				R.assets[id]=record; present[key(defID,p)]=id
 				if h and m and (h<m*.95 or built and built<1) then damaged[#damaged+1]={id=id,point=p} end

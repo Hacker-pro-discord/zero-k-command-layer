@@ -127,6 +127,10 @@ return function(C)
 				return build(name,key,origin,anchor) or build(name,key) or (name~=fallback and (build(fallback,smallKey,origin,anchor) or build(fallback,smallKey)))
 			end
 			if not job and #factories>0 and (#mexes>=2 or energy<150 or ei<mi*.8) and (plannedEi<mi*1.05+#factories*2 or energy<150) then job=power(true) end
+			if not job and C.structurePlanning and #factories>0 then
+				local candidate=C.structurePlanning.choose(id,own,resources,catchup,now)
+				if candidate then job=build(candidate.name,candidate.key,candidate.origin); if job then job.structure=candidate end end
+			end
 			if not job and not catchup and state and C.economyPlan.storageNeeded(state,resources) then job=build('staticstorage','storage buffer') end
 			local function invest()
 				local upgrade
@@ -156,7 +160,7 @@ return function(C)
 				end
 			end
 			if not job then job=invest() end
-			if job then if issue(id,job.cmd,job.p,job.key) then E.jobCount=E.jobCount+1; if job.reason then C.debug.log('FACTORY PLAN',job.reason) end; occupied[job.key]=true; if job.cmd<0 then metal=metal-math.min(metal,math.min(UnitDefs[-job.cmd].metalCost or 0,math.max(100,mi*6))) end end end
+			if job then if issue(id,job.cmd,job.p,job.key) then E.jobCount=E.jobCount+1; if job.structure then C.structurePlanning.issued(job.structure,now) end; if job.reason then C.debug.log('FACTORY PLAN',job.reason) end; occupied[job.key]=true; if job.cmd<0 then metal=metal-math.min(metal,math.min(UnitDefs[-job.cmd].metalCost or 0,math.max(100,mi*6))) end end end
 		end
 	end
 	return E

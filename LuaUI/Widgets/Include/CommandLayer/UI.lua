@@ -70,9 +70,26 @@ return function(C)
 		end
 		local text=(C.economy and ('Economy: '..C.economy.status..'\n') or '')..(C.arsenal and C.arsenal.status..'\n' or '')..C.productionControl.status..(C.recovery and ('\n'..C.recovery.status) or '')
 		if C.enemyModel then local model=C.enemyModel.snapshot(); text=text..'\n\nRolling visual intel (half-life '..model.halfLife..'s):'; local keys={}; for role in pairs(model.roles) do keys[#keys+1]=role end; table.sort(keys); for _,role in ipairs(keys) do text=text..'\n'..role..': '..string.format('%.1f',model.roles[role])..' weighted sightings' end; text=text..'\nUnknown radar contacts: '..model.unknown..'\nOld sightings decay; this is not a current hidden-army count.' end
-		UI.ch.TextBox:New{parent=p,x=0,y=232,width=510,height=300,text=text}
+		button(p,0,228,250,'DEFENCE / SPECIAL BUILDS','Select builders; request any native Defence or Special building, or toggle automatic structures.',function() UI.showStructures('DEFENCE',1) end)
+		button(p,260,228,250,'AUTO STRUCTURES: '..(C.settings.autoStructures and 'ON' or 'OFF'),'Automatic affordable local defenses, radar and support. Existing queues remain.',function() C.settings.autoStructures=not C.settings.autoStructures; UI.showManagement() end)
+		UI.ch.TextBox:New{parent=p,x=0,y=274,width=510,height=255,text=text}
 		button(p,0,590,250,'REFRESH','Refresh current control and intel information.',function() UI.showManagement() end)
 		button(p,260,590,250,'CLOSE','Keep current controls.',function() p:Dispose(); UI.management=nil end)
+	end
+	function UI.showStructures(category,page)
+		if not C.structurePlanning then return end
+		if UI.structures then UI.structures:Dispose() end
+		local w=UI.ch.Window:New{name='CommandLayerStructures',caption='Officer construction: '..category,parent=UI.ch.Screen0,x=440,y=70,width=560,height=580,draggable=true,padding={12,30,12,12}}; UI.structures=w
+		button(w,0,0,250,'DEFENCE','Native Defence build options of selected builders.',function() UI.showStructures('DEFENCE',1) end)
+		button(w,260,0,250,'SPECIAL','Native Special buildings; terraform remains native manual control.',function() UI.showStructures('SPECIAL',1) end)
+		local list=C.structurePlanning.catalog(Spring.GetSelectedUnits(),category)
+		for i=(page-1)*10+1,math.min(#list,page*10) do local def=list[i]; local d=UnitDefs[def]
+			button(w,0,45+(i-(page-1)*10-1)*38,510,(d.humanName or d.name)..' | '..(d.metalCost or 0)..' metal','Place a native building ghost. Adds a specific Officer construction request; launcher firing is separately controlled.',function() if C.structurePlanning.arm(def) then w:Dispose(); UI.structures=nil end end)
+		end
+		UI.ch.TextBox:New{parent=w,x=0,y=433,width=510,height=42,text=#list==0 and 'Select constructors with these native build options, then reopen this menu.' or 'Manual orders override builders. Strategic launchers require separate arming. '..C.structurePlanning.status}
+		button(w,0,480,160,'PREVIOUS','Previous page.',function() UI.showStructures(category,math.max(1,page-1)) end)
+		button(w,170,480,160,'NEXT','Next page.',function() UI.showStructures(category,math.min(math.max(1,math.ceil(#list/10)),page+1)) end)
+		button(w,340,480,160,'CLOSE','Close without ordering.',function() w:Dispose(); UI.structures=nil end)
 	end
 	function UI.initialize()
 		if not WG.Chili then return false end; UI.ch=WG.Chili
@@ -156,7 +173,7 @@ return function(C)
 		UI.ch.TextBox:New{parent=UI.adviceDialog,x=0,y=0,width='100%',height=350,text=f.advice}
 		button(UI.adviceDialog,0,365,200,'DISMISS','No production changes.',function() f.advice=nil; UI.adviceDialog:Dispose(); UI.adviceDialog=nil end)
 	end
-	function UI.shutdown() if UI.management then UI.management:Dispose() end;
+	function UI.shutdown() if UI.structures then UI.structures:Dispose() end; if UI.management then UI.management:Dispose() end;
 		if UI.objectiveDialog then UI.objectiveDialog:Dispose() end
 		if UI.tacticalDialog then UI.tacticalDialog:Dispose() end
 		if UI.adviceDialog then UI.adviceDialog:Dispose() end
