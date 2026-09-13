@@ -9,16 +9,20 @@ C.productionControl={enabled=false,status='OFF',set=function(value) C.production
 C.startup={start=function() C.testStarted=true end}
 C.ui=loadModule('UI')(C); assert(C.ui.initialize()); C.ui.tab='OFFICER'; C.ui.build()
 local function find(caption) for i=#controls,1,-1 do if controls[i].caption==caption then return controls[i] end end end
+Spring.GetPlayerList=function() return {0} end
+Spring.AreTeamsAllied=function(a,b) return a==b end
+C.settings.privateSession=true
 local production=find('PRODUCTION: OFF'); assert(production and production.parent==C.ui.body)
 assert(production.y+production.height<=C.ui.detail.y)
 production.OnClick[1](); assert(C.productionControl.enabled and find('PRODUCTION: ON'))
-find('START MAP CONTROL').OnClick[1](); assert(C.testStarted)
+find('WIN THE GAME').OnClick[1](); assert(C.testStarted)
 C.settings.autoAssign=true; C.settings.privateSession=false; C.ui.build()
 assert(find('AUTO ASSIGN: WAIT'))
 C.ui.update(1); assert(C.ui.detail.text:find('enable LOCAL / PRIVATE'))
 
 C.productionControl.enroll=function(ids) C.enrolled=ids; return true end
 C.recovery={status='Recovery test',enroll=function(ids) C.builders=ids end,cancelRequests=function() C.cancelled=true end,stop=function() C.recoveryStopped=true end}
+C.settings.privateSession=true
 C.ui.showManagement(); find('RE-ENROLL SELECTED FACTORIES').OnClick[1](); assert(C.enrolled[1]==1)
 find('ADD SELECTED BUILDERS').OnClick[1](); assert(C.builders[1]==1)
 find('ADD BUILD REQUEST').OnClick[1](); assert(C.recovery.armed)

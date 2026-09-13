@@ -12,6 +12,7 @@ units[20]={x=1000,z=1000,team=0,def=2}
 local team={20}; Spring.GetTeamUnits=function() return team end
 assert(not C.startup.start() and #calls==0) -- No authority from persisted auto-assign.
 C.settings.privateSession=true
+C.settings.defaultTactic='CONTINUOUS PRESSURE' -- Legacy immediate-reinforcement policy.
 assert(C.startup.start())
 local f=C.registry.forces[C.registry.activeForce]
 assert(f and #C.officer.members(f)==0)

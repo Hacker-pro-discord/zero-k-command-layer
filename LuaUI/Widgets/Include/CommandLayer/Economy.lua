@@ -140,7 +140,8 @@ return function(C)
 				if not catchup and not upgrade and #factories>0 and #mexes>=2 and metal>=100 and plannedEi<mi+math.min(160,#mexes*6) then upgrade=power(false) end
 				return upgrade
 			end
-			if not job and (E.jobCount%3==2 or catchup and budget.capacityNeeded) then job=invest() end
+			local force=C.startup and C.registry.forces[C.startup.forceID]; local expansionFirst=force and force.objectiveMode=='WIN THE GAME'
+			if not job and ((expansionFirst and E.jobCount%4==3 or not expansionFirst and E.jobCount%3==2) or catchup and budget.capacityNeeded) then job=invest() end
 			if not job and #factories>0 and metal>(catchup and math.max(65,mi*6)+125 or 40) then
 				local def=named('staticmex'); local best,score
 				if def and can(id,def) then for i,spot in ipairs(WG.metalSpots or {}) do local pos={spot.x,spot.y,spot.z}; local key='mex:'..i; local used=false

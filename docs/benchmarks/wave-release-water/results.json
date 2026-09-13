@@ -1,0 +1,125 @@
+[
+  {
+    "id": "sailaway2-factoryship-s0",
+    "map": "SailAway 2",
+    "archive": "SailAway2.sd7",
+    "category": "naval/large",
+    "split": "train",
+    "factories": [
+      "factoryship",
+      "factoryhover"
+    ],
+    "starts": [
+      [
+        5120,
+        8782.69727
+      ],
+      [
+        5120,
+        1457.30322
+      ]
+    ],
+    "startSource": "map startboxes",
+    "size": [
+      10240,
+      10240
+    ],
+    "waterFraction": 0.6958190962490882,
+    "heightStd": 70.62338203466001,
+    "heightRange": [
+      -75.0,
+      202.0
+    ],
+    "side": 0,
+    "factory": "factoryship",
+    "seed": 1729,
+    "outcome": "CENSORED",
+    "wallSeconds": 137.94261619995814,
+    "gameSeconds": 900.000061,
+    "final": {
+      "0": {
+        "kind": "METRIC",
+        "composition": {
+          "gunshipraid": 1,
+          "shipcon": 1,
+          "gunshipcon": 1,
+          "dyntrainer_strike_base": 1,
+          "staticmex": 10,
+          "energysolar": 3,
+          "factorygunship": 2,
+          "energyfusion": 2
+        },
+        "factories": 2,
+        "time": 900.000061,
+        "metalExpense": 9.99999905,
+        "team": 0,
+        "energyExpense": 9.99999905,
+        "combatLost": 13035,
+        "armyValue": 93.9999237,
+        "mexes": 10,
+        "army": 1,
+        "metalIncome": 31.884201,
+        "killed": 2885,
+        "lost": 16920,
+        "builders": 3,
+        "energyIncome": 10,
+        "economyValue": 4425.5,
+        "energy": 543.005737,
+        "metal": 521.528442
+      },
+      "1": {
+        "kind": "METRIC",
+        "composition": {
+          "turrettorp": 24,
+          "shiptorpraider": 3,
+          "energypylon": 8,
+          "factoryship": 1,
+          "energysolar": 1,
+          "staticcon": 10,
+          "hoverassault": 3,
+          "subraider": 2,
+          "hoverdepthcharge": 1,
+          "shiparty": 1,
+          "turretaalaser": 1,
+          "turretmissile": 2,
+          "shipscout": 9,
+          "shipskirm": 8,
+          "hoverriot": 1,
+          "shipcon": 16,
+          "staticradar": 14,
+          "shipriot": 4,
+          "energyfusion": 2,
+          "factoryhover": 1,
+          "staticheavyradar": 1,
+          "shipassault": 6,
+          "shipaa": 3,
+          "hovercon": 2,
+          "staticmex": 41,
+          "staticstorage": 3,
+          "turretriot": 2,
+          "turretlaser": 6,
+          "energywind": 55,
+          "dyntrainer_recon_base": 1
+        },
+        "factories": 2,
+        "time": 900.000061,
+        "metalExpense": 150.500061,
+        "team": 1,
+        "energyExpense": 163.899887,
+        "combatLost": 2885,
+        "armyValue": 12739.3496,
+        "mexes": 41,
+        "army": 41,
+        "metalIncome": 96.8151932,
+        "killed": 13035,
+        "lost": 3380,
+        "builders": 19,
+        "energyIncome": 136.043762,
+        "economyValue": 22026.25,
+        "energy": 1741.72888,
+        "metal": 391.151245
+      }
+    },
+    "errors": []
+  }
+]

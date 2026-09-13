@@ -2,6 +2,7 @@
 return function(C)
 	local T={last=-100}
 	function T.start(f)
+		f.tactic=f.tactic or C.settings.defaultTactic
 		local ids={}; for _,id in ipairs(C.officer.members(f)) do if not C.classify.definition(Spring.GetUnitDefID(id)).builder then ids[#ids+1]=id end end; local sector=C.rules.sector(ids,f.objective)
 		if f.mapControl and C.mapControl and #ids>0 then sector=C.mapControl.sector(f,ids,{Game.mapSizeX/2,0,Game.mapSizeZ/2}) end
 		if not sector then return false,'Draw an objective line at least 128 units from the force.' end
@@ -19,7 +20,7 @@ return function(C)
 	end
 	local function rebalance(f)
 		local d=f.delegation; if f.objectiveMode=='UTTER DESTRUCTION' then return end; local live=#C.officer.members(f)
-		local wanted={SCOUT=live>=5 and math.min(2,math.max(1,math.floor(live*.1))) or 0,RAID=live>=8 and math.min(4,math.floor(live*.2)) or 0}
+		local wave=f.tactic=='WAVE TACTICS'; local wanted={SCOUT=live>=(wave and 3 or 5) and math.min(wave and 4 or 2,math.max(1,math.floor(live*.1))) or 0,RAID=live>=8 and math.min(wave and 8 or 4,math.floor(live*.2)) or 0}
 		for _,group in ipairs({'SCOUT','RAID'}) do
 			local count=0; for _,id in ipairs(d.groups[group]) do if f.members[id] and C.U.owned(id) and not f.suspended[id] then count=count+1 end end -- Retry-blocked detachments still occupy their subgroup slots.
 			if count<wanted[group] then
@@ -191,11 +192,18 @@ return function(C)
 		local main=d.ops.MAIN and C.registry.operations[d.ops.MAIN]
 		if not fieldRecovering and d.recruits and main and main.active then
 			local recruits={}; local inMain={}; for _,id in ipairs(d.groups.MAIN) do inMain[id]=true end
-			for id in pairs(d.recruits) do if inMain[id] and f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) and not C.registry.owner[id] then recruits[#recruits+1]=id end end
+			for id in pairs(d.recruits) do if inMain[id] and f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 and not C.registry.owner[id] then recruits[#recruits+1]=id end end
 			table.sort(recruits)
-			if #recruits>0 then
+			local wave=f.tactic=='WAVE TACTICS'
+			if #recruits>0 then d.waveWaiting=d.waveWaiting or now else d.waveWaiting=nil end
+			-- Batch follow-up troops, with a bounded wait even for a lone recruit.
+			local ready=not wave or now>=(d.waveNext or 0) and (#recruits>=3 or now-(d.waveWaiting or now)>=12)
+			if #recruits>0 and ready then
 				local p=plan(f,recruits,main.plan.center,'MAIN',C.observations.snapshot().contacts)
-				if p and C.officer.executeDelegated(f,recruits,p,'REINFORCE',CMD.FIGHT) then for _,id in ipairs(recruits) do d.recruits[id]=nil end end
+				if p and C.officer.executeDelegated(f,recruits,p,'REINFORCE',CMD.FIGHT) then
+					for _,id in ipairs(recruits) do d.recruits[id]=nil end
+					if wave then d.waveNext=now+12; d.waveWaiting=nil; d.waveNumber=(d.waveNumber or 1)+1; C.debug.log('WAVE','Wave '..d.waveNumber..': '..#recruits..' troops reinforce the active front; native Fight retains combat control.') end
+				end
 			end
 		end
 		local s=d.sector; local snapshot=C.observations.snapshot(); local contacts={}
@@ -211,10 +219,14 @@ return function(C)
 				d.next[group]=now+(op.state=='COMPLETED' and (group=='MAIN' and 3 or 12) or 15)
 			end
 			if #ids>0 and (d.failures[group] or 0)<3 then
+				if group=='MAIN' then
+					local available={}; for _,id in ipairs(ids) do local owner=C.registry.owner[id]; if not owner or op and owner==op.id then available[#available+1]=id end end
+					ids=available
+				end
 				local center=C.U.center(ids); local health=C.rules.health(ids); local retreat=group~='MAIN' and (health<.4 or C.rules.risk(center,contacts,350)>math.max(300,#ids*180))
 				local emergency=retreat and not d.returning[group] and op and op.active and now-op.created>=8
 				if emergency then C.officer.cancel(op.id); op=nil; d.next[group]=now end
-				if (not op or not op.active) and now>=(d.next[group] or 0) then
+				if #ids>0 and (not op or not op.active) and now>=(d.next[group] or 0) then
 					local target,reason,kind,visit; local returning=false
 					if retreat then
 						target=C.rules.point(s,math.max(0,C.rules.progress(s,center)-400),0); reason='Damaged/exposed light detachment returns inside its assigned corridor.'; kind='WITHDRAW'; returning=true

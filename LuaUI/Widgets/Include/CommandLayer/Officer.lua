@@ -1,5 +1,20 @@
 return function(C)
 	local A={}
+	function A.factoryControl(action,ids)
+		if action=='OFF' then return C.productionControl.set(false) end
+		if not C.U.delegationAllowed(C.settings) then return false end
+		if action=='ON' then return C.productionControl.set(true) end
+		if action=='ENROLL' then return C.productionControl.enroll(ids or Spring.GetSelectedUnits()) end
+		if action=='RELEASE' then for _,id in ipairs(ids or Spring.GetSelectedUnits()) do C.productionControl.release(id) end; return true end
+		return false
+	end
+	function A.setTactic(tactic)
+		if tactic~='WAVE TACTICS' and tactic~='CONTINUOUS PRESSURE' then return false end
+		C.settings.defaultTactic=tactic
+		local f=C.registry.forces[C.registry.activeForce]
+		if f then f.tactic=tactic end
+		return true
+	end
 	function A.releaseUnits(ids,reason)
 		for _,id in ipairs(ids or {}) do for _,name in ipairs({'arsenal','recovery','economy','productionControl'}) do if C[name] then C[name].release(id) end end end
 		C.registry.release(ids or {},reason or 'PLAYER_OVERRIDE')

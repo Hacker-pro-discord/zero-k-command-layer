@@ -14,7 +14,7 @@ return function(C)
 		if not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Enable LOCAL / PRIVATE TEST SESSION first; autonomous startup is single-player only.'); return false end
 		local f=C.officer.ensureForce(); if not f then return false end
 		if f.delegation and f.delegation.active then C.officer.setDelegated(f.id,false) end
-		f.objective=nil; f.mapControl=true; if C.mapControl then C.mapControl.initialize(f) end
+		f.objective=nil; f.mapControl=true; f.objectiveMode=C.settings.defaultObjective; f.tactic=C.settings.defaultTactic; if C.mapControl then C.mapControl.initialize(f) end
 		C.officer.setAutoAssign(true); S.forceID=f.id; S.enabled=true; S.last=-100
 		C.productionControl.set(true); if C.economy and C.settings.autoEconomy then C.economy.start() end; if C.recovery then C.recovery.start() end
 		S.update(); return true
@@ -31,7 +31,7 @@ return function(C)
 		local f=C.registry.forces[S.forceID]; if not f then S.stop(); return end
 		local ids=C.officer.members(f); if #ids==0 then f.status='WAITING FOR FIRST MILITARY UNIT'; return end
 		if f.delegation and f.delegation.active then return end
-		f.mapControl=true; f.objectiveMode='MAP CONTROL'
+		f.mapControl=true; f.objectiveMode=C.settings.defaultObjective
 		if not C.officer.setDelegated(f.id,true) then S.stop() end
 	end
 	return S

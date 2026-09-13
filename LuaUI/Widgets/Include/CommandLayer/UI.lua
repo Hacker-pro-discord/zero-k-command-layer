@@ -29,7 +29,7 @@ return function(C)
 			button(p,0,84,375,'LOCAL / PRIVATE TEST SESSION','Explicitly attest this is local/skirmish or private testing. Resets on reload. Autohost/public metadata stays locked.',function()
 				C.officer.setSession(not C.settings.privateSession); UI.build()
 			end)
-			button(p,0,126,185,'CONTROL PANEL','Re-enroll factories and manage construction, air/sea and strategic weapons.',function() UI.showManagement() end)
+			button(p,0,126,185,'FACTORY / ECONOMY','Re-enroll factories and manage construction, air/sea and strategic weapons.',function() UI.showManagement() end)
 			button(p,190,126,185,'NEXT FORCE','Select next assigned-force record.',function() if C.officer.cycle then C.officer.cycle(1) end end)
 			button(p,0,168,185,'CANCEL ACTION','Stop further Officer maintenance for active force.',function() local f=C.registry.forces[C.registry.activeForce]; if f and f.delegation and f.delegation.active then C.officer.setDelegated(f.id,false) elseif f and f.operation then C.officer.cancel(f.operation) end end)
 			button(p,190,168,185,'RESUME','Explicitly resume suspended advice membership, never old approval.',function() if C.officer.resume then C.officer.resume(C.registry.activeForce) end end)
@@ -42,8 +42,8 @@ return function(C)
 			button(p,285,338,90,'AI DETAILS','Read groups, observed evidence and current decision.',function() UI.showTactical() end)
 			button(p,0,380,185,'REVIEW ARMY PUSH','Propose one Fight action by the entire assigned force. Draw an objective first. Approval required; delegation ends on approval.',function() C.advisor.ask(C.registry.activeForce,true,true) end)
 			button(p,190,380,185,'AUTO ASSIGN: '..(C.settings.autoAssign and (C.U.assisted(C.settings) and 'ON' or 'WAIT') or 'OFF'),'Recruit existing unassigned and newly completed military units into a fixed receiving force. Manual releases stay released. Existing approvals never expand.',function() C.officer.setAutoAssign(not C.settings.autoAssign); UI.build() end)
-			button(p,0,420,185,'PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Control existing idle factories. Requires local/private testing; works before your first military unit.',function() C.productionControl.set(not C.productionControl.enabled); UI.build() end)
-			button(p,190,420,185,'START MAP CONTROL','Single-player map-wide control: recruit, produce, search successive sectors and attack visible enemies. Enabled automatically by default. STOP AI cancels for this session.',function() C.startup.start(); UI.build() end)
+			button(p,0,420,185,'PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Control existing idle factories. Requires local/private testing; works before your first military unit.',function() C.officer.factoryControl(C.productionControl.enabled and 'OFF' or 'ON'); UI.build() end)
+			button(p,190,420,185,'WIN THE GAME','Single-player map-wide control: recruit, produce, search successive sectors and attack visible enemies. Enabled automatically by default. STOP AI cancels for this session.',function() C.startup.start(); UI.build() end)
 			UI.lastDetail=nil
 			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=458,width=367,height=40,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
@@ -51,9 +51,9 @@ return function(C)
 	function UI.showManagement()
 		if UI.management then UI.management:Dispose() end
 		local p=UI.ch.Window:New{name='CommandLayerManagement',caption='Officer control and logistics',parent=UI.ch.Screen0,x=440,y=80,width=560,height=690,draggable=true,resizable=false,padding={12,30,12,12}}; UI.management=p
-		button(p,0,0,510,'RE-ENROLL SELECTED FACTORIES','Explicitly return selected factories to AI production. Busy queues stay intact. Other manual exclusions stay excluded.',function() C.productionControl.enroll(Spring.GetSelectedUnits()); UI.showManagement() end)
-		button(p,0,45,250,'PREVIOUS FORCE','View previous force.',function() C.officer.cycle(-1) end)
-		button(p,260,45,250,'NEXT FORCE','View next force.',function() C.officer.cycle(1) end)
+		button(p,0,0,510,'RE-ENROLL SELECTED FACTORIES','Explicitly return selected factories to AI production. Busy queues stay intact. Other manual exclusions stay excluded.',function() C.officer.factoryControl('ENROLL'); UI.showManagement() end)
+		button(p,0,45,250,'PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Toggle automatic production; existing queues remain.',function() C.officer.factoryControl(C.productionControl.enabled and 'OFF' or 'ON'); UI.showManagement() end)
+		button(p,260,45,250,'RELEASE SELECTED FACTORIES','Keep native queues; prevent future AI additions until explicitly re-enrolled.',function() C.officer.factoryControl('RELEASE'); UI.showManagement() end)
 		if C.recovery then
 			button(p,0,92,250,'ADD SELECTED BUILDERS','Enroll selected constructors for recovery and requested construction. Manual orders release them again.',function() C.recovery.enroll(Spring.GetSelectedUnits()); UI.showManagement() end)
 			button(p,260,92,250,'ADD BUILD REQUEST','Select constructors, click this, then choose and place one native build command. The AI receives that explicit build request; Escape cancels.',function() C.recovery.armed=true; C.debug.log('BUILD REQUEST','Choose a building in the native build menu and place it. Escape cancels.'); p:Dispose(); UI.management=nil end)
@@ -113,7 +113,7 @@ return function(C)
 		local f=C.registry.forces[UI.tacticalForce]; local d=f and f.delegation
 		local text='No delegated operation for this force.'
 		if d then
-			text='Force '..f.id..' | '..(d.active and 'DELEGATED' or 'STOPPED')..' | '..d.state..'\nRules: '..d.version..' (experimental)\n\n'
+			text='Force '..f.id..' | '..(d.active and 'DELEGATED' or 'STOPPED')..' | '..d.state..'\nTactic: '..(f.tactic or 'CONTINUOUS PRESSURE')..' | Wave '..(d.waveNumber or 1)..'\nRules: '..d.version..' (experimental)\n\n'
 			if d.strategy then text=text..'Revision '..d.strategy.revision..': '..d.strategy.formation..', step '..math.floor(d.strategy.step)..', spacing '..math.floor(d.strategy.spacing)..', lane '..(d.strategy.side<0 and 'left' or 'right')..'\n' end
 			if d.recovery and d.recovery.evacuate then text=text..'Retreat: '..d.recovery.injured..' injured; '..#d.recovery.evacuate..' first wave; '..#d.recovery.cover..' temporary cover\n' end
 			for _,group in ipairs({'SCOUT','RAID','MAIN','RESERVE','DEFENSE','AIR','SEA'}) do local n=0; for _,id in ipairs(d.groups[group] or {}) do if f.members[id] and not f.suspended[id] and not d.blocked[id] and C.U.owned(id) then n=n+1 end end; local decision=d.decisions and d.decisions[group]; text=text..group..': '..n..' available units'..(decision and ' | '..decision.state..'\n'..decision.reason:sub(1,100) or '')..'\n' end
@@ -134,19 +134,20 @@ return function(C)
 	function UI.showObjectives()
 		local f=C.registry.forces[C.registry.activeForce]; if not f then C.debug.log('OBJECTIVE','Assign an army first.'); return end
 		if UI.objectiveDialog then UI.objectiveDialog:Dispose() end
-		UI.objectiveDialog=UI.ch.Window:New{name='CommandLayerObjectives',caption='Objective / Force '..f.id,parent=UI.ch.Screen0,x=450,y=100,width=540,height=470,draggable=true,padding={12,30,12,12}}
+		UI.objectiveDialog=UI.ch.Window:New{name='CommandLayerObjectives',caption='Objective / Force '..f.id,parent=UI.ch.Screen0,x=450,y=100,width=540,height=560,draggable=true,padding={12,30,12,12}}
 		local w=UI.objectiveDialog
-		UI.ch.TextBox:New{parent=w,x=0,y=0,width='100%',height=105,text='Choose a policy, then draw its territory/objective line. Autonomous policies start after drawing in single-player testing. All policies stay inside your corridor. Manual orders override control. No fog reveal or automatic map-wide victory search.'}
-		local modes={'ADVICE ONLY','WIN OBJECTIVE','UTTER DESTRUCTION','SHOCK AND AWE'}
-		local tips={'Draw a line and review individual proposals.','Balanced scout, raid and main advances; hold at the final line.','Commit all assigned military units together; no detached raids. Fight only within your corridor.','Faster 900-unit phases with Assault role zones; scout/raid support. This does not guarantee a breakthrough.'}
+		UI.ch.TextBox:New{parent=w,x=0,y=0,width='100%',height=105,text='WIN THE GAME starts map-wide scouting, expansion and observed-enemy attacks. Other objectives use a drawn corridor. Wave tactics batches follow-up troops every 12 seconds; manual orders always override.'}
+		local modes={'WIN THE GAME','ADVICE ONLY','WIN OBJECTIVE','UTTER DESTRUCTION','SHOCK AND AWE'}
+		local tips={'Start map-wide control using legitimate observations; no objective line required.','Draw a line and review individual proposals.','Balanced scout, raid and main advances; hold at the final line.','Commit all assigned military units together; no detached raids. Fight only within your corridor.','Faster 900-unit phases with Assault role zones; scout/raid support. This does not guarantee a breakthrough.'}
 		for i,name in ipairs(modes) do local mode=name; button(w,0,105+(i-1)*40,490,name,tips[i],function()
 			if mode~='ADVICE ONLY' and not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Autonomous objectives require single-player testing.'); return end
-			UI.objectiveDialog:Dispose(); UI.objectiveDialog=nil; C.input.armObjective(f.id,mode~='ADVICE ONLY' and mode or nil)
+			UI.objectiveDialog:Dispose(); UI.objectiveDialog=nil; if mode=='WIN THE GAME' then C.startup.start(); return end; C.input.armObjective(f.id,mode~='ADVICE ONLY' and mode or nil)
 		end) end
-		button(w,0,275,490,'AUTO PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Opt in to existing idle factories for this force. One affordable unit per idle factory per five seconds; manual factory commands release it. No factory construction.',function() C.productionControl.set(not C.productionControl.enabled); UI.showObjectives() end)
-		button(w,0,315,240,'STOP PRODUCTION','Stop future queue additions; existing queues remain.',function() C.productionControl.set(false); UI.showObjectives() end)
-		button(w,250,315,240,'CLOSE','Keep current settings and close.',function() UI.objectiveDialog:Dispose(); UI.objectiveDialog=nil end)
-		UI.ch.TextBox:New{parent=w,x=0,y=360,width=490,height=60,text=C.productionControl.status}
+		button(w,0,315,490,'AUTO PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Opt in to existing idle factories for this force. One affordable unit per idle factory per five seconds; manual factory commands release it. No factory construction.',function() C.officer.factoryControl(C.productionControl.enabled and 'OFF' or 'ON'); UI.showObjectives() end)
+		button(w,0,355,240,'STOP PRODUCTION','Stop future queue additions; existing queues remain.',function() C.productionControl.set(false); UI.showObjectives() end)
+		button(w,250,355,240,'CLOSE','Keep current settings and close.',function() UI.objectiveDialog:Dispose(); UI.objectiveDialog=nil end)
+		button(w,0,395,490,'TACTIC: '..(f.tactic or C.settings.defaultTactic),'Choose wave batches or continuous reinforcement; applies to this force and future startup.',function() C.officer.setTactic((f.tactic or C.settings.defaultTactic)=='WAVE TACTICS' and 'CONTINUOUS PRESSURE' or 'WAVE TACTICS'); UI.showObjectives() end)
+		UI.ch.TextBox:New{parent=w,x=0,y=440,width=490,height=60,text=C.productionControl.status}
 	end
 	function UI.showAdvice()
 		local f=C.registry.forces[C.registry.activeForce]; if not f or not f.advice then return end

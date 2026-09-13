@@ -38,6 +38,18 @@ python tools/install.py --game "C:\path\to\Zero-K"
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
 
+## Default objective and wave tactics
+
+Local automatic startup now uses **WIN THE GAME** with **WAVE TACTICS**. This means map-wide scouting, resource contests, expansion and attacks on legitimately observed enemies until stopped or the match ends. It is an objective, not a promise of victory. Drawn objectives still restrict operations to their corridor.
+
+Open **OFFICER > FACTORY / ECONOMY** to toggle production, re-enroll selected factories, release selected factories, and manage builders. Existing queues remain intact. Manual commands release a factory until you explicitly return it to AI control.
+
+**SET OBJECTIVE** includes a **WIN THE GAME** button (no line required) and a tactic selector. Wave tactics groups follow-up ground troops for the current front: three ready recruits can launch a batch, successive batches are at least 12 seconds apart, and a lone recruit waits at most 12 seconds when a valid operation can be issued. The opening force moves immediately; native combat, defenses, retreats and manual overrides remain authoritative. Air/naval units retain their separate domain controllers. Choose **CONTINUOUS PRESSURE** for immediate reinforcement instead. The tactic preference persists.
+
+Suitable scouts detach at three military units, increasing to four scout units and eight raiders as the army grows. Missing suitable units can limit these groups. Expansion gets first consideration on three of four discretionary job turns instead of two of three; urgent power and military catch-up capacity retain priority. Unknown territory is still surveyed and observed threats still constrain constructor routes.
+
+See [wave behavior and validation](docs/WAVE_DEFAULTS.md).
+
 ## Resource pressure, defense and rebuilding
 
 Constructor continuity fixes recognize native build approaches and internal clearance moves, retain workers through those queue changes, and return idle automatic recovery builders to economic work. Healed military units can rejoin after native retreat. Manual overrides remain authoritative. See [causes and tests](docs/BUILDER_CONTINUITY.md).
@@ -56,7 +68,7 @@ It adds storage when income outgrows a nearly full buffer, develops solar/tidal 
 
 When income exceeds existing factory capacity, new factory choices use their affordable unit-by-unit counters. A new factory type must materially improve on available production; otherwise capacity is added to a suitable existing type. Covered unit matchups no longer receive a cheap-unit discount. Shared role/queue demand, affordability, native build options and manual overrides remain in force. See [economy growth behavior and tests](docs/ECONOMY_GROWTH.md).
 
-Open **OFFICER > CONTROL PANEL** for **ECONOMY: ON/OFF** and **ADD ECONOMY BUILDERS**. The latter explicitly returns selected constructors to expansion control. Recovery builders and expansion builders have separate duties. Disabling economy preserves native orders already issued. Disable **Automatic economic expansion in local single-player** in widget settings to keep the preference off in later matches. **STOP AI** ends the current automatic session.
+Open **OFFICER > FACTORY / ECONOMY** for **ECONOMY: ON/OFF** and **ADD ECONOMY BUILDERS**. The latter explicitly returns selected constructors to expansion control. Recovery builders and expansion builders have separate duties. Disabling economy preserves native orders already issued. Disable **Automatic economic expansion in local single-player** in widget settings to keep the preference off in later matches. **STOP AI** ends the current automatic session.
 
 This is experimental. The [Circuit Brutal campaign](docs/BENCHMARK_RESULTS.md) uses normal commander starts and lets the Officer run its economy without scripted help. The 32-match baseline recorded zero wins, 25 losses and seven time limits; the full corrected rerun recorded zero wins, 20 losses and 12 time limits. **It is not a reliable Brutal-beating AI.** Time limits are not wins. The three holdout maps remain unused pending a stronger training candidate. Results, curves, production checks and remaining failure priorities are published in the report. The newly enabled [unit-by-unit matrix](docs/UNIT_MATCHUPS.md) is a later experimental change; it was not used in those benchmark results.
 
@@ -70,7 +82,7 @@ Disable **Unit-by-unit counter matrix (unfinished draft)** in Command Layer sett
 
 ## Adaptive production and expanded control (preview 10)
 
-Open **OFFICER > CONTROL PANEL**. These features remain local single-player automation. Manual orders release affected units; explicit re-enrollment returns them to AI control.
+Open **OFFICER > FACTORY / ECONOMY**. These features remain local single-player automation. Manual orders release affected units; explicit re-enrollment returns them to AI control.
 
 | Control | Behavior |
 |---|---|
@@ -102,7 +114,7 @@ It recruits your eligible military units, queues idle factories and searches suc
 
 The search planner uses a 5x5 map grid, visit/attempt history, group reservations and legitimately observed contacts. It does not know where hidden enemies are. RAID prefers vulnerable observed contacts; MAIN uses native Fight toward observed positions. Arrival and no-contact timeouts allow new objectives; native combat and damaged-unit recovery still have priority. This is an experimental heuristic, not a strategic search guarantee.
 
-**STOP AI** stops the active force and production for this session. To prevent automatic startup in future sessions/reloads, disable **Automatically start map-control AI in local single-player** under Settings > Interface > Command Layer, or disable the widget. **START MAP CONTROL** explicitly restarts it. Automatic startup is a saved preference; active assignments, operations and approvals are still not serialized.
+**STOP AI** stops the active force and production for this session. To prevent automatic startup in future sessions/reloads, disable **Automatically start map-control AI in local single-player** under Settings > Interface > Command Layer, or disable the widget. **WIN THE GAME** explicitly restarts it. Automatic startup is a saved preference; active assignments, operations and approvals are still not serialized.
 
 Player-drawn objectives and explicit front controls revoke that force's map-wide mode and retain bounded corridor behavior. This gives you an explicit way to direct one force while using autonomous search elsewhere.
 

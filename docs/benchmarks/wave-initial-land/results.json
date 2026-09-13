@@ -1,0 +1,141 @@
+[
+  {
+    "id": "folsomdamdeluxev4-factoryshield-s0",
+    "map": "FolsomDamDeluxeV4",
+    "archive": "folsomdamdeluxev4.sd7",
+    "category": "chokepoint/large",
+    "split": "train",
+    "factories": [
+      "factoryshield",
+      "factorycloak"
+    ],
+    "starts": [
+      [
+        1024,
+        3584
+      ],
+      [
+        9216,
+        3584
+      ]
+    ],
+    "startSource": "luarules__configs__startboxes__folsomdamdeluxev4.lua",
+    "size": [
+      10240,
+      7168
+    ],
+    "waterFraction": 0.15909567584549766,
+    "heightStd": 215.7773627244543,
+    "heightRange": [
+      -140.0,
+      1200.0
+    ],
+    "side": 0,
+    "factory": "factoryshield",
+    "seed": 1729,
+    "outcome": "CENSORED",
+    "wallSeconds": 103.88922819995787,
+    "gameSeconds": 900.000061,
+    "final": {
+      "0": {
+        "kind": "METRIC",
+        "composition": {
+          "shieldcon": 5,
+          "energysolar": 16,
+          "factorygunship": 2,
+          "shieldskirm": 5,
+          "gunshiptrans": 1,
+          "gunshipassault": 1,
+          "hoverraid": 2,
+          "gunshipcon": 2,
+          "shieldriot": 2,
+          "hoverheavyraid": 1,
+          "gunshipbomb": 5,
+          "energypylon": 2,
+          "shieldarty": 1,
+          "staticmex": 13,
+          "factoryplane": 1,
+          "shieldassault": 1,
+          "shieldscout": 5,
+          "bomberassault": 1,
+          "energyfusion": 2,
+          "shieldraid": 2,
+          "factoryshield": 1,
+          "factoryhover": 1,
+          "dyntrainer_strike_base": 1,
+          "shieldfelon": 2,
+          "planefighter": 1
+        },
+        "factories": 5,
+        "time": 900.000061,
+        "metalExpense": 49.9999542,
+        "team": 0,
+        "energyExpense": 49.9999542,
+        "combatLost": 4370,
+        "armyValue": 5556.99951,
+        "mexes": 13,
+        "army": 30,
+        "metalIncome": 40.4083748,
+        "killed": 4460,
+        "lost": 8445,
+        "builders": 8,
+        "energyIncome": 49.9999504,
+        "economyValue": 10212.333,
+        "energy": 511.948273,
+        "metal": 453.359314
+      },
+      "1": {
+        "kind": "METRIC",
+        "composition": {
+          "cloakriot": 2,
+          "energypylon": 5,
+          "cloakraid": 14,
+          "energysolar": 26,
+          "staticcon": 7,
+          "turretemp": 3,
+          "turretriot": 3,
+          "cloakassault": 9,
+          "cloakarty": 8,
+          "turretaalaser": 2,
+          "turretmissile": 5,
+          "cloakjammer": 1,
+          "turretgauss": 2,
+          "cloakskirm": 17,
+          "dyntrainer_recon_base": 1,
+          "staticradar": 8,
+          "factorytank": 1,
+          "staticmex": 30,
+          "turretheavylaser": 3,
+          "cloakaa": 9,
+          "energyfusion": 2,
+          "cloakheavyraid": 2,
+          "staticheavyradar": 1,
+          "factorycloak": 1,
+          "staticstorage": 2,
+          "cloakcon": 27,
+          "turretlaser": 26,
+          "energywind": 26,
+          "cloaksnipe": 1
+        },
+        "factories": 2,
+        "time": 900.000061,
+        "metalExpense": 62.6664429,
+        "team": 1,
+        "energyExpense": 90.5665512,
+        "combatLost": 4460,
+        "armyValue": 9740,
+        "mexes": 30,
+        "army": 63,
+        "metalIncome": 102.24527,
+        "killed": 4370,
+        "lost": 4460,
+        "builders": 28,
+        "energyIncome": 78.2055664,
+        "economyValue": 22972.3281,
+        "energy": 1400.96594,
+        "metal": 1058.64526
+      }
+    },
+    "errors": []
+  }
+]
