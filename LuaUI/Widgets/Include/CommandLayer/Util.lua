@@ -35,12 +35,13 @@ function U.point(p)
 end
 function U.assisted(settings)
 	local m=Spring.GetModOptions and Spring.GetModOptions() or {}
-	return settings.privateSession and U.live() and (not m.sendspringiedata or m.sendspringiedata=='0' or m.sendspringiedata==0)
+	local disabled=m.disable_local_widgets
+	if disabled and disabled~='0' and disabled~=0 and disabled~=false then return false end
+	return settings.privateSession and U.live() and (settings.multiplayerSession==true or not m.sendspringiedata or m.sendspringiedata=='0' or m.sendspringiedata==0)
 end
 function U.delegationAllowed(settings)
-	-- Installed LuaRules/Utilities/gametype.lua uses this same single-player criterion.
-	-- Query it live too: joining players must revoke autonomous authority.
-	return U.assisted(settings) and Spring.GetPlayerList and #(Spring.GetPlayerList() or {})==1
+	-- Multiplayer authority is an explicit, non-persisted match opt-in.
+	return U.assisted(settings) and (settings.multiplayerSession==true or Spring.GetPlayerList and #(Spring.GetPlayerList() or {})==1)
 end
 function U.now() return Spring.GetGameSeconds() end
 return U

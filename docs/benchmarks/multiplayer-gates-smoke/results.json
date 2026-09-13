@@ -1,0 +1,107 @@
+[
+  {
+    "id": "folsomdamdeluxev4-factoryshield-s0",
+    "map": "FolsomDamDeluxeV4",
+    "archive": "folsomdamdeluxev4.sd7",
+    "category": "chokepoint/large",
+    "split": "train",
+    "factories": [
+      "factoryshield",
+      "factorycloak"
+    ],
+    "starts": [
+      [
+        1024,
+        3584
+      ],
+      [
+        9216,
+        3584
+      ]
+    ],
+    "startSource": "luarules__configs__startboxes__folsomdamdeluxev4.lua",
+    "size": [
+      10240,
+      7168
+    ],
+    "waterFraction": 0.15909567584549766,
+    "heightStd": 215.7773627244543,
+    "heightRange": [
+      -140.0,
+      1200.0
+    ],
+    "side": 0,
+    "factory": "factoryshield",
+    "seed": 1729,
+    "outcome": "CENSORED",
+    "wallSeconds": 47.01909449999221,
+    "gameSeconds": 180.000015,
+    "final": {
+      "0": {
+        "kind": "METRIC",
+        "composition": {
+          "staticradar": 1,
+          "dyntrainer_strike_base": 1,
+          "staticmex": 7,
+          "energysolar": 6,
+          "shieldraid": 5,
+          "shieldaa": 1,
+          "shieldcon": 3,
+          "factoryshield": 1,
+          "shieldscout": 5
+        },
+        "factories": 1,
+        "time": 180.000015,
+        "metalExpense": 0,
+        "team": 0,
+        "energyExpense": 0.80000001,
+        "combatLost": 0,
+        "armyValue": 615,
+        "mexes": 7,
+        "army": 11,
+        "metalIncome": 20.3224239,
+        "killed": 0,
+        "lost": 0,
+        "builders": 4,
+        "energyIncome": 17.6683331,
+        "economyValue": 3230,
+        "energy": 123.688919,
+        "metal": 253.701889
+      },
+      "1": {
+        "kind": "METRIC",
+        "composition": {
+          "dyntrainer_recon_base": 1,
+          "staticradar": 1,
+          "staticmex": 5,
+          "hoverheavyraid": 2,
+          "hovercon": 3,
+          "energywind": 1,
+          "hoverraid": 2,
+          "factoryhover": 1,
+          "turretlaser": 3,
+          "hoverskirm": 2,
+          "energysolar": 5
+        },
+        "factories": 1,
+        "time": 180.000015,
+        "metalExpense": 11.0005102,
+        "team": 1,
+        "energyExpense": 11.8005104,
+        "combatLost": 0,
+        "armyValue": 960,
+        "mexes": 5,
+        "army": 6,
+        "metalIncome": 16.195055,
+        "killed": 0,
+        "lost": 0,
+        "builders": 4,
+        "energyIncome": 17.9403381,
+        "economyValue": 3171.3335,
+        "energy": 205.788177,
+        "metal": 35.3271446
+      }
+    },
+    "errors": []
+  }
+]

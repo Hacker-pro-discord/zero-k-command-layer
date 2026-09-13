@@ -4,14 +4,14 @@ return function(C)
 	function S.boot()
 		if S.booted or not C.U.live() then return end
 		S.booted=true
-		local gate=C.U.copy(C.settings); gate.privateSession=true
+		local gate=C.U.copy(C.settings); gate.privateSession=true; gate.multiplayerSession=false
 		if C.settings.autoPlay and C.U.delegationAllowed(gate) then C.officer.setSession(true); S.start() end
 	end
 	function S.stop(forceID)
 		if not forceID or S.forceID==forceID then S.enabled=false; if C.economy then C.economy.stop() end; if C.recovery then C.recovery.stop() end; if C.arsenal then C.arsenal.stop() end; S.booted=S.booted or C.U.live() end
 	end
 	function S.start()
-		if not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Enable LOCAL / PRIVATE TEST SESSION first; autonomous startup is single-player only.'); return false end
+		if not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Enable the local session or Multiplayer AI for this match first.'); return false end
 		local f=C.officer.ensureForce(); if not f then return false end
 		if f.delegation and f.delegation.active then C.officer.setDelegated(f.id,false) end
 		f.objective=nil; f.mapControl=true; f.objectiveMode=C.settings.defaultObjective; f.tactic=C.settings.defaultTactic; if C.mapControl then C.mapControl.initialize(f) end

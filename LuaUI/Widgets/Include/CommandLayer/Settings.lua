@@ -1,5 +1,5 @@
 return function(U)
-	local S={version=1,defaultObjective='WIN THE GAME',defaultTactic='WAVE TACTICS',formation='OFF',mode='LOOSE',spacing=64,rankGap=100,supportDepth=200,skirmDepth=250,artilleryDepth=350,autoAssign=false,autoPlay=true,autoEconomy=true,autoStructures=true,reservePercent=20,intelHalfLife=90,unitMatchups=true,constructors=false,overlays=true,scale=1,x=30,y=240,privateSession=false,debug=false,override='release',proposalLifetime=60,suggestionInterval=10}
+	local S={version=1,defaultObjective='WIN THE GAME',defaultTactic='WAVE TACTICS',formation='OFF',mode='LOOSE',spacing=64,rankGap=100,supportDepth=200,skirmDepth=250,artilleryDepth=350,autoAssign=false,autoPlay=true,autoEconomy=true,autoStructures=true,reservePercent=20,intelHalfLife=90,unitMatchups=true,constructors=false,overlays=true,scale=1,x=30,y=240,privateSession=false,multiplayerSession=false,debug=false,override='release',proposalLifetime=60,suggestionInterval=10}
 	function S.load(data)
 		if type(data)~='table' then return end
 		for _,k in ipairs({'spacing','rankGap','supportDepth','skirmDepth','artilleryDepth','scale','x','y','proposalLifetime','suggestionInterval','reservePercent','intelHalfLife'}) do
@@ -14,10 +14,11 @@ return function(U)
 		S.proposalLifetime=math.max(30,math.min(180,S.proposalLifetime)); S.suggestionInterval=math.max(5,math.min(60,S.suggestionInterval))
 		S.intelHalfLife=math.max(30,math.min(300,S.intelHalfLife))
 		S.reservePercent=math.max(0,math.min(40,S.reservePercent))
+		S.multiplayerSession=false
 		S.privateSession=false -- Never persist authority or a private-match assertion.
 	end
 	function S.save()
-		local t={}; for k,v in pairs(S) do if type(v)~='function' and k~='privateSession' and k~='formation' then t[k]=v end end; return t
+		local t={}; for k,v in pairs(S) do if type(v)~='function' and k~='privateSession' and k~='multiplayerSession' and k~='formation' then t[k]=v end end; return t
 	end
 	return S
 end

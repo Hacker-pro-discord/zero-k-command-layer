@@ -94,7 +94,7 @@ return function(C)
 	function A.setDelegated(forceID,enabled)
 		if not enabled and C.startup then C.startup.stop(forceID) end
 		local f=C.registry.forces[forceID]; if not f then return false end
-		if enabled and (not C.U.delegationAllowed(C.settings) or not C.tactical) then C.debug.log('LOCKED','Autonomous testing requires a single-player game and private-session toggle.'); return false end
+		if enabled and (not C.U.delegationAllowed(C.settings) or not C.tactical) then C.debug.log('LOCKED','Enable the local session or explicitly enable Multiplayer AI for this match.'); return false end
 		-- Revoke first, including every parallel detachment operation.
 		if f.delegation then f.delegation.active=false end
 		for _,op in pairs(C.registry.operations) do if op.forceID==forceID then A.cancel(op.id) end end
@@ -170,10 +170,18 @@ return function(C)
 	function A.resume(id)
 		local f=C.registry.forces[id]; if f then if f.delegation and f.delegation.active then A.setDelegated(id,false) end; f.suspended={}; f.revision=f.revision+1; f.status='ADVISER'; C.debug.log('RESUME','Advice resumed; previous approvals stay invalid.') end
 	end
+	function A.setMultiplayerSession(enabled)
+		if not enabled then return A.setSession(false) end
+		C.settings.multiplayerSession=true
+		if not A.setSession(true) then C.settings.multiplayerSession=false; return false end
+		C.debug.log('MULTIPLAYER','Full Officer control enabled for this match by the player. Manual overrides and visibility limits remain active.')
+		return true
+	end
 	function A.setSession(enabled)
+		if not enabled then C.settings.multiplayerSession=false end
 		if not enabled and C.productionControl then C.productionControl.set(false) end
 		C.settings.privateSession=enabled==true
-		if enabled and not C.U.assisted(C.settings) then C.settings.privateSession=false; C.debug.log('LOCKED','Requires active local/private testing; autohost matches stay locked.'); return false end
+		if enabled and not C.U.assisted(C.settings) then C.settings.privateSession=false; C.debug.log('LOCKED','Requires a live match, allowed local widgets, and explicit multiplayer opt-in for hosted matches.'); return false end
 		if not enabled then A.cancelAll(); for _,p in pairs(C.proposals.items) do if p.state=='OFFERED' then p.state='INVALIDATED' end end end
 		C.debug.log('SESSION',enabled and 'Local/private testing enabled for this session.' or 'Assisted testing disabled.'); return true
 	end

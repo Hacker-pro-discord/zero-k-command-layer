@@ -8,7 +8,7 @@ return function(C)
 		P.enabled=false; P.factories={}; P.excluded={}
 		if not enabled then P.status='OFF; existing queues preserved'; return true end
 		local f=C.registry.forces[C.registry.activeForce] or C.officer.ensureForce()
-		if not f or not C.U.delegationAllowed(C.settings) then P.status='Assign a force in single-player testing first'; return false end
+		if not f or not C.U.delegationAllowed(C.settings) then P.status='Enable session control and assign a force first'; return false end
 		P.forceID=f.id
 		for _,id in ipairs(Spring.GetTeamUnits(Spring.GetMyTeamID()) or {}) do
 			local def=UnitDefs[Spring.GetUnitDefID(id)]

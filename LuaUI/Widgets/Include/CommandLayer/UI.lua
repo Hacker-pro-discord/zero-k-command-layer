@@ -4,7 +4,7 @@ return function(C)
 		return UI.ch.Button:New{parent=parent,x=x,y=y,width=w,height=34,caption=caption,tooltip=tip,OnClick={fn}}
 	end
 	function UI.build()
-		UI.controlState=tostring(C.settings.autoAssign)..':'..tostring(C.settings.privateSession)..':'..tostring(C.productionControl.enabled)
+		UI.controlState=tostring(C.settings.autoAssign)..':'..tostring(C.settings.privateSession)..':'..tostring(C.productionControl.enabled)..':'..tostring(C.settings.multiplayerSession)..':'..tostring(Spring.GetPlayerList and #(Spring.GetPlayerList() or {}) or 0)
 		if UI.body then UI.body:Dispose() end
 		UI.body=UI.ch.Panel:New{parent=UI.window,x=0,y=46,width='100%',bottom=105,padding={0,0,0,0}}
 		local p=UI.body
@@ -26,8 +26,10 @@ return function(C)
 			button(p,190,0,185,'RELEASE','Release selected units and cancel their pending authority.',function() C.officer.releaseUnits(selected(),'PLAYER_OVERRIDE'); C.debug.log('RELEASE','Selected units released') end)
 			button(p,0,42,185,'SET OBJECTIVE','Draw a line in the world; this does not issue orders.',function() UI.showObjectives() end)
 			button(p,190,42,185,'ASK OFFICER','Request a tactical proposal and production advice.',function() if C.advisor then C.advisor.ask(C.registry.activeForce,true) end end)
-			button(p,0,84,375,'LOCAL / PRIVATE TEST SESSION','Explicitly attest this is local/skirmish or private testing. Resets on reload. Autohost/public metadata stays locked.',function()
-				C.officer.setSession(not C.settings.privateSession); UI.build()
+			local multiplayer=(Spring.GetPlayerList and #(Spring.GetPlayerList() or {})>1) or C.settings.multiplayerSession or (Spring.GetModOptions and (Spring.GetModOptions().sendspringiedata=='1' or Spring.GetModOptions().sendspringiedata==1))
+			button(p,0,84,375,multiplayer and (C.settings.multiplayerSession and 'MULTIPLAYER AI: ON / DISABLE' or 'ENABLE MULTIPLAYER AI') or 'LOCAL / PRIVATE TEST SESSION','Multiplayer opt-in starts full army, production and economy control for this match. Resets on reload. Manual orders and server widget restrictions remain authoritative.',function()
+				if multiplayer then if C.settings.multiplayerSession then C.officer.setMultiplayerSession(false) elseif C.officer.setMultiplayerSession(true) then C.startup.start() end
+				else C.officer.setSession(not C.settings.privateSession) end; UI.build()
 			end)
 			button(p,0,126,185,'FACTORY / ECONOMY','Re-enroll factories and manage construction, air/sea and strategic weapons.',function() UI.showManagement() end)
 			button(p,190,126,185,'NEXT FORCE','Select next assigned-force record.',function() if C.officer.cycle then C.officer.cycle(1) end end)
@@ -37,13 +39,13 @@ return function(C)
 			button(p,190,210,185,'DISMISS ADVICE','Dismiss the current production recommendation.',function() local f=C.registry.forces[C.registry.activeForce]; if f then f.advice=nil end end)
 			button(p,0,252,375,'ASSIGN ALL MILITARY','Assign all your completed mobile military units now, including air/naval. Excludes builders and structures. No orders until delegated; Auto Assign handles subsequent recruits.',function() C.officer.assignAll() end)
 			for i,front in ipairs({'ADVANCE','HOLD','FLANK_LEFT','FLANK_RIGHT'}) do local directive=front; button(p,(i-1)*95,294,91,front:gsub('_',' '),'Set this force front approach. Cancels maintenance; next action still needs approval. Set an objective line for this front.',function() C.officer.setFront(C.registry.activeForce,directive) end) end
-			button(p,0,338,185,'DELEGATE PRESSURE','Single-player only. Continuously scout, raid and push assigned units inside your objective corridor until stopped. This explicitly authorizes repeated orders.',function() C.officer.setDelegated(C.registry.activeForce,true) end)
+			button(p,0,338,185,'DELEGATE PRESSURE','With session authority enabled. Continuously scout, raid and push assigned units inside your objective corridor until stopped. This explicitly authorizes repeated orders.',function() C.officer.setDelegated(C.registry.activeForce,true) end)
 			button(p,190,338,90,'STOP AI','Stop delegation and production; existing native orders remain.',function() C.productionControl.set(false); if C.recovery then C.recovery.stop() end; if C.arsenal then C.arsenal.stop() end; C.officer.setDelegated(C.registry.activeForce,false) end)
 			button(p,285,338,90,'AI DETAILS','Read groups, observed evidence and current decision.',function() UI.showTactical() end)
 			button(p,0,380,185,'REVIEW ARMY PUSH','Propose one Fight action by the entire assigned force. Draw an objective first. Approval required; delegation ends on approval.',function() C.advisor.ask(C.registry.activeForce,true,true) end)
 			button(p,190,380,185,'AUTO ASSIGN: '..(C.settings.autoAssign and (C.U.assisted(C.settings) and 'ON' or 'WAIT') or 'OFF'),'Recruit existing unassigned and newly completed military units into a fixed receiving force. Manual releases stay released. Existing approvals never expand.',function() C.officer.setAutoAssign(not C.settings.autoAssign); UI.build() end)
 			button(p,0,420,185,'PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Control existing idle factories. Requires local/private testing; works before your first military unit.',function() C.officer.factoryControl(C.productionControl.enabled and 'OFF' or 'ON'); UI.build() end)
-			button(p,190,420,185,'WIN THE GAME','Single-player map-wide control: recruit, produce, search successive sectors and attack visible enemies. Enabled automatically by default. STOP AI cancels for this session.',function() C.startup.start(); UI.build() end)
+			button(p,190,420,185,'WIN THE GAME','Authorized map-wide control: recruit, produce, search successive sectors and attack visible enemies. Enabled automatically by default. STOP AI cancels for this session.',function() C.startup.start(); UI.build() end)
 			UI.lastDetail=nil
 			UI.detail=UI.ch.TextBox:New{parent=p,x=4,y=458,width=367,height=40,text='Assigned adviser: no orders without approval.\nFactory and unit advice never changes production.'}
 		end
@@ -100,7 +102,7 @@ return function(C)
 	end
 	function UI.update(dt)
 		UI.elapsed=UI.elapsed+(dt or .03); if UI.elapsed<.25 then return end; UI.elapsed=0
-		local controls=tostring(C.settings.autoAssign)..':'..tostring(C.settings.privateSession)..':'..tostring(C.productionControl.enabled)
+		local controls=tostring(C.settings.autoAssign)..':'..tostring(C.settings.privateSession)..':'..tostring(C.productionControl.enabled)..':'..tostring(C.settings.multiplayerSession)..':'..tostring(Spring.GetPlayerList and #(Spring.GetPlayerList() or {}) or 0)
 		if UI.tab=='OFFICER' and controls~=UI.controlState then UI.build() end
 		if UI.status then
 			local text=(C.startup and C.startup.enabled and 'AI: MAP-WIDE CONTROL' or 'Formation: '..C.settings.formation)..' | '..(C.settings.privateSession and C.settings.mode or 'ARRIVAL (public)')..'\nSpacing: '..C.settings.spacing..' | Constructors: '..tostring(C.settings.constructors)..'\n'..C.debug.message
@@ -158,7 +160,7 @@ return function(C)
 		local modes={'WIN THE GAME','ADVICE ONLY','WIN OBJECTIVE','UTTER DESTRUCTION','SHOCK AND AWE'}
 		local tips={'Start map-wide control using legitimate observations; no objective line required.','Draw a line and review individual proposals.','Balanced scout, raid and main advances; hold at the final line.','Commit all assigned military units together; no detached raids. Fight only within your corridor.','Faster 900-unit phases with Assault role zones; scout/raid support. This does not guarantee a breakthrough.'}
 		for i,name in ipairs(modes) do local mode=name; button(w,0,105+(i-1)*40,490,name,tips[i],function()
-			if mode~='ADVICE ONLY' and not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Autonomous objectives require single-player testing.'); return end
+			if mode~='ADVICE ONLY' and not C.U.delegationAllowed(C.settings) then C.debug.log('LOCKED','Enable a local session or Multiplayer AI for this match.'); return end
 			UI.objectiveDialog:Dispose(); UI.objectiveDialog=nil; if mode=='WIN THE GAME' then C.startup.start(); return end; C.input.armObjective(f.id,mode~='ADVICE ONLY' and mode or nil)
 		end) end
 		button(w,0,315,490,'AUTO PRODUCTION: '..(C.productionControl.enabled and 'ON' or 'OFF'),'Opt in to existing idle factories for this force. One affordable unit per idle factory per five seconds; manual factory commands release it. No factory construction.',function() C.officer.factoryControl(C.productionControl.enabled and 'OFF' or 'ON'); UI.showObjectives() end)

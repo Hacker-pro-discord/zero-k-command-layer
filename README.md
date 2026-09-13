@@ -1,6 +1,6 @@
 # Zero-K Command Layer
 
-Experimental local widgets for **Zero-K v1.14.8.0 / engine 2025.06.21**: logistics shortcuts, persistent formations, an approval-based Officer, and optional single-player military, production and economic automation.
+Experimental local widgets for **Zero-K v1.14.8.0 / engine 2025.06.21**: logistics shortcuts, persistent formations, an approval-based Officer, and optional military, production and economic automation in local games or explicitly enabled multiplayer.
 
 Choose an army/objective yourself, or explicitly start automatic map control in a local skirmish. Native Zero-K unit AI still handles firing, aiming and ordinary combat behavior. Normal installation adds uniquely named local widgets; it does not edit stock widgets, game archives or LuaRules. This is a community experiment, not an official Zero-K component or a competitive-play recommendation.
 
@@ -37,6 +37,14 @@ python tools/install.py --game "C:\path\to\Zero-K"
 ```
 
 The installer copies only production widget files and expects `games/zk-stable.sdz`. Manual installation is available for other layouts, but compatibility is unverified. Windows is the tested platform.
+
+## Multiplayer, including ranked
+
+The project owner reported permission for the full suite, including ranked, on September 13, 2026. The single-player-only lock has been replaced with a per-match opt-in. No public approval link has been supplied; this records the reported scope rather than claiming official endorsement.
+
+In the **OFFICER** tab, click **ENABLE MULTIPLAYER AI**. This starts map-wide army control, recruitment and production, plus economy/recovery according to their settings. Existing arsenal and explicit strategic-construction controls retain their separate controls. Use **MULTIPLAYER AI: ON / DISABLE** to revoke the session, or **STOP AI** to stop current automation.
+
+Multiplayer authority is not saved: enable it again after joining another match or reloading LuaUI. Local single-player automatic startup remains unchanged. Native server restrictions on local widgets are still honored. See [multiplayer behavior and validation](docs/MULTIPLAYER.md).
 
 ## Basic target priorities
 
@@ -82,7 +90,7 @@ It adds storage when income outgrows a nearly full buffer, develops solar/tidal 
 
 When income exceeds existing factory capacity, new factory choices use their affordable unit-by-unit counters. A new factory type must materially improve on available production; otherwise capacity is added to a suitable existing type. Covered unit matchups no longer receive a cheap-unit discount. Shared role/queue demand, affordability, native build options and manual overrides remain in force. See [economy growth behavior and tests](docs/ECONOMY_GROWTH.md).
 
-Open **OFFICER > FACTORY / ECONOMY** for **ECONOMY: ON/OFF** and **ADD ECONOMY BUILDERS**. The latter explicitly returns selected constructors to expansion control. Recovery builders and expansion builders have separate duties. Disabling economy preserves native orders already issued. Disable **Automatic economic expansion in local single-player** in widget settings to keep the preference off in later matches. **STOP AI** ends the current automatic session.
+Open **OFFICER > FACTORY / ECONOMY** for **ECONOMY: ON/OFF** and **ADD ECONOMY BUILDERS**. The latter explicitly returns selected constructors to expansion control. Recovery builders and expansion builders have separate duties. Disabling economy preserves native orders already issued. Disable **Automatic economic expansion in authorized sessions** in widget settings to keep the preference off in later matches. **STOP AI** ends the current automatic session.
 
 This is experimental. The [Circuit Brutal campaign](docs/BENCHMARK_RESULTS.md) uses normal commander starts and lets the Officer run its economy without scripted help. The 32-match baseline recorded zero wins, 25 losses and seven time limits; the full corrected rerun recorded zero wins, 20 losses and 12 time limits. **It is not a reliable Brutal-beating AI.** Time limits are not wins. The three holdout maps remain unused pending a stronger training candidate. Results, curves, production checks and remaining failure priorities are published in the report. The newly enabled [unit-by-unit matrix](docs/UNIT_MATCHUPS.md) is a later experimental change; it was not used in those benchmark results.
 
@@ -96,7 +104,7 @@ Disable **Unit-by-unit counter matrix (unfinished draft)** in Command Layer sett
 
 ## Adaptive production and expanded control (preview 10)
 
-Open **OFFICER > FACTORY / ECONOMY**. These features remain local single-player automation. Manual orders release affected units; explicit re-enrollment returns them to AI control.
+Open **OFFICER > FACTORY / ECONOMY**. These features require a local session or explicit multiplayer opt-in. Manual orders release affected units; explicit re-enrollment returns them to AI control.
 
 | Control | Behavior |
 |---|---|
@@ -210,7 +218,7 @@ Production advice uses actual factory build options, friendly capability gaps an
 - Congestion-stalled units retry after 30 game seconds. Unknown queues and manual overrides are not treated as congestion. Partial arrival no longer counts as total group failure.
 - Under explicit delegation, 60 seconds without 128 units of forward progress, loss/release of over 25% of the review membership, or average health below 40% now triggers **automatic fallback and regroup**. No additional approval is needed for this recovery. Adviser-only/one-shot-approved control does not gain this authority. See the preview 5 recovery policy below.
 
-## Delegated pressure: single-player only
+## Delegated pressure: authorized sessions
 
 For sustained control:
 
@@ -227,7 +235,7 @@ This explicitly authorizes repeated actions for that force inside the drawn corr
 
 **AI DETAILS** shows group availability, observed composition, rule version, state and reasons. **STOP AI** revokes sustained authority. Manual orders release affected units. Changing the objective/front requires explicit delegation again. Future production joins only when **AUTO ASSIGN** is enabled.
 
-Delegation requires a private-session assertion **and a single-player roster**. Multiplayer delegation is disabled. There is no autonomous base expansion, factory construction, neural model or learned weights. Optional factory queue control is described below.
+Delegation requires local session authority or **ENABLE MULTIPLAYER AI** for the current match. Economy and factory automation are available through their existing controls. Neural models and learned doctrine weights are not implemented.
 
 The widget does not browse the web or learn strategies during a match. The separate [research helper](docs/TACTICAL_RESEARCH.md) fetches public source metadata and writes review-only candidates. Those files cannot issue orders or automatically change doctrine rules.
 
@@ -242,14 +250,14 @@ The widget does not browse the web or learn strategies during a match. The separ
 | UTTER DESTRUCTION | Commit the entire assigned force together, without scout/raid detachments; 750-unit phases. |
 | SHOCK AND AWE | Assault role zones, light detachments and faster 900-unit phases. |
 
-The three autonomous choices explicitly start single-player delegation after the line is drawn and turn Auto Assign on. Choosing a policy without drawing does not change the active operation. Names describe **in-game behavior inside the drawn corridor**, not an automatic map-wide win plan. They neither identify hidden targets nor promise victory. Progress/loss/health checks can automatically withdraw and regroup inside the accepted corridor.
+The three autonomous choices explicitly start authorized delegation after the line is drawn and turn Auto Assign on. Choosing a policy without drawing does not change the active operation. Names describe **in-game behavior inside the drawn corridor**, not an automatic map-wide win plan. They neither identify hidden targets nor promise victory. Progress/loss/health checks can automatically withdraw and regroup inside the accepted corridor.
 
 The same chooser contains **AUTO PRODUCTION** and **STOP PRODUCTION**. Production defaults OFF and is session-only. Enabling it authorizes existing and newly completed idle factories for the receiving force; manually released factories stay excluded until a fresh opt-in. The controller:
 
 - Uses actual factory build options and friendly gaps/visible riot contacts to choose a mobile military unit. It prefers the requested role, with an affordable military fallback.
 - Queues at most one unit per controlled idle factory every five game seconds, reserving their combined metal cost and rotating priority when funds are limited, only into an empty native factory queue. It preserves busy queues and never constructs a factory or changes rally points.
 - Requires the full unit metal cost plus 100 metal in storage and at least 100 stored energy. These are simple reserves, not a complete economic forecast.
-- Releases a factory when you issue a manual command to it. Turning production off preserves already queued units. It disables on leaving the single-player/private-test context or deletion of the receiving-force record; an empty force can still receive production.
+- Releases a factory when you issue a manual command to it. Turning production off preserves already queued units. It disables on losing session authority or deletion of the receiving-force record; an empty force can still receive production.
 - Routes completed units from its factories back to its assigned force even if you browse another force in the UI. Existing approval snapshots remain unchanged.
 
 The main status area shows production decisions and waiting reasons. Use PRODUCTION on the main Officer panel to stop or re-enable it; the objective chooser retains the secondary controls. Ordinary production advice remains read-only; this controller has separate explicit authority.
@@ -294,7 +302,7 @@ The uninstaller retains files differing from this checkout and leaves unrelated 
 
 ## Multiplayer and information boundaries
 
-Developer approval for public/ranked use of the new Officer features has **not** been obtained. Ordinary helpers and one-shot formations remain separate from automation. The local/private toggle is an assertion, not a complete room-type detector; autohost metadata is additionally checked. Do not classify public matches as private.
+The owner reports approval for the full suite in multiplayer, including ranked. Use the explicit multiplayer session control; autohost metadata alone no longer blocks an opted-in session. Ordinary helpers remain separate from automation, and local-widget prohibitions still apply.
 
 There are no orders or observation collection while spectating/replaying. Enemy identity is read only with visual contact; radar-only contacts stay UNKNOWN. The suite does not expose fog-of-war data, conceal control or bypass local-widget restrictions.
 
@@ -308,7 +316,7 @@ The production scheduler now serves every controlled idle factory per pass inste
 - Preview 2 includes a separate 30-game-second headless engine smoke test. The 400-unit and new approval/recruitment cases are mocked Lua regressions, not a demonstrated 400-unit live battle. The two new buttons have not yet had visual in-game interaction testing.
 - Isolated engine tests verified native orders, actual movement, repeated scout/raid/main operations and cancellation.
 - A visible equal-army test started with 32 identical units and 3,010 metal of combat value each. The corrected two-minute run ended with **nine units and 910 value each**: a stalemate, not a victory or completed objective. The opponent was scripted native Fight, not a full Circuit AI match.
-- UI panels and live details were inspected. Broad terrain coverage, long-match strength, other versions/platforms and public multiplayer permission are not established.
+- UI panels and live details were inspected. Broad terrain coverage, long-match strength, other versions/platforms and live network multiplayer reliability are not established by the local harness.
 
 Read [combat results and reproduction](docs/COMBAT_TEST.md) and [validation history](docs/VALIDATION.md). For local regressions:
 

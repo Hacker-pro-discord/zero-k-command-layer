@@ -43,3 +43,10 @@ find('SPECIAL').OnClick[1](); assert(C.requestedCategory=='SPECIAL')
 local caption=(UnitDefs[1].humanName or UnitDefs[1].name)..' | '..UnitDefs[1].metalCost..' metal'
 find(caption).OnClick[1](); assert(C.armedDefinition==1 and not C.ui.structures)
 C.ui.showManagement(); find('AUTO STRUCTURES: ON').OnClick[1](); assert(not C.settings.autoStructures)
+
+Spring.GetPlayerList=function() return {0,1} end
+C.settings.multiplayerSession=false; C.settings.privateSession=false
+C.officer.setMultiplayerSession=function(on) C.settings.multiplayerSession=on; C.multiplayerChoice=on; return true end
+C.testStarted=false; C.ui.tab='OFFICER'; C.ui.build()
+find('ENABLE MULTIPLAYER AI').OnClick[1](); assert(C.multiplayerChoice and C.testStarted)
+find('MULTIPLAYER AI: ON / DISABLE').OnClick[1](); assert(C.multiplayerChoice==false)
