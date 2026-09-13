@@ -1,6 +1,6 @@
 -- Explicit builder service; owns only enrolled workers and its own native orders.
 return function(C)
-	local R={enabled=false,workers={},excluded={},assets={},ignored={},missing={},sites={},requests={},tasks={},retry={},cooldown={},last=-100,status='Recovery idle'}
+	local R={enabled=false,workers={},excluded={},assets={},ignored={},missing={},sites={},requests={},tasks={},retry={},cooldown={},automatic={},idleSince={},loanUntil={},last=-100,status='Recovery idle'}
 	local function matches(q,t)
 		if not q or not t or q.id~=t.cmd or not q.params then return false end
 		if t.cmd==CMD.REPAIR or t.cmd==CMD.RECLAIM then return q.params[1]==t.params[1] end
@@ -42,12 +42,12 @@ return function(C)
 		local n=0
 		for _,id in ipairs(ids or Spring.GetSelectedUnits()) do local v=C.classify.definition(Spring.GetUnitDefID(id))
 			if C.U.owned(id) and v.mobile and v.builder and (not automatic or not R.excluded[id]) then
-				if C.economy then C.economy.release(id) end; C.registry.release({id},'RECOVERY ASSIGNMENT'); R.excluded[id]=nil; R.workers[id]=true; n=n+1
+				if C.economy then C.economy.release(id) end; C.registry.release({id},'RECOVERY ASSIGNMENT'); R.excluded[id]=nil; R.workers[id]=true; R.automatic[id]=automatic==true; R.idleSince[id]=nil; R.loanUntil[id]=nil; n=n+1
 			end
 		end
 		if n>0 then R.enabled=true; R.status='Enrolled '..n..' builders; existing queues preserved' end; return n>0
 	end
-	function R.release(id) if R.workers[id] then R.workers[id]=nil; R.tasks[id]=nil end; R.cooldown[id]=nil; R.excluded[id]=true end
+	function R.release(id) if R.workers[id] then R.workers[id]=nil; R.tasks[id]=nil end; R.cooldown[id]=nil; R.automatic[id]=nil; R.idleSince[id]=nil; R.loanUntil[id]=nil; R.excluded[id]=true end
 	function R.stop() R.enabled=false; R.workers={}; R.tasks={}; R.status='Recovery stopped; native queues preserved' end
 	function R.start() if C.U.delegationAllowed(C.settings) then R.enabled=true end end
 	function R.threat(p)
@@ -85,7 +85,7 @@ return function(C)
 	function R.valid(id,cmd,params)
 		local t=R.tasks[id]; local v=C.classify.definition(Spring.GetUnitDefID(id)); local _,_,_,_,built=Spring.GetUnitHealth(id)
 		if cmd==CMD.REMOVE then
-			local q=(Spring.GetCommandQueue(id,1) or {})[1]
+			local q=C.nativeQueue and C.nativeQueue.current(id,t) or (Spring.GetCommandQueue(id,1) or {})[1]
 			return R.enabled and C.U.delegationAllowed(C.settings) and R.workers[id] and not R.excluded[id] and C.U.owned(id) and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 and #params==1 and t and t.removeTag and params[1]==t.removeTag and q and q.tag==t.removeTag and matches(q,t)
 		end
 		if not v.mobile or not v.builder or built and built<1 then return false end
@@ -96,6 +96,7 @@ return function(C)
 	end
 	local function issue(id,cmd,params,job)
 		R.tasks[id]={cmd=cmd,params=C.U.copy(params),key=job,time=C.U.now()}
+		if cmd==CMD.RECLAIM and Spring.GetFeaturePosition then local x,y,z=Spring.GetFeaturePosition(params[1]-Game.maxUnits); if x and Spring.GetPositionLosState(x,y,z) then R.tasks[id].goal={x,y,z} end end
 		local ok=C.orders.service('recovery',id,cmd,params)
 		if not ok then R.tasks[id]=nil else C.debug.log('RECOVERY WORK','Builder '..id..': '..job) end; return ok
 	end
@@ -136,7 +137,7 @@ return function(C)
 				R.assets[id]=record; present[key(defID,p)]=id
 				if h and m and (h<m*.95 or built and built<1) then damaged[#damaged+1]={id=id,point=p} end
 			end
-			if workerCount<autoGoal and R.workerDefinition(defID) and not R.workers[id] and not R.excluded[id] and (not built or built>=1) and #(Spring.GetCommandQueue(id,1) or {})==0 then if R.enroll({id},true) then workerCount=workerCount+1 end end
+			if workerCount<autoGoal and now>=(R.loanUntil[id] or 0) and R.workerDefinition(defID) and not R.workers[id] and not R.excluded[id] and (not built or built>=1) and #(Spring.GetCommandQueue(id,1) or {})==0 then if R.enroll({id},true) then workerCount=workerCount+1 end end
 		end end
 		-- Native build snapping may differ by a few game units from a clicked point.
 		local function exists(job)
@@ -147,11 +148,12 @@ return function(C)
 		for i=#R.requests,1,-1 do local id=exists(R.requests[i]); if id then local _,_,_,_,built=Spring.GetUnitHealth(id); if not built or built>=1 then table.remove(R.requests,i) else R.requests[i].target=id end end end
 		local occupied={}; local available={}
 		for id in pairs(R.workers) do
-			if not C.U.owned(id) then R.workers[id]=nil; R.tasks[id]=nil else
+			if not C.U.owned(id) then R.workers[id]=nil; R.tasks[id]=nil elseif not (C.nativeQueue and C.nativeQueue.paused(R,id)) then
 				local q=Spring.GetCommandQueue(id,1) or {}; local task=R.tasks[id]
 				local position=C.U.position(id)
+				local tracked,wrapper; if C.nativeQueue and task then tracked,wrapper=C.nativeQueue.current(id,task); if tracked then q={tracked} end end
 				local external=#q>0 and (not task or not matches(q[1],task))
-				if external and task then R.release(id); task=nil end
+				if external and task then C.debug.log('RECOVERY OVERRIDE','Worker '..id..': unexpected queue '..tostring(q[1].id)..' for task '..task.cmd); R.release(id); task=nil end
 				if not external and position and C.observations.nearCombat(position,600) and (not task or task.cmd~=Spring.Utilities.CMD.RAW_MOVE or now-task.time>=10) then
 					local danger,nearest
 					for _,contact in ipairs(C.observations.snapshot().contacts) do local distance=C.U.distance(position,contact.position); if distance<700 and (not nearest or distance<nearest) then danger=contact.position; nearest=distance end end
@@ -221,7 +223,16 @@ return function(C)
 				end
 				if selected then break end
 			end end
-			if selected then if issue(id,selected.cmd,selected.params,selected.key) then occupied[selected.key]=true end end
+			if selected then R.idleSince[id]=nil; if issue(id,selected.cmd,selected.params,selected.key) then occupied[selected.key]=true end
+			elseif R.automatic[id] and C.economy and C.economy.enabled then
+				R.idleSince[id]=R.idleSince[id] or now
+				if now-R.idleSince[id]>=15 then
+					-- Internal loan: no manual exclusion is cleared except the one created by automatic enrollment.
+					R.workers[id]=nil; R.tasks[id]=nil; R.automatic[id]=nil; R.idleSince[id]=nil; R.loanUntil[id]=now+60
+					C.economy.excluded[id]=nil; C.economy.workers[id]=true
+					C.debug.log('BUILDER LOAN','Idle automatic recovery worker '..id..' returned to economy; recovery may borrow again after 60 seconds when idle.')
+				end
+			end
 		end
 		for _,site in ipairs(R.sites) do if now-site.lastThreat>=20 and not site.finished then
 			local pending=false

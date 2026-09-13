@@ -8,4 +8,4 @@ Spring={Utilities={CMD={RAW_MOVE=31109}},GetGameSeconds=function()return clock e
 function loadModule(n)return dofile(ROOT..'/LuaUI/Widgets/Include/CommandLayer/'..n..'.lua') end
 C={U=loadModule('Util')}; C.settings=loadModule('Settings')(C.U); C.settings.formation='LINE'; C.settings.reservePercent=0; -- Legacy movement fixtures opt out; reserve scenarios enable the shipped 20% default explicitly.
  C.debug=loadModule('Debug')(C.U)
-for _,pair in ipairs({{'classify','UnitClassification'},{'registry','ForceRegistry'},{'formations','Formations'},{'orders','Orders'},{'officer','Officer'},{'retreatPriority','RetreatPriority'},{'routing','Routing'},{'mapControl','MapControl'},{'defense','Defense'}}) do C[pair[1]]=loadModule(pair[2])(C) end
+for _,pair in ipairs({{'classify','UnitClassification'},{'nativeQueue','NativeQueue'},{'registry','ForceRegistry'},{'formations','Formations'},{'orders','Orders'},{'officer','Officer'},{'retreatPriority','RetreatPriority'},{'routing','Routing'},{'mapControl','MapControl'},{'defense','Defense'}}) do C[pair[1]]=loadModule(pair[2])(C) end

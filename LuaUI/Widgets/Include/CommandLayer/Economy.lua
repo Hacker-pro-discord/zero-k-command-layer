@@ -20,7 +20,7 @@ return function(C)
 	function E.valid(id,cmd,p)
 		local t=E.tasks[id]
 		if cmd==CMD.REMOVE then
-			local q=(Spring.GetCommandQueue(id,1) or {})[1]
+			local q=C.nativeQueue and C.nativeQueue.current(id,t) or (Spring.GetCommandQueue(id,1) or {})[1]
 			return E.enabled and C.U.delegationAllowed(C.settings) and E.workers[id] and not E.excluded[id] and C.U.owned(id) and not Spring.GetUnitTransporter(id) and Spring.GetUnitRulesParam(id,'retreat')~=1 and #p==1 and t and t.removeTag and p[1]==t.removeTag and q and q.tag==t.removeTag and matches(q,t)
 		end
 		if not E.enabled or not C.U.delegationAllowed(C.settings) or not E.workers[id] or E.excluded[id] or not C.U.owned(id) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 or not t or t.cmd~=cmd or #t.params~=#p then return false end
@@ -71,8 +71,10 @@ return function(C)
 			if v.mobile and v.builder and built==1 and not E.excluded[id] and not (C.recovery and C.recovery.workers[id]) and not E.workers[id] and #(Spring.GetCommandQueue(id,1) or {})==0 then E.workers[id]=true end
 		end end
 		local available,occupied={},{}
-		for id in pairs(E.workers) do if not C.U.owned(id) then E.workers[id]=nil; E.tasks[id]=nil else
+		for id in pairs(E.workers) do if not C.U.owned(id) then E.workers[id]=nil; E.tasks[id]=nil elseif not (C.nativeQueue and C.nativeQueue.paused(E,id)) then
 			local q=(Spring.GetCommandQueue(id,1) or {})[1]; local task=E.tasks[id]; local p=C.U.position(id)
+			if C.nativeQueue and task then q=C.nativeQueue.current(id,task) or q end
+			if task and q and not matches(q,task) then local queue=Spring.GetCommandQueue(id,3) or {}; local detail='Worker '..id..': task '..task.cmd..' ['..table.concat(task.params,',')..']'; for _,item in ipairs(queue) do detail=detail..' queue '..item.id..' ['..table.concat(item.params or {},',')..'] internal='..tostring(item.options and item.options.internal)..' coded='..tostring(item.options and item.options.coded) end; C.debug.log('ECONOMY OVERRIDE',detail..'; manual control preserved'); E.release(id); task=nil end
 			if catchup and task and task.cmd<0 and optional(-task.cmd) and matches(q,task) and q.tag then
 				local stock=C.observations.economy()
 				if stock and (stock.energy.income or 0)>=(stock.metal.income or 0)*1.05 and stock.energy.current>=150 then

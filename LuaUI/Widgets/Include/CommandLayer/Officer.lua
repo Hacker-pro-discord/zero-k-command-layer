@@ -171,12 +171,13 @@ return function(C)
 				for _,id in ipairs(live) do
 					local pos=C.U.position(id); local target=op.slots[id]; local t=op.tracking[id] or {progress=now,lastPos=pos,lastCorrection=0}; op.tracking[id]=t
 					local queue=Spring.GetCommandQueue(id,24) or {}; local baseIndex,base
-					for i,q in ipairs(queue) do if q.id==op.command and #q.params>=3 and C.U.distance(q.params,target)<2 then baseIndex=i; base=q; break end end
+					for i,q in ipairs(queue) do if (q.id==op.command or op.command==CMD.MOVE and q.id==Spring.Utilities.CMD.RAW_MOVE) and #q.params>=3 and C.U.distance(q.params,target)<2 then baseIndex=i; base=q; break end end
 					local arrived=C.U.distance(pos,target)<math.max(48,C.classify.definition(Spring.GetUnitDefID(id)).radius*2)
 					local inObservedCombat=op.grant and C.observations.nearCombat(pos,C.classify.definition(Spring.GetUnitDefID(id)).range+180)
 					if inObservedCombat then op.state='ENGAGING' end
 					local nativeService=C.classify.definition(Spring.GetUnitDefID(id)).domain=='AIR' and ((Spring.GetUnitRulesParam(id,'noammo') or 0)>0 or Spring.GetUnitRulesParam(id,'airpadReservation')==1)
-					local release=nativeService or not C.U.assisted(C.settings) or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1
+					local resting=nativeService or Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1
+					local release=resting or not C.U.assisted(C.settings)
 					if arrived then release=true; op.arrivals=(op.arrivals or 0)+1 end
 					if base then t.seen=true elseif t.seen or now-op.created>5 then release=true end
 					if C.U.distance(pos,t.lastPos)>12 then t.progress=now; t.lastPos=pos end
@@ -184,7 +185,7 @@ return function(C)
 					if stalled then release=true; C.debug.log('STALLED','Released positioning for unit '..id) end
 					if release then
 						C.orders.clearCorrection(op,id)
-						if not arrived then op.endReason=op.endReason or 'ABORTED'; if op.grant then local f=C.registry.forces[op.forceID]; if f and f.delegation then f.delegation.blocked[id]=nativeService and now+5 or (stalled or f.mapControl and #queue==0) and now+30 or true; if f.mapControl then C.debug.log('MAP_QUEUE',id..': '..(#queue==0 and 'native queue ended; retry after 30 seconds' or 'changed queue; preserve external control')) end end end end
+						if not arrived then op.endReason=op.endReason or 'ABORTED'; if op.grant then local f=C.registry.forces[op.forceID]; if f and f.delegation then f.delegation.blocked[id]=resting and now+5 or (stalled or f.mapControl and #queue==0) and now+30 or true; if f.mapControl then C.debug.log('MAP_QUEUE',id..': '..(#queue==0 and 'native queue ended; retry after 30 seconds' or 'changed queue; preserve external control')) end end end end
 						if C.registry.owner[id]==op.id then C.registry.owner[id]=nil end
 					else
 						remaining=remaining+1

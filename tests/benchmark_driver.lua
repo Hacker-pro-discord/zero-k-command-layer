@@ -30,7 +30,7 @@ function widget:Update()
 		if not def.isBuilder and (def.speed or 0)>0 and built and built>=1 then readyArmy=readyArmy+1 end
 	end
 	local f=A.GetForce(1); local d=f and f.delegation; local snapshot=A.GetVisibleBattleState(); local known={}; for _,c in ipairs(snapshot.contacts or {}) do known[c.role]=(known[c.role] or 0)+1 end
-	local r={grid=grid,completedStructures=completedStructures,overdriveMetal=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_metalOverdrive'),overdriveEnergy=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_energyOverdrive'),time=now,readyArmy=readyArmy,factoryQueues=factoryQueues,los=current/256,explored=explored/256,scoutVisited=scouted/256,known=known,economy=A.GetEconomyAutomationStatus(),production=A.GetProductionStatus()}
+	local r={builderControl=A.GetBuilderControlStatus and A.GetBuilderControlStatus(),grid=grid,completedStructures=completedStructures,overdriveMetal=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_metalOverdrive'),overdriveEnergy=Spring.GetTeamRulesParam(Spring.GetMyTeamID(),'OD_energyOverdrive'),time=now,readyArmy=readyArmy,factoryQueues=factoryQueues,los=current/256,explored=explored/256,scoutVisited=scouted/256,known=known,economy=A.GetEconomyAutomationStatus(),production=A.GetProductionStatus()}
 	if d then r.state=d.state; r.reason=d.reason; r.defense=d.defense and d.defense.state; r.recovery=d.recovery and d.recovery.phase; r.strategy=d.strategy; r.groups={}; for name,ids in pairs(d.groups) do r.groups[name]=#ids end
 		local key=(r.state or '')..'|'..(r.defense or '')..'|'..(r.recovery or '')..'|'..(r.reason or '')
 		if key~=states[1] then states[1]=key; report('DECISION',r) end

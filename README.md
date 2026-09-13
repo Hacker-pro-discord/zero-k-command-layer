@@ -40,6 +40,8 @@ The installer copies only production widget files and expects `games/zk-stable.s
 
 ## Resource pressure, defense and rebuilding
 
+Constructor continuity fixes recognize native build approaches and internal clearance moves, retain workers through those queue changes, and return idle automatic recovery builders to economic work. Healed military units can rejoin after native retreat. Manual overrides remain authoritative. See [causes and tests](docs/BUILDER_CONTINUITY.md).
+
 In delegated map control, the main army and raiders contest public metal nodes while scouts keep exploring. Main-army regrouping leaves those detachments active. Reserves respond to observed infrastructure incidents and, with twenty or more assigned units, rotate among owned sites. Quiet recovery escorts shrink and expire so they do not indefinitely tie up the field army.
 
 Recovery uses available mobile constructors from actual factory build options, retries stalled tracked jobs without dropping its workers, and starts rebuilding when its reserved initial funding is available. Manual orders still override it. See [behavior and native test results](docs/PRESSURE_RECOVERY.md).
