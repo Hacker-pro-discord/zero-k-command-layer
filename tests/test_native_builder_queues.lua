@@ -23,6 +23,10 @@ queues[20]={{id=CMD.MOVE,params={5153,0,1000},options={internal=true},tag=810},b
 assert(C.nativeQueue.current(20,task),'Engine internal clearance move preserves the underlying build')
 queues[20][1].options.internal=false; assert(not C.nativeQueue.current(20,task),'Ordinary player move is not a native build wrapper')
 queues[20][1].options.internal=true; queues[20][1].params[1]=7000; assert(not C.nativeQueue.current(20,task),'Unrelated internal movement is not accepted')
+local draining={tasks={[20]=task}}
+queues[20]={{id=CMD.MOVE,params={5153,0,1000},options={internal=true},tag=810}}
+assert(C.nativeQueue.paused(draining,20),'A leftover internal clearance move drains without releasing the worker')
+queues[20]={}; assert(not C.nativeQueue.paused(draining,20) and not draining.tasks[20])
 -- Static repair and visible feature reclaim use the same stock approach wrapper.
 wrapper.params[1]=4000; queues[20]={wrapper,{id=CMD.REPAIR,params={30},tag=800}}
 assert(C.nativeQueue.current(20,{cmd=CMD.REPAIR,params={30}}))

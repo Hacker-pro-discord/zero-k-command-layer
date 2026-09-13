@@ -4,6 +4,13 @@ return function(C)
 	function Q.paused(service,id)
 		service.nativePause=service.nativePause or {}
 		if Spring.GetUnitTransporter(id) or Spring.GetUnitRulesParam(id,'retreat')==1 then service.nativePause[id]=true; return true end
+		local task=service.tasks[id]
+		if task and task.cmd<0 then
+			local queue=Spring.GetCommandQueue(id,2) or {}; local head=queue[1]; local def=UnitDefs[-task.cmd]
+			local clearance=math.max(256,def and math.max(def.xsize or 2,def.zsize or 2)*8+64 or 256)
+			-- The engine may finish/drop the build before its internal clearance move drains.
+			if #queue==1 and head.id==CMD.MOVE and head.options and head.options.internal==true and head.params and #head.params>=3 and C.U.distance(head.params,task.params)<clearance then service.nativePause[id]=true; return true end
+		end
 		if service.nativePause[id] then
 			if #(Spring.GetCommandQueue(id,1) or {})>0 then return true end
 			service.nativePause[id]=nil; service.tasks[id]=nil

@@ -18,7 +18,7 @@ That internal clearance move was incorrectly releasing the commander at the open
 
 `NativeQueue` is a shared recognizer for Economy and Recovery. It accepts the original command or one verified wrapper directly ahead of that same original command. RAW_BUILD must match the task's target position. Internal Move must carry the engine's `internal=true` flag and remain within a bounded target clearance (at least 256 game units, scaled for large building footprints). An ordinary Move, unrelated destination, or different underlying order is rejected. Repair targets are owned; reclaim uses visible or previously recorded legitimate feature coordinates.
 
-Stall removal targets only the original owned command's tag. The native gadget cleans up its approach when the underlying job disappears. No arbitrary queue tags are deleted.
+Stall removal targets only the original owned command's tag. The native gadget cleans up its approach when the underlying job disappears. If an internal clearance move remains after the build disappears, the worker waits for that native move to drain, retaining service ownership. No arbitrary queue tags are deleted.
 
 Constructors pause during native retreat/transport and wait for the native queue to drain before taking another job. Combat units use a temporary retry block for native retreat/transport instead of a permanent block; eligibility still prevents orders while retreating or transported. The stock conversion of Move to RAW_MOVE at the identical destination is also recognized.
 
