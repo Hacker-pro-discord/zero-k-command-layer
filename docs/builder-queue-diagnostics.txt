@@ -1,0 +1,3 @@
+[t=00:00:38.785946][f=0000071] [CommandLayer] ECONOMY OVERRIDE: Worker 23120: task -409 [1048,241.494751,3536,0] queue 10 [1201.27991,241.494751,3536] queue -409 [1048,241.494751,3536,0]; manual control preserved
+[t=00:01:11.967747][f=0007153] [CommandLayer] ECONOMY OVERRIDE: Worker 13595: task -406 [2107.37598,241.403061,3828.25024,0] queue 10 [2171.70947,241.412354,3756.79395] queue -406 [2107.37598,241.403061,3828.25024,0]; manual control preserved
+[t=00:00:42.989892][f=0000061] [CommandLayer] ECONOMY OVERRIDE: Worker 23120: task -409 [1048,241.494751,3536,0] queue 10 [1201.27991,241.494751,3536] internal=true coded=8 queue -409 [1048,241.494751,3536,0] internal=false coded=0; manual control preserved

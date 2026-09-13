@@ -52,3 +52,6 @@ Raw demos, original logs and source snapshots remain in the local isolated bench
 
 
 Later targeted control/recovery revision: [resource pressure and recovery results](PRESSURE_RECOVERY.md). Seven additional checks; the final three recorded two losses and one cap. This does not establish a stronger calibrated candidate or replace the full training/holdout campaign.
+
+
+Constructor continuity follow-up: [native queue fixes and results](BUILDER_CONTINUITY.md). Final land/water checks retained late-game builder control without unexpected queue releases, but produced one loss and one cap; overall strength remains unproven.

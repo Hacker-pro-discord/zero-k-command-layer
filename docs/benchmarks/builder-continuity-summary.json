@@ -1,0 +1,28 @@
+[
+  {
+    "case": "folsomdamdeluxev4-factoryshield-s0",
+    "outcome": "LOSS",
+    "seconds": 1142.3667,
+    "errors": [],
+    "unexpectedQueues": [],
+    "loans": 9,
+    "lateMaxEconomyWorkers": 6,
+    "lateMaxRecoveryWorkers": 1,
+    "lateWrapperSamples": 17,
+    "lateEconomyOrders": 49,
+    "lateRecoveryOrders": 12
+  },
+  {
+    "case": "sailaway2-factoryship-s0",
+    "outcome": "CENSORED",
+    "seconds": 900.000061,
+    "errors": [],
+    "unexpectedQueues": [],
+    "loans": 8,
+    "lateMaxEconomyWorkers": 5,
+    "lateMaxRecoveryWorkers": 2,
+    "lateWrapperSamples": 15,
+    "lateEconomyOrders": 60,
+    "lateRecoveryOrders": 24
+  }
+]

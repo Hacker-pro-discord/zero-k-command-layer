@@ -30,4 +30,22 @@ These fixes address units silently dropping out of control and recovery workers 
 
 ## Validation
 
-All 39 Lua regression suites and seven benchmark-parser tests pass. New checks cover native build/repair/reclaim wrappers, exact owned-tag stall removal, invalid and non-internal Move rejection, native retreat recovery, idle loans, manual assignment/release and native Move replacement. Final native results are recorded after the land and water checks complete.
+All 39 Lua regression suites and seven benchmark-parser tests pass. New checks cover native build/repair/reclaim wrappers, exact owned-tag stall removal, invalid and non-internal Move rejection, native retreat recovery, idle loans, manual assignment/release and native Move replacement. The final native results are recorded below.
+
+
+## Native checks, 2026-09-12
+
+Ten isolated runs were used: six longer development runs, two short queue diagnostics, and two final checks. All used normal native starts against Circuit Brutal; no extra resources or hidden opponent information were supplied to the controller. Holdout maps were untouched.
+
+The final production files match commit `189ea6d`. Both final checks had zero detected controller errors and **zero unexpected economy/recovery queue releases**.
+
+| Final case | Result | End | Maximum controlled economy/recovery workers after 10 minutes | Economy/recovery orders after 10 minutes | Idle-worker loan events |
+|---|---|---:|---:|---:|---:|
+| Folsom / Shield / side 0 | Loss | 19:02 | 6 / 1 | 49 / 12 | 9 |
+| SailAway / Ship / side 0 | Censored | 15:00 | 5 / 2 | 60 / 24 | 8 |
+
+After ten minutes, 17 land and 15 water telemetry samples showed controlled workers actively inside recognized native wrappers. These are samples and dispatch counts, not unique workers or a claim that every construction finished. The water cap is not a win. The land loss shows that engagement efficiency and overall strategy remain unresolved; retaining control alone does not establish competitive strength.
+
+Final evidence: [land report](benchmarks/builder-release-land/REPORT.md), [water report](benchmarks/builder-release-water/REPORT.md), [control summary](benchmarks/builder-continuity-summary.json). Manifests contain source, engine and AI hashes; JSONL files retain control counters and timeline events.
+
+Earlier evidence: [initial land](benchmarks/builder-initial-land/REPORT.md), [initial water](benchmarks/builder-initial-water/REPORT.md), [clearance-wrapper land](benchmarks/builder-wrapper-land/REPORT.md), [clearance-wrapper water](benchmarks/builder-wrapper-water/REPORT.md), [exact queue diagnostics](builder-queue-diagnostics.txt). The intermediate queue failures motivated the final native-drain fix; they are retained rather than presented as final-version results.
