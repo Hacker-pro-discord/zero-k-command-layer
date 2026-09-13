@@ -8,14 +8,18 @@ return function(C)
 			if v.visibility=='VISUAL' and v.defID then
 				local def=UnitDefs[v.defID]; local role=def and def.canFly and 'AIR' or v.role
 				if def and (def.isBuilding or def.isFactory) and C.classify.definition(v.defID).range>0 then role='DEFENSE' end
-				E.seen[v.id]={name=def and def.name,defID=v.defID,role=role,cost=def and def.metalCost or 0,time=v.time or live.time or now}
+				local income=def and tonumber((def.customParams or {}).metal_extractor_mult) and Spring.GetUnitRulesParam(v.id,'current_metalIncome')
+				E.seen[v.id]={name=def and def.name,defID=v.defID,role=role,cost=def and def.metalCost or 0,income=type(income)=='number' and math.max(0,income) or nil,time=v.time or live.time or now}
 			elseif v.visibility=='RADAR' then unknown=unknown+1 end
 		end
-		local out={units={},roles={},value={},rawValue={},total=0,unknown=unknown,time=now,halfLife=C.settings.intelHalfLife or 90}
+		local out={units={},roles={},value={},rawValue={},total=0,unknown=unknown,time=now,halfLife=C.settings.intelHalfLife or 90,militaryValue=0,observedIncome=0,incomeSamples=0,incomeWeight=0}
 		for id,v in pairs(E.seen) do
 			local age=math.max(0,now-v.time)
 			if age>out.halfLife*6 then E.seen[id]=nil else
 				local weight=2^(-age/out.halfLife)
+				local unit=C.classify.definition(v.defID)
+				if unit.mobile and not unit.builder then out.militaryValue=out.militaryValue+v.cost*weight end
+				if v.income and age<=90 then out.observedIncome=out.observedIncome+v.income*weight; out.incomeSamples=out.incomeSamples+1; out.incomeWeight=out.incomeWeight+weight end
 				if v.name then
 					local u=out.units[v.name] or {defID=v.defID,value=0,rawValue=0}; out.units[v.name]=u
 					u.value=u.value+math.max(50,v.cost)*weight; u.rawValue=u.rawValue+math.max(50,v.cost)

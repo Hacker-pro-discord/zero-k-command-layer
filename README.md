@@ -46,6 +46,8 @@ Recovery uses available mobile constructors from actual factory build options, r
 
 ## Expanding economy, overdrive and counter factories
 
+**Military catch-up:** when recent scouting suggests roughly comparable income but our completed army value is far behind, a temporary spending mode favors counter troops, defers optional infrastructure and adds factory capacity only after sustained saturation. It exits when the army recovers or the evidence no longer qualifies. It never reads hidden enemy resources. See [thresholds, diagnostics and tests](docs/MILITARY_BUDGET.md).
+
 In local single-player, automatic map control also starts economic expansion by default. The Officer keeps considering unclaimed public mex spots across the map, checks the approach against observed threats and surveys unseen approaches in steps. A stalled tracked order can be removed and retried elsewhere without permanently abandoning the builder. Manual release remains permanent until explicit re-enrollment.
 
 It adds storage when income outgrows a nearly full buffer, develops solar/tidal generation into fusion, and links useful grids with pylons using the game's actual grid IDs and connection radii. Pending generation is counted, and a severe energy shortage can redirect one authorized builder to basic power. Expansion and discretionary upgrades alternate rather than letting upgrades consume every available builder.

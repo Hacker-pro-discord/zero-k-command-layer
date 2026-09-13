@@ -67,6 +67,10 @@ return function(C)
 		local workerNeed=C.recovery and C.recovery.workerNeed() or 0
 		local economicNeed=C.economy and C.economy.workerNeed() or 0
 		local recoveryReserve=C.recovery and C.recovery.reserveMetal() or 0
+		local budget=C.militaryBudget and C.militaryBudget.update()
+		local catchup=budget and budget.active
+		if catchup and budget.builders>0 then workerNeed=0; economicNeed=0 end
+		local buffer=catchup and 40 or 100
 		local sent=0
 		for offset=1,#factories do
 			local index=((P.cursor or 0)+offset-1)%#factories+1; local id=factories[index]
@@ -80,7 +84,7 @@ return function(C)
 					local funding=d.cost
 					local sustainable=not (C.economy and C.economy.enabled) or d.cost<=math.max(400,(economy.metal.income or 0)*60) or metal>=d.cost+100
 					if C.economy and C.economy.enabled then funding=math.min(d.cost,math.max(65,(economy.metal.income or 0)*6)) end
-					if sustainable and d.mobile and (not d.builder or recovery or economic) and d.cost>0 and metal>=funding+100+((recovery or economic) and 0 or recoveryReserve) and P.valid(id,bid) then
+					if sustainable and d.mobile and (not d.builder or recovery or economic) and d.cost>0 and metal>=funding+buffer+((recovery or economic) and 0 or recoveryReserve) and P.valid(id,bid) then
 						local score=recovery and -1000000 or economic and -500000+d.cost or counterMode and -C.enemyModel.score(d,weights,friendly,total,model) or d.cost+(d.role==desired and 0 or 100000)
 						if not best or score<best.score then best={unit=bid,score=score,role=d.role,cost=d.cost,recovery=recovery,economic=economic,funding=funding} end
 					end
@@ -95,7 +99,7 @@ return function(C)
 			end
 		end
 		P.cursor=#factories>0 and ((P.cursor or 0)+1)%#factories or 0
-		P.status=sent>0 and ('Queued '..sent..' factories; reserved metal remaining '..math.floor(metal)) or 'WAIT: busy/released factories or insufficient stored resources (100 metal reserve)'
+		P.status=(catchup and 'MILITARY CATCH-UP: ' or '')..(sent>0 and ('Queued '..sent..' factories; reserved metal remaining '..math.floor(metal)) or ('WAIT: busy/released factories or insufficient stored resources ('..buffer..' metal reserve)'))
 	end
 	return P
 end

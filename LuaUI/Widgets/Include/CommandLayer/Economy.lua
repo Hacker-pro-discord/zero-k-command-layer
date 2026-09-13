@@ -57,6 +57,11 @@ return function(C)
 		if not E.enabled then return end
 		if not C.U.delegationAllowed(C.settings) then E.stop(); return end
 		local now=C.U.now(); if now-E.last<2 then return end; E.last=now
+		local budget=C.militaryBudget and C.militaryBudget.update(); local catchup=budget and budget.active
+		local function optional(def)
+			local name=UnitDefs[def] and UnitDefs[def].name
+			return name=='staticstorage' or name=='energypylon' or name=='energyfusion'
+		end
 		local own=Spring.GetTeamUnits(Spring.GetMyTeamID()); local structures,unfinished,factories,mexes={}, {},{},{}
 		for _,id in ipairs(own) do if C.U.owned(id) then local def=Spring.GetUnitDefID(id); local d=UnitDefs[def]; local _,_,_,_,built=Spring.GetUnitHealth(id); local cp=d.customParams or {}
 			if d.isFactory then factories[#factories+1]=id end
@@ -68,6 +73,13 @@ return function(C)
 		local available,occupied={},{}
 		for id in pairs(E.workers) do if not C.U.owned(id) then E.workers[id]=nil; E.tasks[id]=nil else
 			local q=(Spring.GetCommandQueue(id,1) or {})[1]; local task=E.tasks[id]; local p=C.U.position(id)
+			if catchup and task and task.cmd<0 and optional(-task.cmd) and matches(q,task) and q.tag then
+				local stock=C.observations.economy()
+				if stock and (stock.energy.income or 0)>=(stock.metal.income or 0)*1.05 and stock.energy.current>=150 then
+					task.removeTag=q.tag
+					if C.orders.service('economy',id,CMD.REMOVE,{q.tag}) then E.retry[task.key]=now+30; E.tasks[id]=nil; task=nil; q=nil; E.cooldown[id]=now+2; C.debug.log('MILITARY BUDGET','Paused an owned optional construction order; foundation retained for later completion.') end
+				end
+			end
 			if task and q then
 				local value=0; for _,u in ipairs(unfinished) do if task.cmd<0 and Spring.GetUnitDefID(u)==-task.cmd and C.U.distance(C.U.position(u),task.params)<64 then value=Spring.GetUnitHealth(u) or 0; break end end
 				if task.cmd==CMD.REPAIR and C.U.owned(task.params[1]) then value=Spring.GetUnitHealth(task.params[1]) or 0 end
@@ -93,7 +105,7 @@ return function(C)
 		local state=C.economyPlan and C.economyPlan.snapshot(own)
 		local metal=resources.metal.current; local energy=resources.energy.current; local mi=resources.metal.income or 0; local ei=resources.energy.income or 0; local plannedEi=ei+(state and state.pendingPower or 0)
 		for _,id in ipairs(available) do local p=C.U.position(id); local job
-			for _,u in ipairs(unfinished) do local key='finish:'..u; local pos=C.U.position(u); local name=UnitDefs[Spring.GetUnitDefID(u)].name; local energyEmergency=energy<150 and ei<mi*1.05 and name~='energysolar' and name~='energywind'; if not energyEmergency and not occupied[key] and C.U.distance(p,pos)<1400 and not C.observations.nearCombat(pos,700) then job={cmd=CMD.REPAIR,p={u},key=key}; break end end
+			for _,u in ipairs(unfinished) do local key='finish:'..u; local pos=C.U.position(u); local name=UnitDefs[Spring.GetUnitDefID(u)].name; local energyEmergency=energy<150 and ei<mi*1.05 and name~='energysolar' and name~='energywind'; if not (catchup and optional(Spring.GetUnitDefID(u))) and not energyEmergency and not occupied[key] and C.U.distance(p,pos)<1400 and not C.observations.nearCombat(pos,700) then job={cmd=CMD.REPAIR,p={u},key=key}; break end end
 			local function build(name,key,origin,anchor,bridge)
 				local def=named(name); if not def or occupied[key] or now<(E.retry[key] or 0) or metal<50 then return end
 				if state and state.pending[name] and (name=='energyfusion' or name=='energypylon' or name=='staticstorage') then return end
@@ -107,27 +119,27 @@ return function(C)
 				local anchor=state and C.economyPlan.energyAnchor(state,p); local origin=anchor and anchor.p or p
 				local name=Spring.GetGroundHeight(origin[1],origin[3])<-5 and 'energywind' or 'energysolar'
 				local fallback=name
-				if (not urgent or energy>200) and mi>=25 and metal>=200 and named('energyfusion') and ei<mi+math.min(160,#mexes*6)-20 then name='energyfusion' end
+				if not catchup and (not urgent or energy>200) and mi>=25 and metal>=200 and named('energyfusion') and ei<mi+math.min(160,#mexes*6)-20 then name='energyfusion' end
 				local key='energy '..name..' near '..math.floor(origin[1]/600)..':'..math.floor(origin[3]/600)
 				local smallKey='energy '..fallback..' near '..math.floor(origin[1]/600)..':'..math.floor(origin[3]/600)
 				return build(name,key,origin,anchor) or build(name,key) or (name~=fallback and (build(fallback,smallKey,origin,anchor) or build(fallback,smallKey)))
 			end
 			if not job and #factories>0 and (#mexes>=2 or energy<150 or ei<mi*.8) and (plannedEi<mi*1.05+#factories*2 or energy<150) then job=power(true) end
-			if not job and state and C.economyPlan.storageNeeded(state,resources) then job=build('staticstorage','storage buffer') end
+			if not job and not catchup and state and C.economyPlan.storageNeeded(state,resources) then job=build('staticstorage','storage buffer') end
 			local function invest()
 				local upgrade
-				if #factories>0 and metal>math.min(400,(resources.metal.storage or 1000)*.6) and mi>(state and state.factoryPower*.9 or #factories*18) and ei>mi then
+				if #factories>0 and ((catchup and budget.capacityNeeded) or (not catchup and metal>math.min(400,(resources.metal.storage or 1000)*.6) and mi>(state and state.factoryPower*.9 or #factories*18) and ei>mi)) then
 					if C.economyPlan then for _,candidate in ipairs(C.economyPlan.factories(id,factories,resources)) do if candidate.preferred then upgrade=build(candidate.name,'additional factory '..#factories); if upgrade then upgrade.reason=candidate.reason; break end end end end
 					if not upgrade then upgrade=build(UnitDefs[Spring.GetUnitDefID(factories[1])].name,'additional factory '..#factories) end
 				end
-				if not upgrade and state and metal>=200 and ei>mi*1.1 and not state.pending.energypylon then
+				if not catchup and not upgrade and state and metal>=200 and ei>mi*1.1 and not state.pending.energypylon then
 					local bridge=C.economyPlan.bridge(state,p); if bridge then upgrade=build('energypylon','grid bridge',bridge.p,bridge.anchor,bridge) end
 				end
-				if not upgrade and #factories>0 and #mexes>=2 and metal>=100 and plannedEi<mi+math.min(160,#mexes*6) then upgrade=power(false) end
+				if not catchup and not upgrade and #factories>0 and #mexes>=2 and metal>=100 and plannedEi<mi+math.min(160,#mexes*6) then upgrade=power(false) end
 				return upgrade
 			end
-			if not job and E.jobCount%3==2 then job=invest() end
-			if not job and #factories>0 and metal>40 then
+			if not job and (E.jobCount%3==2 or catchup and budget.capacityNeeded) then job=invest() end
+			if not job and #factories>0 and metal>(catchup and math.max(65,mi*6)+125 or 40) then
 				local def=named('staticmex'); local best,score
 				if def and can(id,def) then for i,spot in ipairs(WG.metalSpots or {}) do local pos={spot.x,spot.y,spot.z}; local key='mex:'..i; local used=false
 					for _,m in ipairs(mexes) do if C.U.distance(m,pos)<80 then used=true; break end end
