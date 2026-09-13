@@ -1,0 +1,3 @@
+case,map,side,factory,outcome,seconds,killed,lost,ownIncome,enemyIncome,ownMex,enemyMex,ownArmyValue,enemyArmyValue,firstFiveCreatedSeconds,firstFiveReadySeconds,explored,scoutVisited,enemyOpening
+folsomdamdeluxev4-factoryshield-s0,FolsomDamDeluxeV4,0,factoryshield,CENSORED,1200.0,10515,48606,26.1,102.6,9,37,460,21728,60.0000038,60.0000038,0.40625,0.29296875,factorycloak
+folsomdamdeluxev4-factoryshield-s1,FolsomDamDeluxeV4,1,factoryshield,CENSORED,1200.0,5675,24740,6,132.2,0,36,0,18660,50.0000038,60.0000038,0.39453125,0.2421875,factorycloak

@@ -1,0 +1,41 @@
+[
+  {
+    "case": "folsomdamdeluxev4-factoryshield-s0",
+    "outcome": "LOSS",
+    "seconds": 933.000061,
+    "errors": [],
+    "nodeMissions": 21,
+    "lateNodeMissions": 0,
+    "defenseDispatches": 33,
+    "recoveryBuildOrders": 0,
+    "repairOrders": 5,
+    "wreckOrders": 3,
+    "peakReserveUnits": 5
+  },
+  {
+    "case": "folsomdamdeluxev4-factoryshield-s1",
+    "outcome": "CENSORED",
+    "seconds": 1200.00012,
+    "errors": [],
+    "nodeMissions": 39,
+    "lateNodeMissions": 7,
+    "defenseDispatches": 173,
+    "recoveryBuildOrders": 7,
+    "repairOrders": 26,
+    "wreckOrders": 18,
+    "peakReserveUnits": 2
+  },
+  {
+    "case": "red_comet_remake_1_7-factorycloak-s0",
+    "outcome": "LOSS",
+    "seconds": 934.933411,
+    "errors": [],
+    "nodeMissions": 24,
+    "lateNodeMissions": 1,
+    "defenseDispatches": 107,
+    "recoveryBuildOrders": 3,
+    "repairOrders": 12,
+    "wreckOrders": 5,
+    "peakReserveUnits": 1
+  }
+]

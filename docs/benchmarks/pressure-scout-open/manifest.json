@@ -1,0 +1,97 @@
+{
+  "created": 1789264411.255337,
+  "cases": [
+    {
+      "id": "red_comet_remake_1_7-factorycloak-s0",
+      "map": "Red Comet Remake 1.7",
+      "archive": "red_comet_remake_1.7.sd7",
+      "category": "open/small",
+      "split": "train",
+      "factories": [
+        "factorycloak",
+        "factoryveh"
+      ],
+      "starts": [
+        [
+          1048.0,
+          3536.0
+        ],
+        [
+          5064.0,
+          479.0
+        ]
+      ],
+      "startSource": "mapinfo teams",
+      "size": [
+        6144,
+        4096
+      ],
+      "waterFraction": 0.0,
+      "heightStd": 18.886013399663522,
+      "heightRange": [
+        100.0,
+        400.0
+      ],
+      "side": 0,
+      "factory": "factorycloak",
+      "seed": 1729
+    }
+  ],
+  "seconds": 1200,
+  "speed": 20,
+  "ai": "1052188CircuitAIBrutal64",
+  "files": {
+    "tests\\benchmark_driver.lua": "13b02d95e8122ba3fe9b2926f7a87a04f5ec7f05f0f6bef79817a4bb45f3602a",
+    "tests\\benchmark_observer.lua": "f42be284854360ca9901f869a05664ade992f775e27d45d55bdb042f99140155",
+    "LuaUI\\Widgets\\gui_command_layer.lua": "4fc080d7814dedbedd9987ef12fbd16ab267742eb82f4e6416f86e6834abb0c7",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Arsenal.lua": "4a8866bfbd921262d8b974a823466c39dfefc4104d070f3f45b89d3022e382bc",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\CounterMatrixData.lua": "1723ca15bdaa1065ce4780174848ad32e0b2305df9077b290905d7946cc424a2",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Debug.lua": "1de42d6a11aad6ee33d3439d97fb9e0f590194566a146f556807b6957862b44d",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Defense.lua": "98c22eab204b83791a1a75c5e1d170ea2375bc56f2285ef1a0b0e7a5717b445a",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Domains.lua": "5117d9df0b76319c31002d45f6c9a11c16e256713ab415401d89304762401dd1",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Economy.lua": "c3eca700dcf1e08b6fad83bcb0b97fd481ff4fc72124ff09cc23674b69d86ed0",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\EconomyPlanning.lua": "106979fa8b5b3db4ff86dbd7c149463a9a15022808b8261a38676039811913d3",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\EnemyModel.lua": "8c89d691885d5fe0e020a4c8d8c42c8d22253f60d1f9298d2b3418a2244d1c42",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\ForceRegistry.lua": "463ebcea5119179376e6d96c3ec3de5c8be61eb5c971b8f1a71bd5d227a7ef18",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Formations.lua": "dc65d4e00b555a36e0c3e8f93b5f7e474613c095e9740fab22d5ede2be6d1165",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Input.lua": "9743f4602576a0385f5e5a803a2af832ee95b088a0f4535919e842ef685482e7",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Logistics.lua": "f99b4203a04133157a30f978b71dfc49ef146ec2000770dd8c305eb4aa737d4a",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\MapControl.lua": "29c4a62bc26d67cbe88213deb3c410cc6b5f24a119f3c451eddce5130489cf87",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Observations.lua": "227b50feb18b9a3b79b0d9572bba6363f895b5ddb75ec2b8c7ccc59df19316cc",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Officer.lua": "0dc641a3c66e5276eabf0006885db5ad94df0a27cad1055eef7bf5402a9acf64",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Orders.lua": "71e82cdb8b9ed1fb502c4a20ffaf152483993d1e6a1069708e160268165b2d05",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\ProductionAdvisor.lua": "c42c0855de2c8c35edf21443561afb9baa2756faade5c2192f580aa7e7168efe",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\ProductionController.lua": "589f9cdbb5de138d4cbe8a06b7a03d4dcb22caefc9ea83a2ccb2e0cffdf4f5e9",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\ProposalService.lua": "ae544000f91836f4b40204c8b9c0e61143dbdc2affb223df192fa1ceccfcc55d",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Recovery.lua": "d5cd2b0767e78bd1aa3e0b87ed5ae2745bc0948b0fb5277dab19437e4c4e5187",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\RetreatPriority.lua": "bc88d8132b0384645ed58d5e6151393b875af7ccca099385ee038c7ce2b98323",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Routing.lua": "6aaafff008c59ea321a9ef783e66539964f52a13cfffacc6991bb17da69de93f",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Settings.lua": "3d3804ba41a4be44274c8c2938f86aa8a02a41d09d8b0d31240ad04726dfb96b",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Startup.lua": "5ad380317103f3562c2ea6c9d4a5b0e52a8fbc0e97d32a68cb5345317f7a888e",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\TacticalAdvisor.lua": "74029f8842886a1aed963627acb5bd206f062b25d798c46020ccd5d590b2c07a",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\TacticalController.lua": "0124150dcd8cd151ed3b63534d6bf1efd200c5be9b53ddfb6cdefbeee0e887ca",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\TacticalRules.lua": "5f4d75737240067c4f72541522c745208a5ae7e50dc10ada381dd30ac7e09a55",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\UI.lua": "b7f8074c6c3c0238b621ca19561d8ced32481664970ad6aeaf8ca08e68173f91",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\UnitClassification.lua": "41566e1a9cb525e1291521d0cff9c343baa2c86f321a1e40fd7d81019b620ef3",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\UnitMatchups.lua": "a8f0931a4b950324c1243b899ba882121fa8b7ee6b83f2339110f14041c379fa",
+    "LuaUI\\Widgets\\Include\\CommandLayer\\Util.lua": "83be9eba1e5c8b2ca12e37be3eeaa6993291ce4312899c1ec7b16a83b12ba951"
+  },
+  "engineSha256": "8a1895bad0c7e5140ae8fcb75f8c314b26085d9ba326f214aaa23011110acd60",
+  "aiSha256": "147e2c5475e947a4d0e3f7d875e67707439ee52b63af5ab0b2839a8ea5158431",
+  "aiFiles": {
+    "stable\\AIInfo.lua": "6eb5c7a2e1a16d3a4a89cec770a490fc395ee350943f7cc68003329e5294e5d5",
+    "stable\\AIOptions.lua": "b25fd62e61a5cbd11be111c37f62c4716ce1a7d7b26481822f312fe127535da8",
+    "stable\\libSkirmishAI.so": "5969ff35fec601180515325692d6b2861925c241e9a47162bbbb01912f531223",
+    "stable\\SkirmishAI.dll": "147e2c5475e947a4d0e3f7d875e67707439ee52b63af5ab0b2839a8ea5158431",
+    "stable\\config\\behaviour.json": "0e34436c29c0c088b76778d95cad7a958dfc9bdaa5c74bd10c1db93d88a59896",
+    "stable\\config\\block_map.json": "e70141d15777ff255e2b62ea7e3c65c34155fd23b50b41421a2662f222a1dadc",
+    "stable\\config\\build_chain.json": "1121ff229db53a33274b493c244e1868ecb5a04bb327bc471cc2dde72e7a72bb",
+    "stable\\config\\commander.json": "78ebe2c9fe54f27303cdcef390c51d91681ab75d1126a277b1c27009659cffaf",
+    "stable\\config\\economy.json": "51c4b269d43e6a48ed2623199975bfdc9264864aa51d14fe6c149fd348a8f3e4",
+    "stable\\config\\factory.json": "927fb27254bcfd0ba76b500a15e54b74d51f4d8b0e2c4b7754cdc75ef46862ee",
+    "stable\\config\\response.json": "6c2873b40b40ba5f56bf3724fa0d64aa18eb688ca2846675b97f2e5eacfdd5b7",
+    "stable\\script\\init.as": "adcd11b8165e29089df8c2f52420bb40752d080e4451dedd3cc68a628dfa1353",
+    "stable\\script\\role.as": "50af41000dee7e242559dc451586a1547510a7c352c03a192315653d680b7e1a",
+    "stable\\script\\side.as": "9129aa4f722da5970bf3d75dc03ae6f5626af7ca2cabe8847d5102e51c1c164e"
+  }
+}

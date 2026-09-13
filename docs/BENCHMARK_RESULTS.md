@@ -49,3 +49,6 @@ The next tuning cycle should address expansion protection, sustainable recovery 
 The user-supplied unfinished matchup matrix was inactive and outside the distributable package throughout both recorded training passes. It was subsequently enabled at the user's explicit request; see [unit matchups](UNIT_MATCHUPS.md). These results do not evaluate that later change. [Its review](MATRIX_DRAFT_REVIEW.md) defines reviewed-pair integration, confidence/coverage reporting and unchanged legacy fallback for unknown or unreviewed pairs. A future matrix candidate starts with non-executing comparisons and its own frozen training pass.
 
 Raw demos, original logs and source snapshots remain in the local isolated benchmark directories. Published data is sanitized to benchmark/Officer records. Synced scoring data is offline evaluation only and is never supplied to the Officer. Manual override, normal visibility restrictions and the single-player automation gate remain in force.
+
+
+Later targeted control/recovery revision: [resource pressure and recovery results](PRESSURE_RECOVERY.md). Seven additional checks; the final three recorded two losses and one cap. This does not establish a stronger calibrated candidate or replace the full training/holdout campaign.

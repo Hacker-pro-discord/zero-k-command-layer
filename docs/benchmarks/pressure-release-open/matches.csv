@@ -1,0 +1,2 @@
+case,map,side,factory,outcome,seconds,killed,lost,ownIncome,enemyIncome,ownMex,enemyMex,ownArmyValue,enemyArmyValue,firstFiveCreatedSeconds,firstFiveReadySeconds,explored,scoutVisited,enemyOpening
+red_comet_remake_1_7-factorycloak-s0,Red Comet Remake 1.7,0,factorycloak,LOSS,934.9,2415,15495,2,146.1,0,40,0,24216,50.0000038,60.0000038,0.74609375,0.546875,factoryshield
